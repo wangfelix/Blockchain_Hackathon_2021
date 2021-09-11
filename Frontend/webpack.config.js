@@ -14,7 +14,7 @@ module.exports = {
     devtool: "source-map",
 
     output: {
-        path: __dirname+distPath,
+        path: __dirname + distPath,
         filename: "[name].js",
     },
 
@@ -47,16 +47,16 @@ module.exports = {
                     outputPath: `..${relativeIllustrationsDistPath}`,
                 },
             },
-        ]
+        ],
     },
 
     plugins: [
         new htmlWebpackPlugin({
-            template: "./src/index.html"
-        })
+            template: "./src/index.html",
+        }),
     ],
 
     devServer: {
         static: path.resolve(__dirname + distPath),
-    }
-}
+    },
+};

@@ -1,7 +1,6 @@
 import React from "react";
 
 export const Counter = () => {
-
     return (
         <>
             <h2>Counter: </h2>
@@ -9,8 +8,8 @@ export const Counter = () => {
 
             <IncrementForm />
         </>
-    )
-}
+    );
+};
 
 const IncrementForm = () => {
     return (
@@ -18,5 +17,5 @@ const IncrementForm = () => {
             <label>Increment</label>
             <button>Clicke hier</button>
         </form>
-    )
-}
+    );
+};
