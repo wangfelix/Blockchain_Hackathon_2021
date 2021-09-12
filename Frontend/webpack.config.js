@@ -3,6 +3,7 @@ const htmlWebpackPlugin = require("html-webpack-plugin");
 
 const distPath = "/dist";
 const relativeIllustrationsDistPath = "/illustrations";
+
 const sourcePath = path.resolve(__dirname, "src");
 const baseComponentsPath = path.resolve(__dirname, "src", "BaseComponents");
 
@@ -19,12 +20,15 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ["", ".ts", ".tsx", ".js", ".json", ".scss"],
+        extensions: ["", ".ts", ".tsx", ".js", ".json", "css", ".scss"],
+
+        // keep in sync with tsconfig.json
         alias: {
             Source: sourcePath,
             BaseComponents: baseComponentsPath,
-            Pages: "./src/Pages",
-            Illustrations: "./src/Illustrations",
+            Pages: path.resolve(__dirname, "src", "Pages"),
+            Illustrations: path.resolve(__dirname, "src", "Illustrations"),
+            Styles: path.resolve(__dirname, "src", "Styles"),
         },
     },
 
@@ -36,16 +40,20 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.css$/,
+                test: /\.(css)$/,
                 use: ["style-loader", "css-loader"],
             },
             {
-                test: /\.(png|jpg|svg)$/,
-                loader: "file-loader",
+                test: /\.(png|jpg)$/,
+                loader: "url-loader",
                 options: {
                     name: "[name].[ext]",
-                    outputPath: `..${relativeIllustrationsDistPath}`,
+                    outputPath: `..${distPath + relativeIllustrationsDistPath}`,
                 },
+            },
+            {
+                test: /\.svg$/,
+                use: ["@svgr/webpack"],
             },
         ],
     },

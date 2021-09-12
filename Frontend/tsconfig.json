@@ -37,7 +37,8 @@
             "Source/*": ["./src/*"],
             "BaseComponents/*": ["./src/BaseComponents/*"],
             "Pages/*": ["./src/Pages/*"],
-            "Illustrations/*": ["./src/Illustrations/*"]
+            "Illustrations/*": ["./src/Illustrations/*"],
+            "Styles/*": ["./src/Styles/*"],
         },
         // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
         // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
@@ -110,5 +111,6 @@
         // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
         "skipLibCheck": true
         /* Skip type checking all .d.ts files. */
+        "include": ["src/**/", "custom.d.ts"]
     }
 }
