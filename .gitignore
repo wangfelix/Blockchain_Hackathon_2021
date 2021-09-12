@@ -3,6 +3,10 @@
 /.idea/*
 .DS_Store
 
+# build
+build
+/build
+
 # dist
 /dist/*
 

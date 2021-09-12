@@ -12,7 +12,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.1"
+  },
   "devDependencies": {
     "truffle": "^5.4.10"
   }
