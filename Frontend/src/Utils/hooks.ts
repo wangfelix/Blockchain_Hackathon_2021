@@ -45,3 +45,28 @@ export const useConnectWallet = () => {
 
     return activateBrowserWallet;
 };
+
+const getViewportDimensions = () => {
+    const { innerWidth: viewportWidth, innerHeight: viewportHeight } = window;
+
+    return {
+        viewportWidth,
+        viewportHeight,
+    };
+};
+
+export function useViewportDimensions() {
+    const [viewportDimensions, setViewportDimensions] = useState(getViewportDimensions());
+
+    useEffect(() => {
+        const handleResize = () => {
+            setViewportDimensions(getViewportDimensions());
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return viewportDimensions;
+}
