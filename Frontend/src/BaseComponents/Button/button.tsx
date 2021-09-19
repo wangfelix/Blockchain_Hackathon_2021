@@ -1,9 +1,9 @@
 import React from "react";
 
-import { primaryButtonStyle, secondaryButtonStyle } from "Styles/buttonStyles";
+import { primaryButtonStyle, secondaryButtonStyle, textButtonStyle } from "BaseComponents/Button/buttonStyles";
 
 type ButtonProps = {
-    buttonType: "primary" | "secondary";
+    buttonType: "primary" | "secondary" | "text";
     children?: string;
     onClickHandle?: (...args: any[]) => any;
     stylesProp?: Object;
@@ -15,7 +15,9 @@ export const Button = ({ children, stylesProp, buttonType, onClickHandle }: Butt
     let buttonStyle =
         buttonType === "primary"
             ? { ...stylesProp, ...primaryButtonStyle }
-            : { ...stylesProp, ...secondaryButtonStyle };
+            : buttonType === "secondary"
+            ? { ...stylesProp, ...secondaryButtonStyle }
+            : { ...stylesProp, ...textButtonStyle };
 
     // -- RENDER --
 
