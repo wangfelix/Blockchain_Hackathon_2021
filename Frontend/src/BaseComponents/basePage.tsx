@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { NavBar } from "BaseComponents/NavBar/navBar";
 import { Colors, NAVBAR_HEIGHT, Z_INDEX } from "Utils/globalStyles";
+import { Footer } from "BaseComponents/footer";
 
 type BasePageProps = {
     children: ReactNode;
@@ -10,6 +11,8 @@ export const BasePage = ({ children }: BasePageProps) => {
     // -- STYLES --
 
     const globalStyles = {
+        display: "flex",
+        flexDirection: "column" as "column",
         color: Colors.BLACK,
         fontFamily: "Work Sans",
         zIndex: Z_INDEX.PAGE,
@@ -23,9 +26,11 @@ export const BasePage = ({ children }: BasePageProps) => {
     return (
         <div style={globalStyles}>
             <NavBar />
-            <div style={contentStyle}>{children}</div>
 
-            {/* TODO: Footer */}
+            <div style={contentStyle}>
+                {children}
+                <Footer />
+            </div>
         </div>
     );
 };
