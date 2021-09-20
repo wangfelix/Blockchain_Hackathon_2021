@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useEthers } from "@usedapp/core";
 
 import { NavBarItem } from "BaseComponents/NavBar/Components/navBarItem";
