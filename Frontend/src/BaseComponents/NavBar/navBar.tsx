@@ -34,6 +34,11 @@ export const NavBar = () => {
                   ]
                 : []),
             { title: NavBarTabs.DEMO, to: Paths.DEMO, selected: page === Paths.DEMO },
+            {
+                title: NavBarTabs.CONTRIBUTED_DATA,
+                to: Paths.CONTRIBUTE_DATA_PAGE,
+                selected: page === Paths.CONTRIBUTE_DATA_PAGE,
+            },
         ],
         [page, account]
     );

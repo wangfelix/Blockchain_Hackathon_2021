@@ -4,6 +4,7 @@ import { ChainId, Config, DAppProvider } from "@usedapp/core";
 
 import { LandingPage } from "Pages/LandingPage/landingPage";
 import { BasePage } from "BaseComponents/basePage";
+import { ContributeDataPage } from "Pages/ContributeDataPage/contributeDataPage";
 import { Paths } from "Utils/paths";
 
 export const App = () => {
@@ -23,7 +24,7 @@ export const App = () => {
             <DAppProviderWrapper config={config}>
                 <BasePage>
                     <Switch>
-                        <Route path={Paths.CONTRIBUTE_DATA_PAGE} component={TestPage} />
+                        <Route path={Paths.CONTRIBUTE_DATA_PAGE} component={ContributeDataPage} />
 
                         <Route path={Paths.ACCOUNT_AND_HISTORY} component={TestPage} />
 
