@@ -4,7 +4,10 @@ import "./MediCoin.sol";
 contract MediSystem {
     mapping(address => Doctor) private doctors;
     mapping(string => Disease) private diseases;
-    MediCoin mediCoin = MediCoin();
+    //address mediCoinAddress= 0xa131AD247055FD2e2aA8b156A11bdEc81b9eAD95;
+    //IOtherContr medicoin = IOtherContr(mediCoinAddress);
+    address mediCoinAddress;
+    address owner;
 
     struct Doctor {
         address doctorAccount;
@@ -18,29 +21,43 @@ contract MediSystem {
         string name;
     }
 
-    modifier hasAccess {
-        require(owner == msg.sender, "No access rights");
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier isOwner {
+        require(owner == msg.sender, "No access rights!");
         _;
     }
 
-    function registerDoctor(string doctorName) public view returns(string) {
-        Doctor doctor = Doctor(msg.sender, doctorName, bytes32[]);
-        doctors[doctorAccount] = doctor;
+    function setMediCoinAddress(address _mediCoinAddress) external {
+        mediCoinAddress = _mediCoinAddress;
+    }
+
+    function registerDoctor(string memory doctorName) public payable returns(string memory) {
+        Doctor memory doctor;
+        doctor.doctorAccount = msg.sender;
+        doctor.doctorName = doctorName;
+        doctors[msg.sender] = doctor;
         return "success";
     }
 
-    function addDisease(uint budget, string name) public view hasAccess returns() {
-        Disease disease = Disease(budget, 0, name);
+    function addDisease(uint budget, string memory name) public payable returns(string memory) {
+        Disease memory disease = Disease(budget, 0, name);
         diseases[name] = disease;
+        return "";
     }
 
-    function getMyName() public view returns(string){
+    function getMyName() public view returns(string memory){
         return doctors[msg.sender].doctorName;
     }
 
     function getMyMediCoin() public view returns(uint) {
-        return ;
+        InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
+        return medicoin.balanceOf(doctors[msg.sender].doctorAccount);
     }
-
+    function getDoctorName(address _doctorAddress) public view isOwner returns(string memory) {
+        return doctors[_doctorAddress].doctorName;
+    }
 
 }
