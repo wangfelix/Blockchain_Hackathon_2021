@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -22,13 +23,21 @@ module.exports = {
     resolve: {
         extensions: ["", ".ts", ".tsx", ".js", ".json", "css", ".scss"],
 
+        fallback: {
+            os: require.resolve("os-browserify/browser"),
+            http: false,
+            https: require.resolve("https-browserify"),
+            crypto: require.resolve("crypto-browserify"),
+        },
+
         // keep in sync with tsconfig.json
         alias: {
             Source: sourcePath,
             BaseComponents: baseComponentsPath,
             Pages: path.resolve(__dirname, "src", "Pages"),
             Illustrations: path.resolve(__dirname, "src", "Illustrations"),
-            Styles: path.resolve(__dirname, "src", "Styles"),
+            Utils: path.resolve(__dirname, "src", "Utils"),
+            process: "process/browser",
         },
     },
 
@@ -62,9 +71,18 @@ module.exports = {
         new htmlWebpackPlugin({
             template: "./src/index.html",
         }),
+        new webpack.ProvidePlugin({
+            Buffer: ["buffer", "Buffer"],
+        }),
+        new webpack.ProvidePlugin({
+            process: "process/browser",
+        }),
     ],
 
     devServer: {
         static: path.resolve(__dirname + distPath),
+
+        // Enable client side routing
+        historyApiFallback: true,
     },
 };
