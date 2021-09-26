@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
-import { useEthers } from "@usedapp/core";
+import { useContractCall, useEthers, useContractFunction } from "@usedapp/core";
+import { Contract } from "ethers";
+import { Interface } from "@ethersproject/abi";
+import mediSysAbi from "Source/Contracts/MediSystem.json";
 
 /**
  * Returns the current URL's pathname without any subdirectories or query parameters.
@@ -69,4 +72,36 @@ export function useViewportDimensions() {
     }, []);
 
     return viewportDimensions;
+}
+
+export const useIsLoggedIn = () => {
+    const { account } = useEthers();
+
+    return account === "" ? false : !!account;
+};
+
+const simpleContractInterface = new Interface(mediSysAbi.abi);
+
+export const useMyName = (account: string | null | undefined) => {
+    const [doctorsName]: any =
+        useContractCall({
+            abi: simpleContractInterface,
+            address: "0x3974e6fcB9c3a50Fba187C1E319557eddFb83fE2",
+            method: "getMyName",
+            args: [account],
+        }) ?? [];
+
+    useEffect(() => {
+        return doctorsName;
+    }, [doctorsName]);
+
+    return doctorsName;
+};
+
+const contract = new Contract("0x3974e6fcB9c3a50Fba187C1E319557eddFb83fE2", mediSysAbi.abi);
+
+export function useMediSysMethod(functionName: string) {
+    const { state, send } = useContractFunction(contract, functionName, {});
+
+    return { state, send };
 }
