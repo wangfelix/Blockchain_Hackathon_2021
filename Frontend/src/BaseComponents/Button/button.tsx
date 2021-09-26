@@ -1,28 +1,29 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { primaryButtonStyle, secondaryButtonStyle, textButtonStyle } from "BaseComponents/Button/buttonStyles";
 
 type ButtonProps = {
     buttonType: "primary" | "secondary" | "text";
-    children?: string;
+    children?: ReactNode;
     onClickHandle?: (...args: any[]) => any;
-    stylesProp?: Object;
+    styleProps?: React.CSSProperties;
+    id?: string;
 };
 
-export const Button = ({ children, stylesProp, buttonType, onClickHandle }: ButtonProps) => {
+export const Button = ({ children, styleProps, buttonType, onClickHandle, id }: ButtonProps) => {
     // -- STYLES --
 
     let buttonStyle =
         buttonType === "primary"
-            ? { ...stylesProp, ...primaryButtonStyle }
+            ? { ...primaryButtonStyle, ...styleProps }
             : buttonType === "secondary"
-            ? { ...stylesProp, ...secondaryButtonStyle }
-            : { ...stylesProp, ...textButtonStyle };
+            ? { ...secondaryButtonStyle, ...styleProps }
+            : { ...textButtonStyle, ...styleProps };
 
     // -- RENDER --
 
     return (
-        <button style={buttonStyle} onClick={onClickHandle}>
+        <button id={id ? id : ""} style={buttonStyle} onClick={onClickHandle}>
             {children}
         </button>
     );

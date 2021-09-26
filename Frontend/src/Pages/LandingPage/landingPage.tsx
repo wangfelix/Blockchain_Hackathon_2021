@@ -7,6 +7,7 @@ import { LandingPageSection } from "Pages/LandingPage/Components/landingPageSect
 import LandingPicture from "Illustrations/Drawkit-Vector-Illustration-Medical-16.png";
 import { Colors } from "Utils/globalStyles";
 import { useConnectWallet } from "Utils/hooks";
+import { Container } from "BaseComponents/container";
 
 export const LandingPage = () => {
     // -- STATE --
@@ -55,7 +56,7 @@ export const LandingPage = () => {
     // -- RENDER --
 
     return (
-        <>
+        <Container>
             <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT} num={550} bg={true} />
 
             <LandingPageSection color="transparent">
@@ -77,6 +78,6 @@ export const LandingPage = () => {
                     {section.illustration && <img style={imageStyle} src={section.illustration} />}
                 </LandingPageSection>
             ))}
-        </>
+        </Container>
     );
 };
