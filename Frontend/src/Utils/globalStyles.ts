@@ -9,7 +9,8 @@ export enum Colors {
     WHITE_OFF_WHITE = "#E9E9E9",
     BLACK = "#2C2C2C",
     TRANSPARENT = "#00000000",
-    GREY_DARK = "#9B9B9B",
+    GREY_DARK = "#a5a5a5",
+    GREY_DARKER = "#767676",
     GREY_LIGHT = "#EEEEEE",
 }
 
@@ -25,8 +26,8 @@ export enum NavBarTabs {
 }
 
 export enum Z_INDEX {
-    MODAL = 2000,
-    NAVBAR = 1000,
+    MODAL = 1000,
+    NAVBAR = 2000,
     BUTTON = 500,
     PAGE = 0,
     CARD = 10,

@@ -4,7 +4,7 @@ import { Colors } from "Utils/globalStyles";
 
 type TextProps = {
     children: ReactNode;
-    textType: "text" | "nudge";
+    textType: "text" | "nudge" | "modal";
     styleProps?: React.CSSProperties;
 };
 
@@ -12,11 +12,12 @@ export const Text = ({ children, textType, styleProps }: TextProps) => {
     // -- STYLES --
 
     const textStyle = {
-        color: textType === "text" ? Colors.BLACK : Colors.GREY_DARK,
-        fontSize: textType === "text" ? "15px" : "14px",
+        color: textType === "text" || "modal" ? Colors.BLACK : Colors.GREY_DARK,
+        fontSize: textType === "text" ? "15px" : "13px",
         fontWeight: textType === "text" ? ("normal" as "normal") : ("lighter" as "lighter"),
         textAlign: "justify" as "justify",
         hyphens: "auto" as "auto",
+        fontFamily: "Work Sans",
 
         ...styleProps,
     };

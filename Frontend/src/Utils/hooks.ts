@@ -76,8 +76,9 @@ export function useViewportDimensions() {
 
 export const useIsLoggedIn = () => {
     const { account } = useEthers();
+    const myName = useMyName(account);
 
-    return account === "" ? false : !!account;
+    return !!myName;
 };
 
 const simpleContractInterface = new Interface(mediSysAbi.abi);

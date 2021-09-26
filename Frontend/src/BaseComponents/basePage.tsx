@@ -1,10 +1,13 @@
 import React, { ReactNode } from "react";
+import { useSelector } from "react-redux";
 
 import { NavBar } from "BaseComponents/NavBar/navBar";
 import { Footer } from "BaseComponents/footer";
 import { Colors, NAVBAR_HEIGHT, Z_INDEX } from "Utils/globalStyles";
 import { useViewportDimensions } from "Utils/hooks";
 import { Container } from "BaseComponents/container";
+import { RegistrationModal } from "BaseComponents/RegistrationModal/registrationModal";
+import { RootState } from "State/Reducers";
 
 type BasePageProps = {
     children: ReactNode;
@@ -20,6 +23,8 @@ export const BasePage = ({ children }: BasePageProps) => {
     const { viewportHeight } = useViewportDimensions();
 
     const minBaseContentHeight = viewportHeight - Number(NAVBAR_HEIGHT.replace('"', "").replace("px", ""));
+
+    const isRegistrationModalOpen = useSelector<RootState, boolean>((state) => state.modals.isRegistrationModalOpen);
 
     // -- STYLES --
 
@@ -46,6 +51,8 @@ export const BasePage = ({ children }: BasePageProps) => {
             <Container styleProps={contentStyle}>{children}</Container>
 
             <Footer />
+
+            <RegistrationModal isOpen={isRegistrationModalOpen} />
         </Container>
     );
 };

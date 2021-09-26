@@ -8,7 +8,7 @@ type PageProps = {
     heading?: string;
     headingContent?: ReactNode;
     children: ReactNode;
-    layout?: "single-row" | "double-row";
+    layout?: "single-row" | "double-row" | "landing";
 };
 
 /**
@@ -56,6 +56,9 @@ export const Page = ({ icon, heading, headingContent, children, layout: propsLay
                     <Container styleProps={{ height: "100%" }}>{children}</Container>
                 </Container>
             );
+
+        case "landing":
+            return <Container>{children}</Container>;
 
         case "double-row":
         default:

@@ -1,9 +1,14 @@
 import React, { ReactNode } from "react";
 
-import { primaryButtonStyle, secondaryButtonStyle, textButtonStyle } from "BaseComponents/Button/buttonStyles";
+import {
+    primaryButtonStyle,
+    primaryButtonStyleGreyedOut,
+    secondaryButtonStyle,
+    textButtonStyle,
+} from "BaseComponents/Button/buttonStyles";
 
 type ButtonProps = {
-    buttonType: "primary" | "secondary" | "text";
+    buttonType: "primary" | "secondary" | "text" | "primaryGreyedOut";
     children?: ReactNode;
     onClickHandle?: (...args: any[]) => any;
     styleProps?: React.CSSProperties;
@@ -18,12 +23,18 @@ export const Button = ({ children, styleProps, buttonType, onClickHandle, id }: 
             ? { ...primaryButtonStyle, ...styleProps }
             : buttonType === "secondary"
             ? { ...secondaryButtonStyle, ...styleProps }
-            : { ...textButtonStyle, ...styleProps };
+            : buttonType === "text"
+            ? { ...textButtonStyle, ...styleProps }
+            : { ...primaryButtonStyleGreyedOut, ...styleProps };
+
+    // -- HELPERS --
+
+    const isGreyedOut = buttonType === "primaryGreyedOut";
 
     // -- RENDER --
 
     return (
-        <button id={id ? id : ""} style={buttonStyle} onClick={onClickHandle}>
+        <button id={id ? id : ""} style={buttonStyle} onClick={isGreyedOut ? undefined : onClickHandle}>
             {children}
         </button>
     );

@@ -37,6 +37,7 @@ module.exports = {
             Pages: path.resolve(__dirname, "src", "Pages"),
             Illustrations: path.resolve(__dirname, "src", "Illustrations"),
             Utils: path.resolve(__dirname, "src", "Utils"),
+            State: path.resolve(__dirname, "src", "State"),
             process: "process/browser",
         },
     },
