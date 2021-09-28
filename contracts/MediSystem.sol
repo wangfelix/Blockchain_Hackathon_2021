@@ -13,6 +13,7 @@ contract MediSystem {
         address doctorAccount;
         string doctorName;
         bytes32[] contributedData;
+        bool isExist;
     }
 
     struct Disease {
@@ -30,6 +31,11 @@ contract MediSystem {
         _;
     }
 
+    modifier isRegistered {
+        require(doctors[msg.sender].isExist, "Not registered!");
+        _;
+    }
+
     function setMediCoinAddress(address _mediCoinAddress) external {
         mediCoinAddress = _mediCoinAddress;
     }
@@ -38,6 +44,7 @@ contract MediSystem {
         Doctor memory doctor;
         doctor.doctorAccount = msg.sender;
         doctor.doctorName = doctorName;
+        doctor.isExist = true;
         doctors[msg.sender] = doctor;
         return "success";
     }
