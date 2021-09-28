@@ -41,6 +41,9 @@ contract MediCoin is ERC20 {
         return true;
     }
 
+
+
+
     function mint(address receiver, uint amount) public {
         require(msg.sender == minter);
         _balances[receiver] += amount;
