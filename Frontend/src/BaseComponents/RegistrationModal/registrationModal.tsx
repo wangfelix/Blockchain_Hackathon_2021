@@ -69,6 +69,10 @@ export const RegistrationModal = ({ isOpen }: RegistrationModalProps) => {
                     position: "relative",
                     width: "100%",
                     boxShadow: "0 0 20px 10px rgba(180, 180, 180, 0.5)",
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
                 },
                 overlay: {
                     alignItems: "center",

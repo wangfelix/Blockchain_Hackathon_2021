@@ -1,11 +1,12 @@
 pragma solidity 0.8.7;
 import "./MediCoin.sol";
 
+
 contract MediSystem {
+
+
     mapping(address => Doctor) private doctors;
     mapping(string => Disease) private diseases;
-    //address mediCoinAddress= 0xa131AD247055FD2e2aA8b156A11bdEc81b9eAD95;
-    //IOtherContr medicoin = IOtherContr(mediCoinAddress);
     address mediCoinAddress;
     address owner;
 
@@ -13,6 +14,7 @@ contract MediSystem {
         address doctorAccount;
         string doctorName;
         bytes32[] contributedData;
+        bytes32[] pendingDataSets;
     }
 
     struct Disease {
@@ -48,14 +50,16 @@ contract MediSystem {
         return "";
     }
 
-    function getMyName(address account) public view returns(string memory){
-        return doctors[account].doctorName;
+    function getMyName() public view returns(string memory){
+        return doctors[msg.sender].doctorName;
     }
 
-    function getMyMediCoin() public view returns(uint) {
+    function getMyMediCoinBalance() public view returns(uint) {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
         return medicoin.balanceOf(doctors[msg.sender].doctorAccount);
     }
+
+    // Only the deployer of the contract - medicalvalues - is able to see a list of all the users.
     function getDoctorName(address _doctorAddress) public view isOwner returns(string memory) {
         return doctors[_doctorAddress].doctorName;
     }

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+
 import { Text } from "BaseComponents/text";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
 import { Row } from "BaseComponents/row";
 import { Button } from "BaseComponents/Button/button";
 import { setRegistrationModalOpen } from "State/Actions/actionCreators";
 import { useMediSysMethod } from "Utils/hooks";
-import { useDispatch } from "react-redux";
 
 export const RegistrationModalRegisterNameSection = () => {
     const dispatch = useDispatch();
@@ -26,6 +27,8 @@ export const RegistrationModalRegisterNameSection = () => {
                 console.log("Name konnte nicht registriert werden"); // TODO
             });
     };
+
+    // -- RENDER --
 
     return (
         <>
