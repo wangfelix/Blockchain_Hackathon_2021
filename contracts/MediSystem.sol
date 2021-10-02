@@ -54,8 +54,8 @@ contract MediSystem {
         return "";
     }
 
-    function getMyName() public view returns(string memory){
-        return doctors[msg.sender].doctorName;
+    function getMyName(address account) public view returns(string memory){
+        return doctors[account].doctorName;
     }
 
     function getMyMediCoinBalance() public view returns(uint) {

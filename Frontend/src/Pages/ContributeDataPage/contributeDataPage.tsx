@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from "BaseComponents/Button/button";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
@@ -35,6 +35,12 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
     const handleSelectFile = (event: any) => {
         setSelectedFile(event.target.files[0]);
     };
+
+    useEffect(() => {
+        if (selectedFile) {
+            console.log(selectedFile);
+        }
+    }, [selectedFile]);
 
     // -- RENDER --
 

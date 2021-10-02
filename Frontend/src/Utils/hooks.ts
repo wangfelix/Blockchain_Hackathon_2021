@@ -87,9 +87,9 @@ export const useMyName = (account: string | null | undefined) => {
     const [doctorsName]: any =
         useContractCall({
             abi: simpleContractInterface,
-            address: "0xa5FEBf852B8414b75Eb376F7C1e17D6A4Df21D28",
+            address: "0xed4685AE45E1004c9dF65d26E0552709E3308893",
             method: "getMyName",
-            args: [],
+            args: [account],
         }) ?? [];
 
     useEffect(() => {
@@ -99,7 +99,7 @@ export const useMyName = (account: string | null | undefined) => {
     return doctorsName;
 };
 
-const contract = new Contract("0xa5FEBf852B8414b75Eb376F7C1e17D6A4Df21D28", mediSysAbi.abi);
+const contract = new Contract("0xed4685AE45E1004c9dF65d26E0552709E3308893", mediSysAbi.abi);
 
 export function useMediSysMethod(functionName: string) {
     const { state, send } = useContractFunction(contract, functionName, {});
