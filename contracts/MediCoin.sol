@@ -25,5 +25,4 @@ contract MediCoin is ERC20 {
         return true;
     }
 
-
 }
