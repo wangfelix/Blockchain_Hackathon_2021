@@ -1,28 +1,40 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-import { primaryButtonStyle, secondaryButtonStyle, textButtonStyle } from "BaseComponents/Button/buttonStyles";
+import {
+    primaryButtonStyle,
+    primaryButtonStyleGreyedOut,
+    secondaryButtonStyle,
+    textButtonStyle,
+} from "BaseComponents/Button/buttonStyles";
 
 type ButtonProps = {
-    buttonType: "primary" | "secondary" | "text";
-    children?: string;
+    buttonType: "primary" | "secondary" | "text" | "primaryGreyedOut";
+    children?: ReactNode;
     onClickHandle?: (...args: any[]) => any;
-    stylesProp?: Object;
+    styleProps?: React.CSSProperties;
+    id?: string;
 };
 
-export const Button = ({ children, stylesProp, buttonType, onClickHandle }: ButtonProps) => {
+export const Button = ({ children, styleProps, buttonType, onClickHandle, id }: ButtonProps) => {
     // -- STYLES --
 
     let buttonStyle =
         buttonType === "primary"
-            ? { ...stylesProp, ...primaryButtonStyle }
+            ? { ...primaryButtonStyle, ...styleProps }
             : buttonType === "secondary"
-            ? { ...stylesProp, ...secondaryButtonStyle }
-            : { ...stylesProp, ...textButtonStyle };
+            ? { ...secondaryButtonStyle, ...styleProps }
+            : buttonType === "text"
+            ? { ...textButtonStyle, ...styleProps }
+            : { ...primaryButtonStyleGreyedOut, ...styleProps };
+
+    // -- HELPERS --
+
+    const isGreyedOut = buttonType === "primaryGreyedOut";
 
     // -- RENDER --
 
     return (
-        <button style={buttonStyle} onClick={onClickHandle}>
+        <button id={id ? id : ""} style={buttonStyle} onClick={isGreyedOut ? undefined : onClickHandle}>
             {children}
         </button>
     );

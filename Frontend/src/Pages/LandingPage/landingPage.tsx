@@ -1,17 +1,30 @@
 import React from "react";
 import { useEthers } from "@usedapp/core";
 import ParticlesBg from "particles-bg";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { Button } from "BaseComponents/Button/button";
 import { LandingPageSection } from "Pages/LandingPage/Components/landingPageSection";
 import LandingPicture from "Illustrations/Drawkit-Vector-Illustration-Medical-16.png";
 import { Colors } from "Utils/globalStyles";
-import { useConnectWallet } from "Utils/hooks";
+import { useIsLoggedIn } from "Utils/hooks";
+import { Page } from "BaseComponents/page";
+import { Row } from "BaseComponents/row";
+import { setRegistrationModalOpen } from "State/Actions/actionCreators";
+import { Container } from "BaseComponents/container";
+import { Paths } from "Utils/paths";
 
 export const LandingPage = () => {
+    const dispatch = useDispatch();
+
     // -- STATE --
 
+    const history = useHistory();
+
     const { account } = useEthers();
+
+    const isLoggedIn = useIsLoggedIn();
 
     // -- CONST DATA --
 
@@ -42,7 +55,9 @@ export const LandingPage = () => {
 
     // -- CALLBACKS --
 
-    const connectWallet = useConnectWallet();
+    const openRegistrationModal = () => dispatch(setRegistrationModalOpen(true));
+
+    const handleGoToDemoPage = () => history.push(Paths.DEMO);
 
     // -- STYLES --
 
@@ -55,15 +70,57 @@ export const LandingPage = () => {
     // -- RENDER --
 
     return (
-        <>
+        <Page layout="landing">
             <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT} num={550} bg={true} />
 
             <LandingPageSection color="transparent">
-                {!account && (
-                    <Button buttonType="primary" onClickHandle={connectWallet}>
-                        Login Using Metamask
-                    </Button>
-                )}
+                <Container
+                    styleProps={{
+                        width: "90%",
+                        maxWidth: "800px",
+                        padding: "40px",
+                        background: "rgba(250, 245, 256, 0.3)",
+                        backdropFilter: "blur(5px)",
+                        boxShadow: "0 0 20px 10px rgba(185, 175, 190, 0.2)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Row styleProps={{ marginBottom: "30px", justifyContent: "center" }}>
+                        <h1
+                            style={{
+                                fontWeight: "bold",
+                                fontSize: "50px",
+                                fontFamily: "Work Sans",
+                                color: Colors.PRIMARY_ACCENT_BLUE_HUE,
+                                letterSpacing: "10px",
+                                marginRight: "-10px", // remove letter-spacing from last letter
+                            }}
+                        >
+                            Medi-System
+                        </h1>
+                    </Row>
+                    <Row>
+                        <Row styleProps={{ width: "100%", justifyContent: "center", gap: "20px" }}>
+                            {!isLoggedIn && (
+                                <Button
+                                    buttonType="primary"
+                                    styleProps={{ width: "200px" }}
+                                    onClickHandle={openRegistrationModal}
+                                >
+                                    Get Started
+                                </Button>
+                            )}
+                            <Button
+                                buttonType={"secondary"}
+                                styleProps={{ width: "200px" }}
+                                onClickHandle={handleGoToDemoPage}
+                            >
+                                Watch Demo
+                            </Button>
+                        </Row>
+                    </Row>
+                </Container>
             </LandingPageSection>
 
             {landingSections.map((section, index) => (
@@ -77,6 +134,6 @@ export const LandingPage = () => {
                     {section.illustration && <img style={imageStyle} src={section.illustration} />}
                 </LandingPageSection>
             ))}
-        </>
+        </Page>
     );
 };

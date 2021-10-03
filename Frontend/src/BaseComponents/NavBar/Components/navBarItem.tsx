@@ -20,7 +20,7 @@ export const NavBarItem = ({ title, selected, to: propsTo }: NavBarItemProps) =>
     };
 
     const anchorStyle = {
-        fontWeight: selected ? ("bold" as "bold") : ("regular" as "normal"),
+        fontWeight: selected ? ("bold" as "bold") : ("lighter" as "lighter"),
         color: selected ? Colors.WHITE : Colors.WHITE_OFF_WHITE,
         cursor: "pointer",
         padding: "10px",
@@ -31,7 +31,7 @@ export const NavBarItem = ({ title, selected, to: propsTo }: NavBarItemProps) =>
         position: "absolute" as "absolute",
         bottom: "0",
         right: "0",
-        height: "7px",
+        height: "5px",
         width: "100%",
         borderStyle: "none",
         background: Colors.LAVENDER,
