@@ -121,4 +121,42 @@ contract MediSystem {
         return number;
     }
 
+    function getGenderValue(string[] memory gender) public view returns(uint){
+        uint genderCredit;
+        uint genderLength = gender.length;
+        uint sumAll;
+        uint sumUngender;
+
+        if(genderLength == 6){
+            genderCredit = 100;
+            return genderCredit;
+        }
+
+        for(uint j = 1; j < genderLength; j += 2){
+            sumAll += parseStringToUint(gender[j]);
+        }
+
+        if(genderLength > 6){
+            for(uint i = 7; i < genderLength; i += 2){
+                sumUngender += parseStringToUint(gender[i]);
+            }
+        }
+
+        if(sumUngender <= 6){
+            genderCredit = 80;
+        }else if(6 < sumUngender && sumUngender <= 12){
+            genderCredit = 60;
+        }else if(12 < sumUngender && sumUngender <= 18){
+            genderCredit = 40;
+        }else if(18 < sumUngender && sumUngender <= 24){
+            genderCredit = 20;
+        }else if(sumUngender == sumAll){
+            genderCredit = 0;
+        }else{
+            genderCredit = 10;
+        }
+
+        return genderCredit;
+    }
+
 }
