@@ -64,7 +64,7 @@ contract MediSystem {
     function evaluation_attribute(uint _attributeAmount) public view returns(uint){
         uint attributeCredit;
         if(_attributeAmount <= 6){
-            attributeCredit  = 0;
+            attributeCredit = 0;
         }else if(6 < _attributeAmount && _attributeAmount <= 12){
             attributeCredit = 20;
         }else if(12 < _attributeAmount && _attributeAmount <= 18){
