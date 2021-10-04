@@ -68,17 +68,17 @@ contract MediSystem {
         return doctors[_doctorAddress].doctorName;
     }
 
-    function evaluation_attribute(uint _attributeAmount) public view returns(uint) {
+    function evaluation_attribute(uint _attributeAmount) public pure returns(uint) {
         uint attributeCredit;
         if(_attributeAmount <= 6) {
             attributeCredit = 0;
-        } else if(6 < _attributeAmount && _attributeAmount <= 12) {
+        } else if(_attributeAmount <= 12) {
             attributeCredit = 20;
-        } else if(12 < _attributeAmount && _attributeAmount <= 18) {
+        } else if(_attributeAmount <= 18) {
             attributeCredit = 40;
-        } else if(18< _attributeAmount && _attributeAmount <= 24) {
+        } else if(_attributeAmount <= 24) {
             attributeCredit = 60;
-        } else if(24 < _attributeAmount && _attributeAmount <= 30) {
+        } else if(_attributeAmount <= 30) {
             attributeCredit = 80;
         } else {
             attributeCredit = 100;
@@ -86,7 +86,7 @@ contract MediSystem {
         return attributeCredit;
     }
 
-    function parseStringToUint(string memory _string) public view returns(uint) {
+    function parseStringToUint(string memory _string) public pure returns(uint) {
         uint[] memory array1 = new uint[](10);
         uint uint8_number = 48;
 
@@ -121,13 +121,13 @@ contract MediSystem {
         return number;
     }
 
-    function getGenderValue(string[] memory gender) public view returns(uint) {
+    function getGenderValue(string[] memory gender) public pure returns(uint) {
         uint genderCredit;
         uint genderLength = gender.length;
         uint sumAll;
         uint sumUngender;
 
-        if(genderLength == 6){
+        if(genderLength == 6) {
             genderCredit = 100;
             return genderCredit;
         }
@@ -160,7 +160,7 @@ contract MediSystem {
     }
 
     // @dev
-    function getAgeValue(string[] memory age) public view returns(uint256) {
+    function getAgeValue(string[] memory age) public pure returns(uint256) {
         uint minAge = parseStringToUint(age[0]);
         uint256 maxAge = parseStringToUint(age[1]);
         uint256 numberOfFalsyValues = parseStringToUint(age[2]);
@@ -200,54 +200,46 @@ contract MediSystem {
         }
     }
 
-    function getLoincVal(bool loinc) public view returns(uint){
-        if (loinc == true){
+    function getLoincVal(bool loinc) public pure returns(uint256) {
+        if (loinc == true) {
             return 100;
         }
         return 0;
     }
 
-    function getRadlexVal(bool radlex) public view returns(uint){
-        if (radlex == true){
+    function getRadlexVal(bool radlex) public pure returns(uint256) {
+        if (radlex == true) {
             return 100;
         }
         return 0;
     }
 
-    function getSnomedVal(string[] memory snomed) public view returns(uint256){
+    function getSnomedVal(string[] memory snomed) public pure returns(uint256) {
         string memory exists = snomed[0];
         string memory countFalsyVal = snomed[1];
 
-        uint countFalsyNum = parseStringToUint(countFalsyVal);
+        uint256 countFalsyNum = parseStringToUint(countFalsyVal);
 
-        if (keccak256(bytes(exists)) == keccak256(bytes("true"))){
+        if (keccak256(bytes(exists)) == keccak256(bytes("true"))) {
             if (countFalsyNum <= 5){
                 return 100;
-            }
-            else if (countFalsyNum > 5 && countFalsyNum <= 10){
+            } else if (countFalsyNum <= 10) {
                 return 90;
-            }
-            else if (countFalsyNum > 5 && countFalsyNum <= 10){
+            } else if (countFalsyNum <= 10) {
                 return 80;
-            }
-            else if (countFalsyNum > 11 && countFalsyNum <= 15){
+            } else if (countFalsyNum <= 15) {
                 return 70;
-            }
-            else if (countFalsyNum > 16 && countFalsyNum <= 20){
+            } else if (countFalsyNum <= 20) {
                 return 60;
-            }
-            else if (countFalsyNum > 21 && countFalsyNum <= 25){
+            } else if (countFalsyNum <= 25) {
                 return 50;
-            }
-            else if (countFalsyNum > 26 && countFalsyNum <= 30){
+            } else if (countFalsyNum <= 30) {
                 return 25;
-            }
-            else{
+            } else {
                 return 0;
             }
         }
         return 0;
-
     }
 
 }
