@@ -184,4 +184,20 @@ contract MediSystem {
         }
     }
 
+    function getNumberOfPatientsValue(uint256 numberOfPatients) public pure returns(uint256) {
+        if (numberOfPatients <= 200) {
+            return 40;
+        } else if (numberOfPatients <= 400) {
+            return 60;
+        } else if (numberOfPatients <= 600) {
+            return 70;
+        } else if (numberOfPatients <= 800) {
+            return 80;
+        } else if (numberOfPatients <= 1000) {
+            return 90;
+        } else {
+            return 100;
+        }
+    }
+
 }
