@@ -54,7 +54,7 @@ contract MediSystem {
         return "";
     }
 
-    function getMyName(address account) public view returns(string memory){
+    function getMyName(address account) public view returns(string memory) {
         return doctors[account].doctorName;
     }
 
@@ -68,25 +68,25 @@ contract MediSystem {
         return doctors[_doctorAddress].doctorName;
     }
 
-    function evaluation_attribute(uint _attributeAmount) public view returns(uint){
+    function evaluation_attribute(uint _attributeAmount) public view returns(uint) {
         uint attributeCredit;
-        if(_attributeAmount <= 6){
+        if(_attributeAmount <= 6) {
             attributeCredit = 0;
-        }else if(6 < _attributeAmount && _attributeAmount <= 12){
+        } else if(6 < _attributeAmount && _attributeAmount <= 12) {
             attributeCredit = 20;
-        }else if(12 < _attributeAmount && _attributeAmount <= 18){
+        } else if(12 < _attributeAmount && _attributeAmount <= 18) {
             attributeCredit = 40;
-        }else if(18< _attributeAmount && _attributeAmount <= 24){
+        } else if(18< _attributeAmount && _attributeAmount <= 24) {
             attributeCredit = 60;
-        }else if(24 < _attributeAmount && _attributeAmount <= 30){
+        } else if(24 < _attributeAmount && _attributeAmount <= 30) {
             attributeCredit = 80;
-        }else{
+        } else {
             attributeCredit = 100;
         }
         return attributeCredit;
     }
 
-    function parseStringToUint(string memory _string) public view returns(uint){
+    function parseStringToUint(string memory _string) public view returns(uint) {
         uint[] memory array1 = new uint[](10);
         uint uint8_number = 48;
 
@@ -94,18 +94,18 @@ contract MediSystem {
         uint len_array2 = array2.length;
         uint number = 0;
 
-        for(uint y = 0; y < 10; y++){
+        for(uint y = 0; y < 10; y++) {
             array1[y] = uint8_number;
             uint8_number += 1;
         }
 
-        for(uint i = 0; i < bytes(_string).length; i++){
+        for(uint i = 0; i < bytes(_string).length; i++) {
             bytes1 new_string = bytes(_string)[i];
             uint num = uint8(new_string);
             array2[i] = num;
         }
 
-        for(uint p = 0; p < 10; p++){
+        for(uint p = 0; p < 10; p++) {
             for(uint r = 0; r < len_array2; r++){
                 if(array1[p] == array2[r]){
                     array2[r] = p;
@@ -113,7 +113,7 @@ contract MediSystem {
             }
         }
 
-        for(uint e = 0; e < len_array2; e++){
+        for(uint e = 0; e < len_array2; e++) {
             array2[e] = array2[e] * 10 ** (len_array2-1-e);
             number = number + array2[e];
         }
@@ -121,7 +121,7 @@ contract MediSystem {
         return number;
     }
 
-    function getGenderValue(string[] memory gender) public view returns(uint){
+    function getGenderValue(string[] memory gender) public view returns(uint) {
         uint genderCredit;
         uint genderLength = gender.length;
         uint sumAll;
@@ -132,27 +132,27 @@ contract MediSystem {
             return genderCredit;
         }
 
-        for(uint j = 1; j < genderLength; j += 2){
+        for(uint j = 1; j < genderLength; j += 2) {
             sumAll += parseStringToUint(gender[j]);
         }
 
-        if(genderLength > 6){
-            for(uint i = 7; i < genderLength; i += 2){
+        if(genderLength > 6) {
+            for(uint i = 7; i < genderLength; i += 2) {
                 sumUngender += parseStringToUint(gender[i]);
             }
         }
 
-        if(sumUngender <= 6){
+        if(sumUngender <= 6) {
             genderCredit = 80;
-        }else if(6 < sumUngender && sumUngender <= 12){
+        } else if(6 < sumUngender && sumUngender <= 12) {
             genderCredit = 60;
-        }else if(12 < sumUngender && sumUngender <= 18){
+        } else if(12 < sumUngender && sumUngender <= 18) {
             genderCredit = 40;
-        }else if(18 < sumUngender && sumUngender <= 24){
+        } else if(18 < sumUngender && sumUngender <= 24) {
             genderCredit = 20;
-        }else if(sumUngender == sumAll){
+        } else if(sumUngender == sumAll) {
             genderCredit = 0;
-        }else{
+        } else {
             genderCredit = 10;
         }
 
