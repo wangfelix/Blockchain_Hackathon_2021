@@ -200,4 +200,54 @@ contract MediSystem {
         }
     }
 
+    function getLoincVal(bool loinc) public view returns(uint){
+        if (loinc == true){
+            return 100;
+        }
+        return 0;
+    }
+
+    function getRadlexVal(bool radlex) public view returns(uint){
+        if (radlex == true){
+            return 100;
+        }
+        return 0;
+    }
+
+    function getSnomedVal(string[] memory snomed) public view returns(uint256){
+        string memory exists = snomed[0];
+        string memory countFalsyVal = snomed[1];
+
+        uint countFalsyNum = parseStringToUint(countFalsyVal);
+
+        if (keccak256(bytes(exists)) == keccak256(bytes("true"))){
+            if (countFalsyNum <= 5){
+                return 100;
+            }
+            else if (countFalsyNum > 5 && countFalsyNum <= 10){
+                return 90;
+            }
+            else if (countFalsyNum > 5 && countFalsyNum <= 10){
+                return 80;
+            }
+            else if (countFalsyNum > 11 && countFalsyNum <= 15){
+                return 70;
+            }
+            else if (countFalsyNum > 16 && countFalsyNum <= 20){
+                return 60;
+            }
+            else if (countFalsyNum > 21 && countFalsyNum <= 25){
+                return 50;
+            }
+            else if (countFalsyNum > 26 && countFalsyNum <= 30){
+                return 25;
+            }
+            else{
+                return 0;
+            }
+        }
+        return 0;
+
+    }
+
 }
