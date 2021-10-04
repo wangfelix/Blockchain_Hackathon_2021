@@ -159,4 +159,29 @@ contract MediSystem {
         return genderCredit;
     }
 
+    // @dev
+    function getAgeValue(string[] memory age) public view returns(uint256) {
+        uint minAge = parseStringToUint(age[0]);
+        uint256 maxAge = parseStringToUint(age[1]);
+        uint256 numberOfFalsyValues = parseStringToUint(age[2]);
+
+        // Check if range of age is valid and believable
+        if (minAge < 0 || maxAge > 150) {
+            return 0;
+        }
+
+        // ToDo: make decisions relative to total number of patients in the dataset
+        if (numberOfFalsyValues <= 5) {
+            return 100;
+        } else if (numberOfFalsyValues <=10) {
+            return 70;
+        } else if (numberOfFalsyValues <=20) {
+            return 40;
+        } else if (numberOfFalsyValues <=30) {
+            return 10;
+        } else {
+            return 0;
+        }
+    }
+
 }
