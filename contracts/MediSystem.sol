@@ -6,12 +6,13 @@ contract MediSystem {
     mapping(string => Disease) private diseases;
     address mediCoinAddress;
     address owner;
+    string[] public diseasesNames;
 
     struct Doctor {
         address doctorAccount;
         string doctorName;
         bytes32[] contributedData;
-        bytes32[] pendingDataSets;
+        uint256[] pendingDataSetsValues;
         bool isExist;
     }
 
@@ -240,6 +241,95 @@ contract MediSystem {
             }
         }
         return 0;
+    }
+
+    /**
+    * @notice Main function that calculates a value of a dataset, given the given quality attributes.
+    *
+    * @param account The address of the caller (TODO: Check why msg.sender doesn't work)
+    * @param disease The name of the disease.
+    * @param numberOfPatients Number of different patients, for whom the dataset contains readings.
+    * @param age A string array with 3 fields. The first containing the lowest occuring age, the second containing the highest occuring age, and the third containing a string representation of the number of falsy values in the dataset. Falsy values in a dataset are anything other than numbers.
+    * @param gender A string array with variable amount of fields. The fields with even indexes contain the different genders or falsy data, that occurr in the dataset. The odd-indexed fields contain a string representation of the number of occurrences of the predecessing value.
+    * @param numberOfAttributes The number of different attributes/columns in the dataset.
+    * @param loinc true, if dataset contains loinc-data - false, if not.
+    * @param radlex loinc true, if dataset contains radlex-data - false, if not.
+    * @param snomed A string array with 2 fields. The first containing either "true" or "false", corresponding with the existence of snomed data in the dataset. The second field contains a string representation of the number of falsy values. A falsy snomed value is any string containing symbols different than numbers.
+    *
+    * @return medicoinsWorth The number of MediCoins, that the dataset is worth, given the quality of it and the current available budget for the disease.
+    */
+    function getDatasetValue(
+        address account,
+        string memory disease,
+        uint256 numberOfPatients,
+        string[] memory age,
+        string[] memory gender,
+        uint256 numberOfAttributes,
+        bool loinc,
+        bool radlex,
+        string[] memory snomed) public payable returns (uint) {
+
+        uint256 sumValue = getTotalDatasetValuePercentage(numberOfPatients, age, gender, numberOfAttributes, loinc, radlex, snomed);
+
+        // The maximum percentage is 5%, represented by 5000, resulting of a maximum sumValue of 1000 multiplied by 5
+        uint256 percentageWorth = sumValue * 5;
+
+        // Check if the disease exists. If not, add it to the system, mint medicoins and allocate budget.
+        if (isDiseaseExists(disease) == false) {
+
+            // Add disease
+            diseases[disease] = Disease(10000 * 10 ** 18, 0, disease);
+            diseasesNames.push(disease);
+
+            // Mint medicoins
+            // TODO Mint MediCoins
+
+        }
+
+        uint mediCoinsWorth = (diseases[disease].budget * percentageWorth) / 100000;
+        diseases[disease].budget -= mediCoinsWorth;
+
+        // add the amount of Medicoins to the pendingDataSetsValues array of the doctor for future transfer validation
+        doctors[account].pendingDataSetsValues.push(mediCoinsWorth);
+
+        return mediCoinsWorth;
+    }
+
+    function getTotalDatasetValuePercentage(
+        uint256 numberOfPatients,
+        string[] memory age,
+        string[] memory gender,
+        uint256 numberOfAttributes,
+        bool loinc,
+        bool radlex,
+        string[] memory snomed) public pure returns(uint256) {
+
+        // number of patients, attributes and the existence of valid snomed data is double-weighted
+        uint256 numberOfPatientsValue = getNumberOfPatientsValue(numberOfPatients) * 2;
+        uint256 numberOfAttributesValue = evaluation_attribute(numberOfAttributes) * 2;
+        uint256 snomedValue = getSnomedVal(snomed) * 2;
+
+        uint256 ageValue = getAgeValue(age);
+        uint256 genderValue = getGenderValue(gender);
+        uint256 loincValue = getLoincVal(loinc);
+        uint256 radlexValue = getRadlexVal(radlex);
+
+        // sumValue is a value in the range [0,1000]
+        return numberOfPatientsValue + ageValue + genderValue + numberOfAttributesValue + loincValue + radlexValue + snomedValue;
+    }
+
+
+    // Checks if a disease exists in the system. The check is done via the name of the disease.
+    function isDiseaseExists(string memory content) public view returns(bool) {
+
+        for (uint256 i = 0; i < diseasesNames.length; i++) {
+
+            if (keccak256(bytes(content)) == keccak256(bytes(diseasesNames[i]))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
