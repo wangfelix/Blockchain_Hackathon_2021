@@ -8,6 +8,7 @@ import { BasePage } from "BaseComponents/basePage";
 import { ContributeDataPage } from "Pages/ContributeDataPage/contributeDataPage";
 import { Paths } from "Utils/paths";
 import { store } from "State/store";
+import { AccountAndHistoryPage } from "Pages/AccountAndHistoryPage/accountAndHistoryPage";
 
 export const App = () => {
     // -- CONST DATA --
@@ -29,7 +30,7 @@ export const App = () => {
                         <Switch>
                             <Route path={Paths.CONTRIBUTE_DATA_PAGE} component={ContributeDataPage} />
 
-                            <Route path={Paths.ACCOUNT_AND_HISTORY} component={TestPage} />
+                            <Route path={Paths.ACCOUNT_AND_HISTORY} component={AccountAndHistoryPage} />
 
                             <Route path={Paths.DEMO} component={TestPage} />
 

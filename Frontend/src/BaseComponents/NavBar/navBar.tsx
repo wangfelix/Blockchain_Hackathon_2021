@@ -54,6 +54,11 @@ export const NavBar = () => {
                 to: Paths.CONTRIBUTE_DATA_PAGE,
                 selected: page === Paths.CONTRIBUTE_DATA_PAGE,
             },
+            {
+                title: NavBarTabs.ACCOUNTS_AND_HISTORY,
+                to: Paths.ACCOUNT_AND_HISTORY,
+                selected: page === Paths.ACCOUNT_AND_HISTORY,
+            },
         ],
         [page, account]
     );

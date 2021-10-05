@@ -18,6 +18,7 @@ export const Text = ({ children, textType, styleProps }: TextProps) => {
         textAlign: "justify" as "justify",
         hyphens: "auto" as "auto",
         fontFamily: "Work Sans",
+        justifySelf: "center",
 
         ...styleProps,
     };
