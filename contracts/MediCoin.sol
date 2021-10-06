@@ -13,8 +13,6 @@ contract MediCoin is ERC20 {
 
     uint256 private _totalSupply;
 
-    mapping(address => uint256) private _balances;
-
     constructor() ERC20("MediCoin", "MVC") {
         owner = msg.sender;
         minter = msg.sender;
@@ -26,15 +24,20 @@ contract MediCoin is ERC20 {
         _;
     }
 
-    function totalSupply() public view virtual override returns (uint256) {
-        return _totalSupply;
+    function approve(address spender, uint256 amount)virtual override hasAccess public returns (bool) {
+        super.approve(spender, amount);
+        return true;
     }
 
-    // Wer soll Zugriff haben?
-    function balanceOf(address account) public view virtual override returns (uint256) {
-        return _balances[account];
+    function decreaseAllowance(address spender, uint256 subtractedValue) virtual override hasAccess public returns (bool) {
+        super.decreaseAllowance(spender, subtractedValue);
+        return true;
     }
 
+    function increaseAllowance(address spender, uint256 addedValue) virtual override hasAccess public returns (bool) {
+        super.increaseAllowance(spender, addedValue);
+        return true;
+    }
 
     function transfer(address recipient, uint256 amount) virtual override hasAccess public returns (bool) {
         super.transfer(recipient, amount);
@@ -42,26 +45,9 @@ contract MediCoin is ERC20 {
     }
 
 
-
-
-    function mint(address receiver, uint amount) public {
-        require(msg.sender == minter);
-        _balances[receiver] += amount;
+    function mint(address account, uint256 amount) hasAccess public returns (bool) {
+        _mint(account, amount);
+        return true;
     }
 
-
-    /*
-        // deployer gets minter and pauser role
-        constructor(string memory name, string memory symbol) public {
-            setupRole(DEFAULT_ADMIN_ROLE, owner());
-            setupRole(MINTER_ROLE, owner());
-            setupRole(PAUSER_ROLE, owner());
-        }
-
-        // minter can add amount of token to the total supply
-        function mint(address to, uint256 amount) public virtual {
-            require(hasRole(MINTER_ROLE, owner()), "Must have minter role to mint");
-            _mint(to, amount);
-        }
-    */
 }
