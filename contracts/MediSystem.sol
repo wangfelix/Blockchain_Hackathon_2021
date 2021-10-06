@@ -332,4 +332,25 @@ contract MediSystem {
         return false;
     }
 
+    function transfer(address _address, uint amount) public {
+        InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
+        bool exit;
+
+        for(uint i = 0; i < doctors[_address].pendingDataSetsValues.length; i++) {
+            if(doctors[_address].pendingDataSetsValues[i] == amount) {
+                exit = true;
+            }
+        }
+
+        require(exit == true, "You can not tansfer");
+        medicoin.transferFrom(owner, _address, amount);
+
+        for(uint j = 0; j < doctors[_address].pendingDataSetsValues.length; j++) {
+            if(doctors[_address].pendingDataSetsValues[j] == amount) {
+                doctors[_address].pendingDataSetsValues[j] = doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
+                delete doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
+            }
+        }
+    }
+
 }
