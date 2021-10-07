@@ -3,6 +3,7 @@ import { useLocation } from "react-router";
 import { useContractCall, useEthers, useContractFunction } from "@usedapp/core";
 import { Contract } from "ethers";
 import { Interface } from "@ethersproject/abi";
+
 import mediSysAbi from "Source/Contracts/MediSystem.json";
 
 /**
@@ -87,7 +88,7 @@ export const useMyName = (account: string | null | undefined) => {
     const [doctorsName]: any =
         useContractCall({
             abi: simpleContractInterface,
-            address: "0xed4685AE45E1004c9dF65d26E0552709E3308893",
+            address: "0x80bDAe3Ed341606A50407De3497f5981C692D1c6",
             method: "getMyName",
             args: [account],
         }) ?? [];
@@ -99,7 +100,7 @@ export const useMyName = (account: string | null | undefined) => {
     return doctorsName;
 };
 
-const contract = new Contract("0xed4685AE45E1004c9dF65d26E0552709E3308893", mediSysAbi.abi);
+const contract = new Contract("0x80bDAe3Ed341606A50407De3497f5981C692D1c6", mediSysAbi.abi);
 
 export function useMediSysMethod(functionName: string) {
     const { state, send } = useContractFunction(contract, functionName, {});

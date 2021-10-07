@@ -1,4 +1,4 @@
-import { ModalAction } from "State/Actions/modalActions";
+import { ModalAction } from "State/Actions/actions";
 import { ActionType } from "State/Actions/actionTypes";
 
 type ModalState = {
