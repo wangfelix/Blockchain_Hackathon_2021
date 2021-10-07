@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 interface InterfaceMediCoin {
     function getOwner() external view returns(address); // abstract
     function balanceOf(address) external view returns(uint);
+    function transferFrom(address, address, uint256)external view;
 }
 
 contract MediCoin is ERC20 {
