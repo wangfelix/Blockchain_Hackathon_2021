@@ -7,7 +7,6 @@ contract MediSystem {
     address mediCoinAddress;
     address owner;
     string[] public diseasesNames;
-    //@Anna
     address[] public allDoctorAddress;
     address[] public unapprovedDoctors;
 
@@ -22,7 +21,7 @@ contract MediSystem {
 
     struct Disease {
         uint budget;
-        uint caseAmount;
+        uint numberOfPatientsData;
         string name;
     }
 
@@ -55,10 +54,10 @@ contract MediSystem {
         return "success";
     }
 
-    function addDisease(uint budget, string memory name) public payable returns(string memory) {
+    function addDisease(uint budget, string memory name) public payable {
         Disease memory disease = Disease(budget, 0, name);
         diseases[name] = disease;
-        return "";
+        diseasesNames.push(name);
     }
 
     function getMyName(address account) public view returns(string memory) {
@@ -151,11 +150,11 @@ contract MediSystem {
 
         if(sumUngender <= 6) {
             genderCredit = 80;
-        } else if(6 < sumUngender && sumUngender <= 12) {
+        } else if(sumUngender <= 12) {
             genderCredit = 60;
-        } else if(12 < sumUngender && sumUngender <= 18) {
+        } else if(sumUngender <= 18) {
             genderCredit = 40;
-        } else if(18 < sumUngender && sumUngender <= 24) {
+        } else if(sumUngender <= 24) {
             genderCredit = 20;
         } else if(sumUngender == sumAll) {
             genderCredit = 0;
@@ -281,7 +280,7 @@ contract MediSystem {
         uint256 percentageWorth = sumValue * 5;
 
         // Check if the disease exists. If not, add it to the system, mint medicoins and allocate budget.
-        if (isDiseaseExists(disease) == false) {
+        if (getIsDiseaseExists(disease) == false) {
 
             // Add disease
             diseases[disease] = Disease(10000 * 10 ** 18, 0, disease);
@@ -326,7 +325,7 @@ contract MediSystem {
 
 
     // Checks if a disease exists in the system. The check is done via the name of the disease.
-    function isDiseaseExists(string memory content) public view returns(bool) {
+    function getIsDiseaseExists(string memory content) public view returns(bool) {
 
         for (uint256 i = 0; i < diseasesNames.length; i++) {
 
@@ -343,7 +342,6 @@ contract MediSystem {
 
     function contributedData(bytes32 fileHash, address doctor, uint256 amount) public payable {
         emit ContributeData(msg.sender, fileHash, msg.value, block.timestamp);
-        //todo transfer
         transfer(doctor, amount);
     }
 
@@ -385,6 +383,15 @@ contract MediSystem {
         }
 
         return true;
+    }
+
+    function getDiseaseBudget(string memory diseaseName) public view returns(uint) {
+        return diseases[diseaseName].budget;
+    }
+
+    // TODO Increment numberOfPatientsData after contiributing data.
+    function getDiseaseNumberOfPatientsData(string memory diseaseName) public view returns(uint256) {
+        return diseases[diseaseName].numberOfPatientsData;
     }
 
 }
