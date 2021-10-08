@@ -7,6 +7,10 @@ contract MediSystem {
     address mediCoinAddress;
     address owner;
     string[] public diseasesNames;
+    //@Anna
+    address[] public allDoctorAddress;
+    address[] public unapprovedDoctors;
+
 
     struct Doctor {
         address doctorAccount;
@@ -46,6 +50,8 @@ contract MediSystem {
         doctor.doctorName = doctorName;
         doctor.isExist = true;
         doctors[msg.sender] = doctor;
+        allDoctorAddress.push(doctor.doctorAccount);
+        unapprovedDoctors.push(msg.sender);
         return "success";
     }
 
@@ -61,7 +67,7 @@ contract MediSystem {
 
     function getMyMediCoinBalance() public view returns(uint) {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        return medicoin.balanceOf(doctors[msg.sender].doctorAccount);
+        return medicoin.balanceOf(msg.sender);
     }
 
     // Only the deployer of the contract - medicalvalues - is able to see a list of all the users.
@@ -332,17 +338,25 @@ contract MediSystem {
         return false;
     }
 
+    //@Anna
+    event ContributeData(address doctor, bytes32 fileHash, uint256 amount, uint now);
+
+    function contributedData(bytes32 fileHash) public payable {
+        emit ContributeData(msg.sender, fileHash, msg.value, block.timestamp);
+        //todo transfer
+    }
+
     function transfer(address _address, uint amount) public {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        bool exit;
+        bool exist;
 
         for(uint i = 0; i < doctors[_address].pendingDataSetsValues.length; i++) {
             if(doctors[_address].pendingDataSetsValues[i] == amount) {
-                exit = true;
+                exist = true;
             }
         }
 
-        require(exit == true, "You can not tansfer");
+        require(exist == true, "You can not tansfer");
         medicoin.transferFrom(owner, _address, amount);
 
         for(uint j = 0; j < doctors[_address].pendingDataSetsValues.length; j++) {
@@ -351,6 +365,16 @@ contract MediSystem {
                 delete doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
             }
         }
+    }
+    //@Anna
+    function isIApproved(address _address) public view returns(bool) {
+        for(uint i = 0; i < unapprovedDoctors.length; i++) {
+            if(unapprovedDoctors[i] == _address){
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
