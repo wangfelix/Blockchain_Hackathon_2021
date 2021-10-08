@@ -341,9 +341,10 @@ contract MediSystem {
     //@Anna
     event ContributeData(address doctor, bytes32 fileHash, uint256 amount, uint now);
 
-    function contributedData(bytes32 fileHash) public payable {
+    function contributedData(bytes32 fileHash, address doctor, uint256 amount) public payable {
         emit ContributeData(msg.sender, fileHash, msg.value, block.timestamp);
         //todo transfer
+        transfer(doctor, amount);
     }
 
     function transfer(address _address, uint amount) public {
@@ -356,6 +357,10 @@ contract MediSystem {
             }
         }
 
+        uint doctorsAllowance = medicoin.allowance(owner, _address);
+
+        require(doctorsAllowance >= amount, "Allowance not sufficient for transaction.");
+
         require(exist == true, "You can not tansfer");
         medicoin.transferFrom(owner, _address, amount);
 
@@ -364,6 +369,11 @@ contract MediSystem {
                 doctors[_address].pendingDataSetsValues[j] = doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
                 delete doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
             }
+        }
+
+        // If the doctors allowance is low, add his address to the unapprovedDoctors array, so that meidcalvalues can refill his allowance.
+        if (doctorsAllowance < 100 * 10 ** 18) {
+            unapprovedDoctors.push(_address);
         }
     }
     //@Anna

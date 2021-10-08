@@ -6,6 +6,7 @@ interface InterfaceMediCoin {
     function getOwner() external view returns(address); // abstract
     function balanceOf(address) external view returns(uint);
     function transferFrom(address, address, uint256)external view;
+    function allowance(address owner, address spender) external view returns(uint256);
 }
 
 contract MediCoin is ERC20 {
