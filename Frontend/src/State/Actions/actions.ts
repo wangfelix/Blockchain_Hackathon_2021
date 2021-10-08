@@ -81,6 +81,46 @@ export interface FalsyGenderValuesAction {
     payload: FalsyGenderValue[];
 }
 
+// LOINC
+
+export interface LoincAction {
+    type: ActionType.SET_IS_LOINC_EXISTS;
+    payload: boolean;
+}
+
+// RADLEX
+
+export interface RadlexAction {
+    type: ActionType.SET_IS_RADLEX_EXISTS;
+    payload: boolean;
+}
+
+// NUMBER PATIENTS
+
+export interface NumberOfPatientsAction {
+    type: ActionType.SET_NUMBER_OF_PATIENTS;
+    payload: number;
+}
+
+// NUMBER ATTRIBUTES
+
+export interface NumberOfAttributesAction {
+    type: ActionType.SET_NUMBER_OF_ATTRIBUTES;
+    payload: number;
+}
+
+// SNOMED
+
+export interface SetIsSnomedExistsAction {
+    type: ActionType.SET_IS_SNOMED_EXISTS;
+    payload: boolean;
+}
+
+export interface SetFalsySnomedValues {
+    type: ActionType.SET_NUMBER_OF_FALSY_SNOMED_VALUES;
+    payload: number;
+}
+
 export type ContributeDataPageAction =
     | IsAgeExistsAction
     | MinAgeAction
@@ -93,4 +133,10 @@ export type ContributeDataPageAction =
     | FemaleGenderOccurrencesAction
     | IsTransgenderGenderExistsAction
     | TransgenderGenderOccurrencesAction
-    | FalsyGenderValuesAction;
+    | FalsyGenderValuesAction
+    | LoincAction
+    | RadlexAction
+    | NumberOfPatientsAction
+    | NumberOfAttributesAction
+    | SetIsSnomedExistsAction
+    | SetFalsySnomedValues;

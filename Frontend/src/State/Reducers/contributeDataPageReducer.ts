@@ -1,12 +1,23 @@
-import { ContributeDataPageAction, ModalAction } from "State/Actions/actions";
+import { ContributeDataPageAction } from "State/Actions/actions";
 import { ActionType } from "State/Actions/actionTypes";
 
-export type ModalState = {
+export type ContributeDataState = {
     age: AgeState;
     gender: GenderState;
+
+    loinc: boolean;
+    radlex: boolean;
+    numberOfPatients: number;
+    numberOfAttributes: number;
+    snomed: SnomedState;
 };
 
-type AgeState = {
+export type SnomedState = {
+    isSnomedExists: boolean;
+    numberOfFalsySnomedValues: number;
+};
+
+export type AgeState = {
     indexAge: number;
     isAgeExists: boolean;
     minAge: number;
@@ -14,7 +25,7 @@ type AgeState = {
     numberFalsyAgeValues: number;
 };
 
-type GenderState = {
+export type GenderState = {
     isMaleExists: boolean;
     numberMaleOccurrences: number;
     isFemaleExists: boolean;
@@ -27,7 +38,7 @@ type GenderState = {
 export type FalsyGenderValue = { value: string; numberOccurrences: number };
 
 export const contributeDataPageReducer = (
-    state: ModalState = {
+    state: ContributeDataState = {
         age: { isAgeExists: false, indexAge: 0, minAge: 0, maxAge: 0, numberFalsyAgeValues: 0 },
         gender: {
             isMaleExists: false,
@@ -38,6 +49,11 @@ export const contributeDataPageReducer = (
             numberTransgenderOccurrences: 0,
             falsyGenderValues: [],
         },
+        loinc: false,
+        radlex: false,
+        numberOfPatients: 0,
+        numberOfAttributes: 0,
+        snomed: { isSnomedExists: false, numberOfFalsySnomedValues: 0 },
     },
     action: ContributeDataPageAction
 ) => {
@@ -81,6 +97,34 @@ export const contributeDataPageReducer = (
 
         case ActionType.SET_FALSY_GENDER_VALUES:
             return { ...state, gender: { ...state.gender, falsyGenderValues: action.payload } };
+
+        // LOINC
+
+        case ActionType.SET_IS_LOINC_EXISTS:
+            return { ...state, loinc: action.payload };
+
+        // RADLEX
+
+        case ActionType.SET_IS_RADLEX_EXISTS:
+            return { ...state, radlex: action.payload };
+
+        // NUMBER PATIENTS
+
+        case ActionType.SET_NUMBER_OF_PATIENTS:
+            return { ...state, numberOfPatients: action.payload };
+
+        // NUMBER ATTRIBUTES
+
+        case ActionType.SET_NUMBER_OF_ATTRIBUTES:
+            return { ...state, numberOfAttributes: action.payload };
+
+        // SNOMED
+
+        case ActionType.SET_IS_SNOMED_EXISTS:
+            return { ...state, snomed: { ...state.snomed, isSnomedExists: action.payload } };
+
+        case ActionType.SET_NUMBER_OF_FALSY_SNOMED_VALUES:
+            return { ...state, snomed: { ...state.snomed, numberOfFalsySnomedValues: action.payload } };
 
         default:
             return state;

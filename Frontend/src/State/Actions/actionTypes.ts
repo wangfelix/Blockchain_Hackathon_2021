@@ -23,4 +23,25 @@ export enum ActionType {
     SET_IS_TRANSGENDER_GENDER_EXISTS = "setTransgenderGenderExists",
     SET_TRANSGENDER_GENDER_OCCURRENCES = "setTransgenderGenderOccurrences",
     SET_FALSY_GENDER_VALUES = "setFalsyGenderValues,",
+
+    // LOINC
+
+    SET_IS_LOINC_EXISTS = "setIsLoincExists",
+
+    // RADLEX
+
+    SET_IS_RADLEX_EXISTS = "setIsRadlexEcists",
+
+    // NUMBER PATIENTS
+
+    SET_NUMBER_OF_PATIENTS = "setNumberOfPatients",
+
+    // NUMBER ATTRIBUTES
+
+    SET_NUMBER_OF_ATTRIBUTES = "setNumberOfAttributes",
+
+    // SNOMED
+
+    SET_IS_SNOMED_EXISTS = "setIsSnomedExists",
+    SET_NUMBER_OF_FALSY_SNOMED_VALUES = "setNumberOfFalsySnomedValues",
 }

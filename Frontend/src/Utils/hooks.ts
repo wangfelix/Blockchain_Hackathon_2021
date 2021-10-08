@@ -6,6 +6,8 @@ import { Interface } from "@ethersproject/abi";
 
 import mediSysAbi from "Source/Contracts/MediSystem.json";
 
+const MEDISYSTEM_ADDRESS = "0x80bDAe3Ed341606A50407De3497f5981C692D1c6";
+
 /**
  * Returns the current URL's pathname without any subdirectories or query parameters.
  *
@@ -88,7 +90,7 @@ export const useMyName = (account: string | null | undefined) => {
     const [doctorsName]: any =
         useContractCall({
             abi: simpleContractInterface,
-            address: "0x80bDAe3Ed341606A50407De3497f5981C692D1c6",
+            address: MEDISYSTEM_ADDRESS,
             method: "getMyName",
             args: [account],
         }) ?? [];
@@ -100,7 +102,7 @@ export const useMyName = (account: string | null | undefined) => {
     return doctorsName;
 };
 
-const contract = new Contract("0x80bDAe3Ed341606A50407De3497f5981C692D1c6", mediSysAbi.abi);
+const contract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
 
 export function useMediSysMethod(functionName: string) {
     const { state, send } = useContractFunction(contract, functionName, {});

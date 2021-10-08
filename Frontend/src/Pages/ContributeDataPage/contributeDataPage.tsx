@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { CSVReader } from "react-papaparse";
 import { ParseResult } from "papaparse";
 import { batch, useDispatch, useSelector } from "react-redux";
+import { useEthers } from "@usedapp/core";
+import { utils } from "ethers";
 
 import { Button } from "BaseComponents/Button/button";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
@@ -16,18 +18,32 @@ import {
     setIndexAge,
     setIsAgeExists,
     setIsFemaleExists,
+    setIsLoincExists,
     setIsMaleExists,
+    setIsRadlexExists,
+    setIsSnomedExists,
     setIsTransgenderExists,
     setMaleOccurrences,
     setMaxAge,
     setMinAge,
     setNumberFalsyAgeValues,
+    setNumberOfAttributes,
+    setNumberOfFalsySnomedValues,
+    setNumberOfPatients,
     setTransgenderOccurrences,
 } from "State/Actions/actionCreators";
 import { RootState } from "State/Reducers";
-import { containsAgeColumn, containsGenderColumn } from "Pages/ContributeDataPage/contributeDataPageUtils";
-import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
-import { useEthers } from "@usedapp/core";
+import {
+    containsAgeColumn,
+    containsGenderColumn,
+    containsLoincColumn,
+    containsSnomedColumn,
+    FEMALE_REGEX,
+    MALE_REGEX,
+    TRANSGENDER_REGEX,
+} from "Pages/ContributeDataPage/contributeDataPageUtils";
+import { AgeState, FalsyGenderValue, GenderState, SnomedState } from "State/Reducers/contributeDataPageReducer";
+import { HashTable } from "Utils/utils";
 
 export const ContributeDataPage = () => {
     // -- CALLBACKS --
@@ -55,43 +71,155 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
 
     const [selectedFile, setSelectedFile] = useState<ParseResult<any>[] | undefined>(undefined);
 
-    const isAgeExists = useSelector<RootState, boolean>((state) => state.contributeDataPage.age.isAgeExists);
-    const indexAge = useSelector<RootState, number>((state) => state.contributeDataPage.age.indexAge);
-    const minAge = useSelector<RootState, number>((state) => state.contributeDataPage.age.minAge);
-    const maxAge = useSelector<RootState, number>((state) => state.contributeDataPage.age.maxAge);
-    const nbrFalsyAgeVal = useSelector<RootState, number>((state) => state.contributeDataPage.age.numberFalsyAgeValues);
+    // File Data
 
-    const isMaleExists = useSelector<RootState, boolean>((state) => state.contributeDataPage.gender.isMaleExists);
-    const maleOccurrences = useSelector<RootState, number>(
-        (state) => state.contributeDataPage.gender.numberMaleOccurrences
-    );
-    const isFemaleExists = useSelector<RootState, boolean>((state) => state.contributeDataPage.gender.isFemaleExists);
-    const femaleOccurrences = useSelector<RootState, number>(
-        (state) => state.contributeDataPage.gender.numberFemaleOccurrences
-    );
-    const isTransgenderExists = useSelector<RootState, boolean>(
-        (state) => state.contributeDataPage.gender.isTransgenderExists
-    );
-    const transgenderOccurrences = useSelector<RootState, number>(
-        (state) => state.contributeDataPage.gender.numberTransgenderOccurrences
-    );
-    const falsyGenderValues = useSelector<RootState, FalsyGenderValue[]>(
-        (state) => state.contributeDataPage.gender.falsyGenderValues
-    );
+    const [selectedFileHash, setSelectedFileHash] = useState("");
+
+    const numberOfPatients = useSelector<RootState, number>((state) => state.contributeDataPage.numberOfPatients);
+    const numberOfAttributes = useSelector<RootState, number>((state) => state.contributeDataPage.numberOfAttributes);
+
+    // Age
+
+    const ageState = useSelector<RootState, AgeState>((state) => state.contributeDataPage.age);
+
+    const isAgeExists = ageState.isAgeExists;
+    const indexAge = ageState.indexAge;
+    const minAge = ageState.minAge;
+    const maxAge = ageState.maxAge;
+    const nbrFalsyAgeVal = ageState.numberFalsyAgeValues;
+
+    // Gender
+
+    const genderState = useSelector<RootState, GenderState>((state) => state.contributeDataPage.gender);
+
+    const isMaleExists = genderState.isMaleExists;
+    const maleOccurrences = genderState.numberMaleOccurrences;
+    const isFemaleExists = genderState.isFemaleExists;
+    const femaleOccurrences = genderState.numberFemaleOccurrences;
+    const isTransgenderExists = genderState.isTransgenderExists;
+    const transgenderOccurrences = genderState.numberTransgenderOccurrences;
+    const falsyGenderValues = genderState.falsyGenderValues;
+
+    // Loinc
+
+    const isLoincExists = useSelector<RootState, boolean>((state) => state.contributeDataPage.loinc);
+
+    // Radlex
+
+    const isRadlexExists = useSelector<RootState, boolean>((state) => state.contributeDataPage.radlex);
+
+    // Snomed
+
+    const snomedState = useSelector<RootState, SnomedState>((state) => state.contributeDataPage.snomed);
+
+    const isSnomedExists = snomedState.isSnomedExists;
+    const numberOfFalsySnomedValues = snomedState.numberOfFalsySnomedValues;
 
     // -- EFFECTS --
 
+    /*
+     * If Snomed data exists, it is very likely, that multiple rows of data belong to a single patient.
+     * In this case, the number of patients doesn't equal the number of rows.
+     */
+    useEffect(() => {
+        if (!selectedFile || !isSnomedExists) return;
+
+        // Check if a column "patient id" or similar exists
+        const patientIdIndex = containsSnomedColumn(selectedFile[0].data);
+
+        /* If no patient Id exists, it is not possible to differentiate different patients.
+         * Therefore we decide in favour of the doctor and keep assuming, that each row is indeed a complete dataset of a single patient.
+         */
+        if (patientIdIndex < 0) return;
+
+        let exists: HashTable<boolean> = {};
+
+        // Get rid of duplicated values to get an array with only unique patientIDs.
+        const patients = selectedFile.filter((row) => {
+            const patientIdValue: string = row.data[patientIdIndex];
+
+            return exists.hasOwnProperty(patientIdValue) ? false : (exists[patientIdValue] = true);
+        });
+
+        console.log("Patients");
+        console.log(patients);
+
+        // Update the number of Patients to the correct value.
+        dispatch(setNumberOfPatients(patients.length));
+    }, [isSnomedExists]);
+
     useEffect(() => {
         if (!selectedFile) return;
+
+        // Calculate hash value of the dataset.
+        const arr: any[] = [];
+        selectedFile?.forEach((item) => arr.push(item.data));
+        setSelectedFileHash(utils.id(JSON.stringify(arr)));
+
+        // TODO REMOVE BELOW
+        console.log(arr);
+        console.log(JSON.stringify(arr));
+        console.log(utils.id(JSON.stringify(arr)));
+        // TODO REMOVE ABOVE
 
         // Process dataset
         batch(() => {
             processAge();
             processGender();
+            processLoinc();
+            processRadlex();
+            processNumberOfPatientsAndAttributes();
+            processSnomed();
         });
     }, [dispatch, selectedFile]);
 
     // -- HELPERS --
+
+    const processSnomed = () => {
+        if (!selectedFile) return;
+
+        const snomedIndex = containsSnomedColumn(selectedFile[0].data);
+
+        if (snomedIndex < 0) return;
+
+        let numberFalsyValues = 0;
+
+        selectedFile.forEach((row) => {
+            if (isNaN(+row.data[snomedIndex])) {
+                numberFalsyValues++;
+            }
+        });
+
+        dispatch(setIsSnomedExists(true));
+        dispatch(setNumberOfFalsySnomedValues(numberFalsyValues));
+    };
+
+    const processNumberOfPatientsAndAttributes = () => {
+        if (!selectedFile) return;
+
+        dispatch(setNumberOfPatients(selectedFile.length - 1));
+        dispatch(setNumberOfAttributes(selectedFile[0].data.length));
+    };
+
+    const processLoinc = () => {
+        if (!selectedFile) return;
+
+        const loincIndex = containsLoincColumn(selectedFile[0].data);
+
+        if (loincIndex > 0) {
+            dispatch(setIsLoincExists(true));
+        }
+    };
+
+    const processRadlex = () => {
+        if (!selectedFile) return;
+
+        const radlexIndex = containsLoincColumn(selectedFile[0].data);
+
+        if (radlexIndex > 0) {
+            dispatch(setIsRadlexExists(true));
+        }
+    };
 
     const processGender = () => {
         if (!selectedFile) return;
@@ -116,17 +244,17 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
             const gender = `${item.data[genderIndex]}`;
 
             switch (gender) {
-                case gender.match(/^(\s*(male|m|mann|männlich|xy)\s*)$/i)?.input:
+                case gender.match(MALE_REGEX)?.input:
                     isMaleExists = true;
                     nbrMaleOccurrences++;
                     break;
 
-                case gender.match(/^(\s*(female|frau|weiblich|woman|w|xx)\s*)$/i)?.input:
+                case gender.match(FEMALE_REGEX)?.input:
                     isFemaleExists = true;
                     nbrFemaleOccurrences++;
                     break;
 
-                case gender.match(/^(\s*(transgender|trans|)\s*)$/i)?.input:
+                case gender.match(TRANSGENDER_REGEX)?.input:
                     isTransgenderExists = true;
                     nbrTransgenderOccurrences++;
                     break;
@@ -210,6 +338,20 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
         });
 
         const ageArr = isAgeExists ? [String(minAge), String(maxAge), String(nbrFalsyAgeVal)] : null;
+
+        const snomedArr = [`${isSnomedExists}`, `${numberOfFalsySnomedValues}`];
+
+        const argumentsArr: any[] = [
+            account,
+            numberOfPatients,
+            ageArr,
+            genderArr,
+            numberOfAttributes,
+            isLoincExists,
+            isRadlexExists,
+            selectedFileHash,
+            snomedArr,
+        ];
     };
 
     // -- RENDER --

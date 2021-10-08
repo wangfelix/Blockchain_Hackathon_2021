@@ -64,3 +64,37 @@ export const setTransgenderOccurrences = (transgenderOccurrences: number) => {
 export const setFalsyGenderValues = (falsyGenderValues: FalsyGenderValue[]) => {
     return { type: ActionType.SET_FALSY_GENDER_VALUES, payload: falsyGenderValues };
 };
+
+// LOINC
+
+export const setIsLoincExists = (isLoincExists: boolean) => {
+    return { type: ActionType.SET_IS_LOINC_EXISTS, payload: isLoincExists };
+};
+
+// RADLEX
+
+export const setIsRadlexExists = (isRadlexExists: boolean) => {
+    return { type: ActionType.SET_IS_RADLEX_EXISTS, payload: isRadlexExists };
+};
+
+// NUMBER PATIENTS
+
+export const setNumberOfPatients = (numberOfPatients: number) => {
+    return { type: ActionType.SET_NUMBER_OF_PATIENTS, payload: numberOfPatients };
+};
+
+// NUMBER ATTRIBUTES
+
+export const setNumberOfAttributes = (numberOfAttributes: number) => {
+    return { type: ActionType.SET_NUMBER_OF_ATTRIBUTES, payload: numberOfAttributes };
+};
+
+// SNOMED
+
+export const setIsSnomedExists = (isSnomedExists: boolean) => {
+    return { type: ActionType.SET_IS_SNOMED_EXISTS, payload: isSnomedExists };
+};
+
+export const setNumberOfFalsySnomedValues = (numberOfFalsySnomedValues: number) => {
+    return { type: ActionType.SET_NUMBER_OF_FALSY_SNOMED_VALUES, payload: numberOfFalsySnomedValues };
+};
