@@ -4,7 +4,7 @@ import "./MediCoin.sol";
 contract MediSystem {
     mapping(address => Doctor) private doctors;
     mapping(string => Disease) private diseases;
-    address mediCoinAddress;
+    address public mediCoinAddress;
     address owner;
     string[] public diseasesNames;
     address[] public allDoctorAddress;
@@ -90,9 +90,9 @@ contract MediSystem {
      *
      * @return the MediCoin balance of the senders
      */
-    function getMyMediCoinBalance() public view returns(uint) {
+    function getMyMediCoinBalance(address _address) public view returns(uint) {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        return medicoin.balanceOf(msg.sender);
+        return medicoin.balanceOf(_address);
     }
 
     // Only the deployer of the contract - medicalvalues - is able to see a list of all the users.
@@ -288,7 +288,7 @@ contract MediSystem {
     * @param snomed A string array with 2 fields. The first containing either "true" or "false", corresponding with the existence of snomed data in the dataset. The second field contains a string representation of the number of falsy values. A falsy snomed value is any string containing symbols different than numbers.
     *
     */
-    function getDatasetValue(
+    function calculateDatasetValue(
         address account,
         string memory disease,
         uint256 numberOfPatients,
@@ -464,6 +464,10 @@ contract MediSystem {
     // TODO Increment numberOfPatientsData after contiributing data.
     function getDiseaseNumberOfPatientsData(string memory diseaseName) public view returns(uint256) {
         return diseases[diseaseName].numberOfPatientsData;
+    }
+
+    function getIsPendingDataExists(address _address) public view returns(bool) {
+        return doctors[_address].isPendingDatasetExist;
     }
 
 }
