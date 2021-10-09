@@ -76,6 +76,9 @@ contract MediSystem {
         Disease memory disease = Disease(budget, 0, name);
         diseases[name] = disease;
         diseasesNames.push(name);
+
+        InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
+        medicoin.mint(owner, budget);
     }
 
     /**
@@ -310,24 +313,21 @@ contract MediSystem {
 
         // Check if the disease exists. If not, add it to the system, mint medicoins and allocate budget.
         if (getIsDiseaseExists(disease) == false) {
-
-            // Mint medicoin
-            InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-            medicoin.mint(owner,10000 * 10 ** 18);
-            // Add disease
-            diseases[disease] = Disease(10000 * 10 ** 18, 0, disease);
-            diseasesNames.push(disease);
-
+            addDisease(10000 * 10 ** 18, disease);
         }
 
         uint mediCoinsWorth = (diseases[disease].budget * percentageWorth) / 100000;
         diseases[disease].budget -= mediCoinsWorth;
 
-        addPendingDataset(account, _fileHash, mediCoinsWorth, numberOfPatients, disease);
+        addPendingDataset(account, _fileHash, mediCoinsWorth, numberOfPatients);
+        doctors[account].pending.diseaseName = disease;
     }
 
-    function addPendingDataset(address account, bytes32 _fileHash, uint256 amount, uint256 numberOfPatients, string memory disease) public payable {
-        Dataset memory dataset = Dataset(_fileHash, amount, numberOfPatients, disease);
+    function addPendingDataset(address account, bytes32 _fileHash, uint256 amount, uint256 numberOfPatients) public payable {
+        Dataset memory dataset;
+        dataset.fileHash = _fileHash;
+        dataset.value = amount;
+        dataset.numberOfPatientsData = numberOfPatients;
         doctors[account].isPendingDatasetExist = true;
         doctors[account].pending = dataset;
     }
