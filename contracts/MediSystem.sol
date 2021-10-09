@@ -309,12 +309,12 @@ contract MediSystem {
         // Check if the disease exists. If not, add it to the system, mint medicoins and allocate budget.
         if (getIsDiseaseExists(disease) == false) {
 
+            // Mint medicoin
+            InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
+            medicoin.mint(owner,10000 * 10 ** 18);
             // Add disease
             diseases[disease] = Disease(10000 * 10 ** 18, 0, disease);
             diseasesNames.push(disease);
-
-            // Mint medicoins
-            // TODO Mint MediCoins
 
         }
 
@@ -404,6 +404,7 @@ contract MediSystem {
 
         // Delete pending dataset, as the contribution is completed.
         doctors[_address].isPendingDatasetExist = false;
+        doctors[_address].contributedData.push(_fileHash);
 
         emit ContributeData(msg.sender, _fileHash, amount, block.timestamp);
     }
