@@ -2,6 +2,7 @@ import { ContributeDataPageAction } from "State/Actions/actions";
 import { ActionType } from "State/Actions/actionTypes";
 
 export type ContributeDataState = {
+    diseaseName: string;
     age: AgeState;
     gender: GenderState;
 
@@ -10,6 +11,7 @@ export type ContributeDataState = {
     numberOfPatients: number;
     numberOfAttributes: number;
     snomed: SnomedState;
+    datasetValue: number;
 };
 
 export type SnomedState = {
@@ -39,6 +41,7 @@ export type FalsyGenderValue = { value: string; numberOccurrences: number };
 
 export const contributeDataPageReducer = (
     state: ContributeDataState = {
+        diseaseName: "",
         age: { isAgeExists: false, indexAge: 0, minAge: 0, maxAge: 0, numberFalsyAgeValues: 0 },
         gender: {
             isMaleExists: false,
@@ -54,6 +57,7 @@ export const contributeDataPageReducer = (
         numberOfPatients: 0,
         numberOfAttributes: 0,
         snomed: { isSnomedExists: false, numberOfFalsySnomedValues: 0 },
+        datasetValue: 0,
     },
     action: ContributeDataPageAction
 ) => {
@@ -125,6 +129,16 @@ export const contributeDataPageReducer = (
 
         case ActionType.SET_NUMBER_OF_FALSY_SNOMED_VALUES:
             return { ...state, snomed: { ...state.snomed, numberOfFalsySnomedValues: action.payload } };
+
+        // DISEASE NAME
+
+        case ActionType.SET_DISEASE_NAME:
+            return { ...state, diseaseName: action.payload };
+
+        // VALUE
+
+        case ActionType.SET_DATASET_VALUE:
+            return { ...state, datasetValue: action.payload };
 
         default:
             return state;

@@ -121,6 +121,20 @@ export interface SetFalsySnomedValues {
     payload: number;
 }
 
+// DISEASE NAME
+
+export interface SetDiseaseName {
+    type: ActionType.SET_DISEASE_NAME;
+    payload: string;
+}
+
+// VALUE
+
+export interface SetDatasetValue {
+    type: ActionType.SET_DATASET_VALUE;
+    payload: number;
+}
+
 export type ContributeDataPageAction =
     | IsAgeExistsAction
     | MinAgeAction
@@ -139,4 +153,6 @@ export type ContributeDataPageAction =
     | NumberOfPatientsAction
     | NumberOfAttributesAction
     | SetIsSnomedExistsAction
-    | SetFalsySnomedValues;
+    | SetFalsySnomedValues
+    | SetDiseaseName
+    | SetDatasetValue;

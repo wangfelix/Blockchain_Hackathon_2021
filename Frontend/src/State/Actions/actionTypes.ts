@@ -44,4 +44,12 @@ export enum ActionType {
 
     SET_IS_SNOMED_EXISTS = "setIsSnomedExists",
     SET_NUMBER_OF_FALSY_SNOMED_VALUES = "setNumberOfFalsySnomedValues",
+
+    // DISEASE NAME
+
+    SET_DISEASE_NAME = "setDiseaseName",
+
+    // VALUE
+
+    SET_DATASET_VALUE = "setDatasetValue",
 }
