@@ -5,7 +5,7 @@ import { BigNumber, Contract } from "ethers";
 import { Interface } from "@ethersproject/abi";
 
 import mediSysAbi from "Source/Contracts/MediSystem.json";
-import { MEDISYS_FUNCS } from "Utils/smartContractUtils";
+import { MediSys_Functions } from "Utils/smartContractUtils";
 
 /**
  * The blockchain address of the MediSystem smart contract.
@@ -14,6 +14,7 @@ import { MEDISYS_FUNCS } from "Utils/smartContractUtils";
  * update this constant to the address of the smart contract.
  */
 const MEDISYSTEM_ADDRESS = "0x8f68914155cC68DD6217B2517131d0B121a4F964";
+const MEDI_SYSTEM_INTERFACE = new Interface(mediSysAbi.abi);
 
 export const MEDICOIN_ADDRESS = "0x8826cb26CE9B2A2D2a10bf3e434BF64b17A2bb59";
 
@@ -93,8 +94,6 @@ export const useIsLoggedIn = () => {
     return !!myName;
 };
 
-const simpleContractInterface = new Interface(mediSysAbi.abi);
-
 /**
  * Returns the username (ideally the real name) of the logged in user.
  *
@@ -103,9 +102,9 @@ const simpleContractInterface = new Interface(mediSysAbi.abi);
 export const useMyName = (account: string | null | undefined) => {
     const [doctorsName]: any =
         useContractCall({
-            abi: simpleContractInterface,
+            abi: MEDI_SYSTEM_INTERFACE,
             address: MEDISYSTEM_ADDRESS,
-            method: MEDISYS_FUNCS.GET_MY_NAME,
+            method: MediSys_Functions.GET_MY_NAME,
             args: [account],
         }) ?? [];
 
@@ -126,9 +125,9 @@ export const useGetDatasetValue = (account: string | null | undefined) => {
 
     const [datasetValue]: any =
         useContractCall({
-            abi: simpleContractInterface,
+            abi: MEDI_SYSTEM_INTERFACE,
             address: MEDISYSTEM_ADDRESS,
-            method: MEDISYS_FUNCS.GET_DATASET_VALUE,
+            method: MediSys_Functions.GET_DATASET_VALUE,
             args: [account],
         }) ?? [];
 
@@ -154,9 +153,9 @@ export const useGetMyMediCoinBalance = (account: string | null | undefined) => {
 
     const [balance]: any =
         useContractCall({
-            abi: simpleContractInterface,
+            abi: MEDI_SYSTEM_INTERFACE,
             address: MEDISYSTEM_ADDRESS,
-            method: MEDISYS_FUNCS.GET_MY_MEDICOIN_BALANCE,
+            method: MediSys_Functions.GET_MY_MEDICOIN_BALANCE,
             args: [account],
         }) ?? [];
 
@@ -181,7 +180,7 @@ const contract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
  *      The blockchain address of the deployed MediCoin smart contract should be passed into the function.
  */
 export const useSetMediCoinAddress = () => {
-    const { state, send } = useContractFunction(contract, MEDISYS_FUNCS.SET_MEDICOIN_ADDRESS, {});
+    const { state, send } = useContractFunction(contract, MediSys_Functions.SET_MEDICOIN_ADDRESS, {});
 
     return { state, send };
 };
@@ -195,25 +194,25 @@ export const useSetMediCoinAddress = () => {
 export const useGetMediCoinAddress = () => {
     const [contractAddress]: any =
         useContractCall({
-            abi: simpleContractInterface,
+            abi: MEDI_SYSTEM_INTERFACE,
             address: MEDISYSTEM_ADDRESS,
-            method: MEDISYS_FUNCS.GET_MEDICOIN_ADDRESS,
+            method: MediSys_Functions.GET_MEDICOIN_ADDRESS,
             args: [],
         }) ?? [];
 
     return contractAddress ? `${contractAddress}` : null;
 };
 
-export const useGetIsOwner = () => {
+export const useGetIsOwner = (account: string | null | undefined) => {
     const [isOwner]: any =
         useContractCall({
-            abi: simpleContractInterface,
+            abi: MEDI_SYSTEM_INTERFACE,
             address: MEDISYSTEM_ADDRESS,
-            method: MEDISYS_FUNCS.GET_IS_OWNER,
+            method: MediSys_Functions.GET_IS_OWNER,
             args: [],
         }) ?? [];
 
-    return !!isOwner;
+    return `${isOwner}` === account;
 };
 
 /**

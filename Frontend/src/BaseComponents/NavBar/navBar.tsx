@@ -27,7 +27,7 @@ export const NavBar = () => {
 
     const myName = useMyName(account);
 
-    const isOwner = useGetIsOwner();
+    const isOwner = useGetIsOwner(account);
 
     // -- MEMOIZED DATA --
 
