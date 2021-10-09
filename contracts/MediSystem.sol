@@ -404,8 +404,10 @@ contract MediSystem {
 
         transfer(_address, amount);
 
-        // Delete pending dataset, as the contribution is completed.
+        // Increment attribute numberOfPatientsData of the disease by the attribute numberOfPatients of the dataset.
         diseases[doctors[_address].pending.diseaseName].numberOfPatientsData += doctors[_address].pending.numberOfPatientsData;
+
+        // Delete pending dataset, as the contribution is completed.
         doctors[_address].isPendingDatasetExist = false;
         doctors[_address].contributedData.push(_fileHash);
 
