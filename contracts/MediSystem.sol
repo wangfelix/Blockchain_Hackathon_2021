@@ -39,11 +39,19 @@ contract MediSystem {
         _;
     }
 
+    /**
+     * @dev Sets the address to the MediCoin contract. Needs to be called as soon as possible after contract deployment.
+     */
     function setMediCoinAddress(address _mediCoinAddress) external {
         mediCoinAddress = _mediCoinAddress;
     }
 
-    function registerDoctor(string memory doctorName) public payable returns(string memory) {
+    /**
+     * @notice Registers a Doctor in the system by creating a Doctor instance and adding it to the doctors mapping.
+     *
+     * @param doctorName The name of the doctor.
+     */
+    function registerDoctor(string memory doctorName) public payable {
         Doctor memory doctor;
         doctor.doctorAccount = msg.sender;
         doctor.doctorName = doctorName;
@@ -51,7 +59,6 @@ contract MediSystem {
         doctors[msg.sender] = doctor;
         allDoctorAddress.push(doctor.doctorAccount);
         unapprovedDoctors.push(msg.sender);
-        return "success";
     }
 
     function addDisease(uint budget, string memory name) public payable {
@@ -60,10 +67,20 @@ contract MediSystem {
         diseasesNames.push(name);
     }
 
+    /**
+     * @param account The address of the doctor, whose name should be returned
+     *
+     * @return name of the doctor with the given address
+     */
     function getMyName(address account) public view returns(string memory) {
         return doctors[account].doctorName;
     }
 
+    /**
+     * @notice Returns the MediCoin balance of the sender
+     *
+     * @return the MediCoin balance of the senders
+     */
     function getMyMediCoinBalance() public view returns(uint) {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
         return medicoin.balanceOf(msg.sender);
@@ -272,7 +289,8 @@ contract MediSystem {
         uint256 numberOfAttributes,
         bool loinc,
         bool radlex,
-        string[] memory snomed) public payable returns (uint) {
+        string[] memory snomed
+    ) public payable returns (uint) {
 
         uint256 sumValue = getTotalDatasetValuePercentage(numberOfPatients, age, gender, numberOfAttributes, loinc, radlex, snomed);
 
@@ -307,7 +325,8 @@ contract MediSystem {
         uint256 numberOfAttributes,
         bool loinc,
         bool radlex,
-        string[] memory snomed) public pure returns(uint256) {
+        string[] memory snomed
+    ) public pure returns(uint256) {
 
         // number of patients, attributes and the existence of valid snomed data is double-weighted
         uint256 numberOfPatientsValue = getNumberOfPatientsValue(numberOfPatients) * 2;
@@ -340,11 +359,23 @@ contract MediSystem {
     //@Anna
     event ContributeData(address doctor, bytes32 fileHash, uint256 amount, uint now);
 
-    function contributedData(bytes32 fileHash, address doctor, uint256 amount) public payable {
-        emit ContributeData(msg.sender, fileHash, msg.value, block.timestamp);
+    function contributeData(bytes32 fileHash, address doctor, uint256 amount) public payable {
         transfer(doctor, amount);
+        emit ContributeData(msg.sender, fileHash, msg.value, block.timestamp);
     }
 
+    /**
+     * @notice function transfers a given amount of MediCoins from the owners account to the given account.
+     *
+     * @dev The function checks, if the doctor has enough allowance from the owner, from where he will transfer MediCoins to himself.
+     * If the allowance is lower than 100 [MDC], his account will be pushed into the array unapprovedDoctors, so that the owner can approve him more allowance.
+     * Before the transaction is made, the given amount is compared to pendingDataSetsValues. If the given amount is included in pendingDataSetsValues,
+     * the amount was manipulated in the frontend and the transaction should not be executed.
+     *
+     * @param _address The address of the message sender. TODO: Check why msg.sender does not work
+     * @param amount The amount of MediCoins to be transfered.
+     *
+     */
     function transfer(address _address, uint amount) public {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
         bool exist;
@@ -374,8 +405,13 @@ contract MediSystem {
             unapprovedDoctors.push(_address);
         }
     }
-    //@Anna
-    function isIApproved(address _address) public view returns(bool) {
+
+    /**
+     * @notice Checks if the doctor with the given address is already approved (= has allowance)
+     *
+     * @return true, if doctor is approved; false, if not.
+     */
+    function getIsIApproved(address _address) public view returns(bool) {
         for(uint i = 0; i < unapprovedDoctors.length; i++) {
             if(unapprovedDoctors[i] == _address){
                 return false;
@@ -385,6 +421,13 @@ contract MediSystem {
         return true;
     }
 
+    /**
+     * @notice function returns the MediCoin budget of the given disease.
+     *
+     * @param diseaseName The name of the disease, whose budget should be returned.
+     *
+     * @return MediCoin budget of the given disease.
+     */
     function getDiseaseBudget(string memory diseaseName) public view returns(uint) {
         return diseases[diseaseName].budget;
     }
