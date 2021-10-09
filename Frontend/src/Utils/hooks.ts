@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router";
 import { useContractCall, useEthers, useContractFunction } from "@usedapp/core";
-import { Contract } from "ethers";
+import { BigNumber, Contract } from "ethers";
 import { Interface } from "@ethersproject/abi";
 
 import mediSysAbi from "Source/Contracts/MediSystem.json";
+import { MEDISYS_FUNCS } from "Utils/smartContractUtils";
 
-const MEDISYSTEM_ADDRESS = "0x80bDAe3Ed341606A50407De3497f5981C692D1c6";
+/**
+ * The blockchain address of the MediSystem smart contract.
+ *
+ * After the deployment of the smart contract, the owner of the system (medicalvalues) should
+ * update this constant to the address of the smart contract.
+ */
+const MEDISYSTEM_ADDRESS = "0x506e3625bf0Ba2d31521718eBf873BeB6333136D";
+
+export const MEDICOIN_ADDRESS = "0x2708C78a6a8A8Ecf167fcB834dCdaA9Be5Ea6aC0";
 
 /**
  * Returns the current URL's pathname without any subdirectories or query parameters.
@@ -86,24 +95,125 @@ export const useIsLoggedIn = () => {
 
 const simpleContractInterface = new Interface(mediSysAbi.abi);
 
+/**
+ * Returns the username (ideally the real name) of the logged in user.
+ *
+ * @param account The ethereum account address of the currently logged in user.
+ */
 export const useMyName = (account: string | null | undefined) => {
     const [doctorsName]: any =
         useContractCall({
             abi: simpleContractInterface,
             address: MEDISYSTEM_ADDRESS,
-            method: "getMyName",
+            method: MEDISYS_FUNCS.GET_MY_NAME,
+            args: [account],
+        }) ?? [];
+
+    return doctorsName ? `${doctorsName}` : doctorsName;
+};
+
+/**
+ * This hook returns the value of the pending contribution, provided the user has one
+ * (meaning a dataset has been and evaluated by the MediSystem contract).
+ *
+ * @param account The ethereum account address of the currently logged in user.
+ *
+ * @return string A string representation of the value of the pending dataset, expressed in amount of MediCoins.
+ * @return null If the user currently has no pending data.
+ */
+export const useGetDatasetValue = (account: string | null | undefined) => {
+    const [value, setValue] = useState<null | string>(null);
+
+    const [datasetValue]: any =
+        useContractCall({
+            abi: simpleContractInterface,
+            address: MEDISYSTEM_ADDRESS,
+            method: MEDISYS_FUNCS.GET_DATASET_VALUE,
             args: [account],
         }) ?? [];
 
     useEffect(() => {
-        return doctorsName;
-    }, [doctorsName]);
+        if (!datasetValue) return;
 
-    return doctorsName;
+        setValue(datasetValue.toString());
+    }, [datasetValue]);
+
+    return value;
+};
+
+/**
+ * This hook returns the MediCoin balance of the user.
+ *
+ * @param account The ethereum account address of the currently logged in user.
+ *
+ * @return string string representation of the MediCoin balance of the currently logged in user.
+ * @return null if the user is logged out or other errors occured.
+ */
+export const useGetMyMediCoinBalance = (account: string | null | undefined) => {
+    const [value, setValue] = useState<null | string>(null);
+
+    const [balance]: any =
+        useContractCall({
+            abi: simpleContractInterface,
+            address: MEDISYSTEM_ADDRESS,
+            method: MEDISYS_FUNCS.GET_MY_MEDICOIN_BALANCE,
+            args: [account],
+        }) ?? [];
+
+    useEffect(() => {
+        if (!balance && balance !== BigNumber.from(0)) return;
+
+        setValue(balance.toString());
+    }, [balance]);
+
+    return value;
 };
 
 const contract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
 
+/**
+ * This hook returns a function send, which should be used for setting the blockchain address of the MediCoin contract in the MediSystem contract.
+ * The returned TransactionStatus object contains information about the transaction and can be used to monitor the transaction.
+ *
+ * @return {state: TransactionStatus, send: (...args: [any]) => Promise<void>} Object with fields state,
+ *      a Object of type TransactionStatue, containing information about the transaction,
+ *      and send, a function to call the function for setting the mediCoinAddress in the MediSystem smart contract.
+ *      The blockchain address of the deployed MediCoin smart contract should be passed into the function.
+ */
+export const useSetMediCoinAddress = () => {
+    const { state, send } = useContractFunction(contract, MEDISYS_FUNCS.SET_MEDICOIN_ADDRESS, {});
+
+    return { state, send };
+};
+
+/**
+ * This hook retrieves the address of the MediCoin contract on the blockchain.
+ *
+ * @return string The address of the MediCoin contract on the blockchain.
+ * @return null If the address of the MediCoin contract is not set in the MediSystem contract.
+ */
+export const useGetMediCoinAddress = () => {
+    const [contractAddress]: any =
+        useContractCall({
+            abi: simpleContractInterface,
+            address: MEDISYSTEM_ADDRESS,
+            method: MEDISYS_FUNCS.GET_MEDICOIN_ADDRESS,
+            args: [],
+        }) ?? [];
+
+    return contractAddress ? `${contractAddress}` : null;
+};
+
+/**
+ * This hook returns returns the function send and TransactionStatus object from useDapp's useContractFunction hook.
+ * By passing in the name of the desired function in the MediSystem contract, using the returned send function will call it.
+ *
+ * @param functionName The name of the desired function in the MediSystem contract.
+ *
+ * @return {state: TransactionStatus, send: (...args: [any]) => Promise<void>} Object with fields state,
+ *      a Object of type TransactionStatue, containing information about the transaction,
+ *      and send, a function to call the desired function in the smart contract.
+ */
 export function useMediSysMethod(functionName: string) {
     const { state, send } = useContractFunction(contract, functionName, {});
 
