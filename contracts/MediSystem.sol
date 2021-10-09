@@ -11,11 +11,20 @@ contract MediSystem {
     address[] public unapprovedDoctors;
 
 
+    struct Dataset {
+        bytes32 fileHash;
+        uint256 value;
+    }
+
     struct Doctor {
         address doctorAccount;
         string doctorName;
-        bytes32[] contributedData;
-        uint256[] pendingDataSetsValues;
+        bytes32[] contributedData;      //TODO Needed? Could be done with Events, but maybe for Admin its easier this way?
+
+        // If isPendingDatasetExist is true, the Dataset pending has correct data.
+        bool isPendingDatasetExist;
+        Dataset pending;
+
         bool isExist;
     }
 
@@ -278,7 +287,6 @@ contract MediSystem {
     * @param radlex loinc true, if dataset contains radlex-data - false, if not.
     * @param snomed A string array with 2 fields. The first containing either "true" or "false", corresponding with the existence of snomed data in the dataset. The second field contains a string representation of the number of falsy values. A falsy snomed value is any string containing symbols different than numbers.
     *
-    * @return medicoinsWorth The number of MediCoins, that the dataset is worth, given the quality of it and the current available budget for the disease.
     */
     function getDatasetValue(
         address account,
@@ -289,8 +297,9 @@ contract MediSystem {
         uint256 numberOfAttributes,
         bool loinc,
         bool radlex,
+        bytes32 _fileHash,
         string[] memory snomed
-    ) public payable returns (uint) {
+    ) public payable {
 
         uint256 sumValue = getTotalDatasetValuePercentage(numberOfPatients, age, gender, numberOfAttributes, loinc, radlex, snomed);
 
@@ -312,10 +321,29 @@ contract MediSystem {
         uint mediCoinsWorth = (diseases[disease].budget * percentageWorth) / 100000;
         diseases[disease].budget -= mediCoinsWorth;
 
-        // add the amount of Medicoins to the pendingDataSetsValues array of the doctor for future transfer validation
-        doctors[account].pendingDataSetsValues.push(mediCoinsWorth);
+        addPendingDataset(account, _fileHash, mediCoinsWorth);
+    }
 
-        return mediCoinsWorth;
+    function addPendingDataset(address account, bytes32 _fileHash, uint256 amount) public payable {
+        Dataset memory dataset = Dataset(_fileHash, amount);
+        doctors[account].isPendingDatasetExist = true;
+        doctors[account].pending = dataset;
+    }
+
+    function getDataSetValue(address account) public view returns(uint256) {
+        require(doctors[account].isPendingDatasetExist == true, "No pending dataset");
+        return doctors[account].pending.value;
+    }
+
+    function abortContribution(address account, string memory diseaseName) public {
+        require(doctors[account].isPendingDatasetExist == true, "Nothing to abort");
+
+        // Add the value of the dataset to the budget of the disease
+        diseases[diseaseName].budget += doctors[account].pending.value;
+
+        // Delete pending dataset
+        doctors[account].isPendingDatasetExist = false;
+
     }
 
     function getTotalDatasetValuePercentage(
@@ -356,12 +384,28 @@ contract MediSystem {
         return false;
     }
 
-    //@Anna
+    /// @notice Event, that is beeing emitted every time a doctor shares a dataset.
     event ContributeData(address doctor, bytes32 fileHash, uint256 amount, uint now);
 
-    function contributeData(bytes32 fileHash, address doctor, uint256 amount) public payable {
-        transfer(doctor, amount);
-        emit ContributeData(msg.sender, fileHash, msg.value, block.timestamp);
+    /**
+     * @notice function that contributes a dataset to MediSystem. The params fileHash and amount must align with the data values in the Dataset pending of the doctor.
+     * @dev In order to contribute data, a pending Dataset is required.
+     *
+     * @param _fileHash The hash value of the dataset, that is about to be contributed.
+     * @param _address address of the doctor, who is contributing the dataset. TODO check msg.sender
+     * @param amount The value of the dataset.
+     */
+    function contributeData(bytes32 _fileHash, address _address, uint256 amount) public payable {
+        require(doctors[_address].isPendingDatasetExist == true, "Cannot contribute dataset. No pending data.");
+        require(doctors[_address].pending.value == amount, "Cannot contribute dataset. The given amount does not match the calculated value of the dataset.");
+        require(doctors[_address].pending.fileHash == _fileHash, "Cannot contribute dataset. The given file does not match the previously evaluated dataset.");
+
+        transfer(_address, amount);
+
+        // Delete pending dataset, as the contribution is completed.
+        doctors[_address].isPendingDatasetExist = false;
+
+        emit ContributeData(msg.sender, _fileHash, amount, block.timestamp);
     }
 
     /**
@@ -378,27 +422,12 @@ contract MediSystem {
      */
     function transfer(address _address, uint amount) public {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        bool exist;
-
-        for(uint i = 0; i < doctors[_address].pendingDataSetsValues.length; i++) {
-            if(doctors[_address].pendingDataSetsValues[i] == amount) {
-                exist = true;
-            }
-        }
 
         uint doctorsAllowance = medicoin.allowance(owner, _address);
 
         require(doctorsAllowance >= amount, "Allowance not sufficient for transaction.");
 
-        require(exist == true, "You can not tansfer");
         medicoin.transferFrom(owner, _address, amount);
-
-        for(uint j = 0; j < doctors[_address].pendingDataSetsValues.length; j++) {
-            if(doctors[_address].pendingDataSetsValues[j] == amount) {
-                doctors[_address].pendingDataSetsValues[j] = doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
-                delete doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
-            }
-        }
 
         // If the doctors allowance is low, add his address to the unapprovedDoctors array, so that meidcalvalues can refill his allowance.
         if (doctorsAllowance < 100 * 10 ** 18) {
