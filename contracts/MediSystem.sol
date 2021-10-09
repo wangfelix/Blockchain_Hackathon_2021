@@ -14,6 +14,8 @@ contract MediSystem {
     struct Dataset {
         bytes32 fileHash;
         uint256 value;
+        uint numberOfPatientsData;
+        string diseaseName;
     }
 
     struct Doctor {
@@ -321,11 +323,11 @@ contract MediSystem {
         uint mediCoinsWorth = (diseases[disease].budget * percentageWorth) / 100000;
         diseases[disease].budget -= mediCoinsWorth;
 
-        addPendingDataset(account, _fileHash, mediCoinsWorth);
+        addPendingDataset(account, _fileHash, mediCoinsWorth, numberOfPatients, disease);
     }
 
-    function addPendingDataset(address account, bytes32 _fileHash, uint256 amount) public payable {
-        Dataset memory dataset = Dataset(_fileHash, amount);
+    function addPendingDataset(address account, bytes32 _fileHash, uint256 amount, uint256 numberOfPatients, string memory disease) public payable {
+        Dataset memory dataset = Dataset(_fileHash, amount, numberOfPatients, disease);
         doctors[account].isPendingDatasetExist = true;
         doctors[account].pending = dataset;
     }
@@ -403,6 +405,7 @@ contract MediSystem {
         transfer(_address, amount);
 
         // Delete pending dataset, as the contribution is completed.
+        diseases[doctors[_address].pending.diseaseName].numberOfPatientsData += doctors[_address].pending.numberOfPatientsData;
         doctors[_address].isPendingDatasetExist = false;
         doctors[_address].contributedData.push(_fileHash);
 
