@@ -13,9 +13,9 @@ import { MEDISYS_FUNCS } from "Utils/smartContractUtils";
  * After the deployment of the smart contract, the owner of the system (medicalvalues) should
  * update this constant to the address of the smart contract.
  */
-const MEDISYSTEM_ADDRESS = "0x506e3625bf0Ba2d31521718eBf873BeB6333136D";
+const MEDISYSTEM_ADDRESS = "0x8f68914155cC68DD6217B2517131d0B121a4F964";
 
-export const MEDICOIN_ADDRESS = "0x2708C78a6a8A8Ecf167fcB834dCdaA9Be5Ea6aC0";
+export const MEDICOIN_ADDRESS = "0x8826cb26CE9B2A2D2a10bf3e434BF64b17A2bb59";
 
 /**
  * Returns the current URL's pathname without any subdirectories or query parameters.
@@ -202,6 +202,18 @@ export const useGetMediCoinAddress = () => {
         }) ?? [];
 
     return contractAddress ? `${contractAddress}` : null;
+};
+
+export const useGetIsOwner = () => {
+    const [isOwner]: any =
+        useContractCall({
+            abi: simpleContractInterface,
+            address: MEDISYSTEM_ADDRESS,
+            method: MEDISYS_FUNCS.GET_IS_OWNER,
+            args: [],
+        }) ?? [];
+
+    return !!isOwner;
 };
 
 /**
