@@ -62,6 +62,24 @@ contract MediSystem {
     }
 
     /**
+     * @notice This function removes the doctor with the given address form the array unapprovedDoctors.
+     * @dev This function should be called after the doctor has been given allowance using the function approve in the MediCoin contract.
+     */
+    function approveDoctor(address doctor) public isOwner {
+        bool isApproved = getIsIApproved(doctor);
+
+        require(isApproved == false, "Doctor is already approved");
+
+        // Remove Doctor from array unapprovedDoctors
+        for (uint256 i = 0; i < unapprovedDoctors.length; i++) {
+            if (unapprovedDoctors[i] == doctor) {
+                unapprovedDoctors[i] = unapprovedDoctors[unapprovedDoctors.length - 1];
+                delete unapprovedDoctors[unapprovedDoctors.length-1];
+            }
+        }
+    }
+
+    /**
      * @notice Registers a Doctor in the system by creating a Doctor instance and adding it to the doctors mapping.
      *
      * @param doctorName The name of the doctor.
@@ -83,9 +101,6 @@ contract MediSystem {
         Disease memory disease = Disease(budget, 0, name);
         diseases[name] = disease;
         diseasesNames.push(name);
-
-        InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        medicoin.mint(owner, budget);
     }
 
     /**
