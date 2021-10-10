@@ -24,8 +24,12 @@ contract MediCoin is ERC20 {
     }
 
     modifier hasAccess {
-        require(owner == msg.sender || msg.sender == mediSystemAddress, "Caller is not owner");
+        require(owner == msg.sender || msg.sender == mediSystemAddress, "Caller is not owner or MediSystem contract");
         _;
+    }
+
+    function setMediSystemAddress(address _mediSystemAddress) public {
+        mediSystemAddress = _mediSystemAddress;
     }
 
     function approve(address spender, uint256 amount)virtual override hasAccess public returns (bool) {
