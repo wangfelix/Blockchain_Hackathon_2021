@@ -13,10 +13,10 @@ import { MediSys_Functions } from "Utils/smartContractUtils";
  * After the deployment of the smart contract, the owner of the system (medicalvalues) should
  * update this constant to the address of the smart contract.
  */
-const MEDISYSTEM_ADDRESS = "0x8f68914155cC68DD6217B2517131d0B121a4F964";
+const MEDISYSTEM_ADDRESS = "0x5f9ed66263815FE539c7a1935e53527aC23DF987";
 const MEDI_SYSTEM_INTERFACE = new Interface(mediSysAbi.abi);
 
-export const MEDICOIN_ADDRESS = "0x8826cb26CE9B2A2D2a10bf3e434BF64b17A2bb59";
+export const MEDICOIN_ADDRESS = "0xdE4CA82ee2a935Db8A1Baa950121B005b79A67B9";
 
 /**
  * Returns the current URL's pathname without any subdirectories or query parameters.
@@ -215,6 +215,20 @@ export const useGetIsOwner = (account: string | null | undefined) => {
     return `${isOwner}` === account;
 };
 
+export const useGetAllUnapprovedDoctors = () => {
+    const [unapprovedDoctors] =
+        useContractCall({
+            abi: MEDI_SYSTEM_INTERFACE,
+            address: MEDISYSTEM_ADDRESS,
+            method: MediSys_Functions.GET_ALL_UNAPPROVED_DOCTORS,
+            args: [],
+        }) ?? [];
+
+    console.log("unapprovedDoctors:");
+    console.log(unapprovedDoctors);
+
+    return unapprovedDoctors ? [...unapprovedDoctors] : null;
+};
 
 export const useGetAmIApproved = (account: string | null | undefined) => {
     const [amIApproved] =
@@ -224,11 +238,6 @@ export const useGetAmIApproved = (account: string | null | undefined) => {
             method: "getIsIApproved",
             args: [account],
         }) ?? [];
-
-    useEffect(() => {
-        console.log("amIApproved:");
-        console.log(amIApproved);
-    }, [amIApproved]);
 
     return amIApproved;
 };
