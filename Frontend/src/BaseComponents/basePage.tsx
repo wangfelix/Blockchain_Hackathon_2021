@@ -4,10 +4,11 @@ import { useSelector } from "react-redux";
 import { NavBar } from "BaseComponents/NavBar/navBar";
 import { Footer } from "BaseComponents/footer";
 import { Colors, NAVBAR_HEIGHT, Z_INDEX } from "Utils/globalStyles";
-import { useViewportDimensions } from "Utils/hooks";
+import { useIsLoggedIn, useViewportDimensions } from "Utils/hooks";
 import { Container } from "BaseComponents/container";
 import { RegistrationModal } from "BaseComponents/RegistrationModal/registrationModal";
 import { RootState } from "State/Reducers";
+import { AccountNotApprovedModal } from "BaseComponents/accountNotApprovedModal";
 
 type BasePageProps = {
     children: ReactNode;
@@ -19,6 +20,8 @@ type BasePageProps = {
  */
 export const BasePage = ({ children }: BasePageProps) => {
     // -- STATE --
+
+    const isLoggedIn = useIsLoggedIn();
 
     const { viewportHeight } = useViewportDimensions();
 
@@ -53,6 +56,8 @@ export const BasePage = ({ children }: BasePageProps) => {
             <Footer />
 
             <RegistrationModal isOpen={isRegistrationModalOpen} />
+
+            {isLoggedIn && <AccountNotApprovedModal />}
         </Container>
     );
 };

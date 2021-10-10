@@ -57,7 +57,7 @@ export const LandingPage = () => {
 
     const openRegistrationModal = () => dispatch(setRegistrationModalOpen(true));
 
-    const handleGoToDemoPage = () => history.push(Paths.DEMO);
+    const handleGoToDemoPage = () => history.push(Paths.DEMO_PAGE);
 
     // -- STYLES --
 
