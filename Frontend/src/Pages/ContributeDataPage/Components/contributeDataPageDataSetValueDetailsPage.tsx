@@ -104,7 +104,6 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                         <Row
                             styleProps={{
                                 width: "100%",
-                                //background:"red"
                             }}
                         >
                             <Button
