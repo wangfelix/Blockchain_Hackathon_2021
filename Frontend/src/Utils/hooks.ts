@@ -279,3 +279,23 @@ export const useMediCoinMethod = (functionName: string) => {
 
     return { state, send };
 };
+
+export const useGetGenderValue = (genderArray: string[]) => {
+    const [genderValueNum, setGenderValueNum] = useState(0);
+
+    const [genderValue]: any =
+        useContractCall({
+            abi: MEDI_SYSTEM_INTERFACE,
+            address: MEDISYSTEM_ADDRESS,
+            method: MediSys_Functions.GET_GENDER_VALUE,
+            args: [genderArray],
+        }) ?? [];
+
+    useEffect(() => {
+        if (!genderValue && genderValue !== BigNumber.from(0)) return;
+
+        setGenderValueNum(genderValue.toNumber());
+    }, [genderValue]);
+
+    return genderValueNum ?? null;
+};

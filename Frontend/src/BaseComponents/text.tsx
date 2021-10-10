@@ -4,11 +4,12 @@ import { Colors } from "Utils/globalStyles";
 
 type TextProps = {
     children: ReactNode;
-    textType: "text" | "nudge" | "modal";
+    textType?: "text" | "nudge" | "modal";
     styleProps?: React.CSSProperties;
 };
 
-export const Text = ({ children, textType, styleProps }: TextProps) => {
+export const Text = ({ children, textType: textTypeProp, styleProps }: TextProps) => {
+    const textType = textTypeProp ?? "text";
     // -- STYLES --
 
     const textStyle = {

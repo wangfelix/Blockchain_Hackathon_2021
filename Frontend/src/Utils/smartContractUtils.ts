@@ -5,6 +5,8 @@ export enum MediSys_Functions {
     GET_MY_NAME = "getMyName",
     GET_DATASET_VALUE = "getDataSetValue",
     GET_IS_OWNER = "owner",
+    GET_GENDER_VALUE = "getGenderValue",
+    TRANSFER_FROM = "transfer",
     GET_ALL_UNAPPROVED_DOCTORS = "getAllUnapprovedDoctors",
     CALCULATE_DATASET_VALUE = "calculateDatasetValue",
     APPROVE_DOCTOR = "approveDoctor",
