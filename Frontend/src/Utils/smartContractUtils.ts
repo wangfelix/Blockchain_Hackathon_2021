@@ -7,4 +7,10 @@ export enum MediSys_Functions {
     GET_IS_OWNER = "owner",
     GET_ALL_UNAPPROVED_DOCTORS = "getAllUnapprovedDoctors",
     CALCULATE_DATASET_VALUE = "calculateDatasetValue",
+    APPROVE_DOCTOR = "approveDoctor",
+}
+
+export enum MediCoinFunctions {
+    APPROVE = "approve",
+    DEFAULT_APPROVE = "defaultApprove",
 }

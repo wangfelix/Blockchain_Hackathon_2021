@@ -13,7 +13,7 @@ export const AdminPage = () => {
             <Container styleProps={{ gap: 10, height: "100%" }}>
                 <AdminPageSetMediCoinContractAddressForm />
 
-                <Container styleProps={{ marginBottom: 50, marginLeft: 20 }}>
+                <Container styleProps={{ marginLeft: 20, height: "100%" }}>
                     <AdminPageApproveDoctorsTable />
                 </Container>
             </Container>
