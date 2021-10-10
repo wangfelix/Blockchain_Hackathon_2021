@@ -1,46 +1,77 @@
 import React, { useMemo } from "react";
 import { useEthers } from "@usedapp/core";
+import { useDispatch } from "react-redux";
 
 import { NavBarItem } from "BaseComponents/NavBar/Components/navBarItem";
 import { NAVBAR_HEIGHT, Colors, NavBarTabs, Z_INDEX } from "Utils/globalStyles";
-import { Paths } from "Utils/paths";
-import { useConnectWallet, usePage } from "Utils/hooks";
+import { ContributeDataPagePaths, Paths } from "Utils/paths";
+import { useGetIsOwner, useIsLoggedIn, useMyName, usePage } from "Utils/hooks";
 import { NavBarItemProps as navBarItem } from "BaseComponents/NavBar/Components/navBarItem";
 import { Button } from "BaseComponents/Button/button";
+import { setRegistrationModalOpen } from "State/Actions/actionCreators";
+import { Row } from "BaseComponents/row";
+import { Text } from "BaseComponents/text";
+import DownArrow from "Illustrations/downArrow.png";
+import ProfilePicture from "Illustrations/ProfilePicture.png";
 
 export const NavBar = () => {
+    const dispatch = useDispatch();
+
     // -- STATE --
 
     const page = usePage();
+
     const { account } = useEthers();
+
+    const isLoggedIn = useIsLoggedIn();
+
+    const myName = useMyName(account);
+
+    const isOwner = useGetIsOwner(account);
 
     // -- MEMOIZED DATA --
 
     const navBarItemsLeft: navBarItem[] = useMemo(
         () => [
             { title: NavBarTabs.HOME, to: Paths.LANDING_PAGE, selected: page === Paths.LANDING_PAGE },
-            ...(account
+            ...(isLoggedIn
                 ? [
                       {
                           title: NavBarTabs.CONTRIBUTED_DATA,
-                          to: Paths.CONTRIBUTE_DATA_PAGE,
+                          to: `${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.FILE_UPLOADER}`,
                           selected: page === Paths.CONTRIBUTE_DATA_PAGE,
                       },
                       {
                           title: NavBarTabs.ACCOUNTS_AND_HISTORY,
-                          to: Paths.ACCOUNT_AND_HISTORY,
-                          selected: page === Paths.ACCOUNT_AND_HISTORY,
+                          to: Paths.ACCOUNT_AND_HISTORY_PAGE,
+                          selected: page === Paths.ACCOUNT_AND_HISTORY_PAGE,
                       },
                   ]
                 : []),
-            { title: NavBarTabs.DEMO, to: Paths.DEMO, selected: page === Paths.DEMO },
+            { title: NavBarTabs.DEMO, to: Paths.DEMO_PAGE, selected: page === Paths.DEMO_PAGE },
+
+            ...(isOwner
+                ? [{ title: NavBarTabs.ADMIN, to: Paths.ADMIN_PAGE, selected: page === Paths.ADMIN_PAGE }]
+                : []),
+
+            // TODO REMOVE
+            {
+                title: NavBarTabs.CONTRIBUTED_DATA,
+                to: `${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.FILE_UPLOADER}`,
+                selected: page === Paths.CONTRIBUTE_DATA_PAGE,
+            },
+            {
+                title: NavBarTabs.ACCOUNTS_AND_HISTORY,
+                to: Paths.ACCOUNT_AND_HISTORY_PAGE,
+                selected: page === Paths.ACCOUNT_AND_HISTORY_PAGE,
+            },
         ],
-        [page, account]
+        [page, isLoggedIn]
     );
 
     // -- CALLBACKS --
 
-    const connectWallet = useConnectWallet();
+    const openRegistrationModal = () => dispatch(setRegistrationModalOpen(true));
 
     // -- STYLES --
 
@@ -65,12 +96,29 @@ export const NavBar = () => {
             {navBarItemsLeft.map((item, index) => (
                 <NavBarItem title={item.title} key={index} selected={item.selected} to={item.to} />
             ))}
-            {!account && (
-                <div style={{ position: "absolute", right: "20px", justifySelf: "flex-end" }}>
-                    <Button buttonType="text" onClickHandle={connectWallet}>
+
+            {!isLoggedIn && (
+                <Row styleProps={{ position: "absolute", right: "20px", justifySelf: "flex-end" }}>
+                    <Button buttonType="text" onClickHandle={openRegistrationModal}>
                         Login
                     </Button>
-                </div>
+                </Row>
+            )}
+
+            {isLoggedIn && (
+                <Row
+                    styleProps={{ position: "absolute", right: "20px", justifySelf: "flex-end", alignItems: "center" }}
+                >
+                    <Text textType="text" styleProps={{ color: Colors.WHITE_OFF_WHITE }}>
+                        {myName}
+                    </Text>
+
+                    <Button buttonType={"text"} styleProps={{ display: "grid", placeItems: "center" }}>
+                        <img src={DownArrow} style={{ height: "24px" }} />
+                    </Button>
+
+                    <img src={ProfilePicture} style={{ height: "40px", alignSelf: "center" }} />
+                </Row>
             )}
         </nav>
     );

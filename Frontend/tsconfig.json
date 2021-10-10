@@ -49,6 +49,9 @@
       "Utils/*": [
         "./src/Utils/*"
       ],
+      "State/*": [
+        "./src/State/*"
+      ],
       "crypto": [
         "./node_modules/crypto-js"
       ]

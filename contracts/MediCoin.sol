@@ -2,13 +2,20 @@ pragma solidity 0.8.7;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
+interface InterfaceMediCoin {
+    function getOwner() external view returns(address); // abstract
+    function balanceOf(address) external view returns(uint);
+    function transferFrom(address, address, uint256)external view;
+    function allowance(address owner, address spender) external view returns(uint256);
+    function mint(uint256 amount) external view returns (bool);
+}
+
 contract MediCoin is ERC20 {
     address public owner;
     address public minter;
+    address public mediSystemAddress;
 
     uint256 private _totalSupply;
-
-    mapping(address => uint256) private _balances;
 
     constructor() ERC20("MediCoin", "MVC") {
         owner = msg.sender;
@@ -17,43 +24,43 @@ contract MediCoin is ERC20 {
     }
 
     modifier hasAccess {
-        require(owner == msg.sender, "Caller is not owner");
+        require(owner == msg.sender || msg.sender == mediSystemAddress, "Caller is not owner or MediSystem contract");
         _;
     }
 
-    function totalSupply() public view virtual override returns (uint256) {
-        return _totalSupply;
+    function setMediSystemAddress(address _mediSystemAddress) public {
+        mediSystemAddress = _mediSystemAddress;
     }
 
-    // Wer soll Zugriff haben?
-    function balanceOf(address account) public view virtual override returns (uint256) {
-        return _balances[account];
+    function defaultApprove(address spender) virtual hasAccess public returns (bool) {
+        super.approve(spender, 1000 * 10 ** 18);
+        return true;
     }
 
+    function approve(address spender, uint amount) virtual override hasAccess public returns (bool) {
+        super.approve(spender, amount);
+        return true;
+    }
+
+    function decreaseAllowance(address spender, uint256 subtractedValue) virtual override hasAccess public returns (bool) {
+        super.decreaseAllowance(spender, subtractedValue);
+        return true;
+    }
+
+    function increaseAllowance(address spender, uint256 addedValue) virtual override hasAccess public returns (bool) {
+        super.increaseAllowance(spender, addedValue);
+        return true;
+    }
 
     function transfer(address recipient, uint256 amount) virtual override hasAccess public returns (bool) {
         super.transfer(recipient, amount);
         return true;
     }
 
-    function mint(address receiver, uint amount) public {
-        require(msg.sender == minter);
-        _balances[receiver] += amount;
+
+    function mint(uint256 amount) hasAccess public payable returns (bool) {
+        _mint(owner, amount);
+        return true;
     }
 
-
-    /*
-        // deployer gets minter and pauser role
-        constructor(string memory name, string memory symbol) public {
-            setupRole(DEFAULT_ADMIN_ROLE, owner());
-            setupRole(MINTER_ROLE, owner());
-            setupRole(PAUSER_ROLE, owner());
-        }
-
-        // minter can add amount of token to the total supply
-        function mint(address to, uint256 amount) public virtual {
-            require(hasRole(MINTER_ROLE, owner()), "Must have minter role to mint");
-            _mint(to, amount);
-        }
-    */
 }

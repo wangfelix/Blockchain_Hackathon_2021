@@ -1,10 +1,15 @@
 import React, { ReactNode } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Provider } from "react-redux";
 import { ChainId, Config, DAppProvider } from "@usedapp/core";
 
 import { LandingPage } from "Pages/LandingPage/landingPage";
 import { BasePage } from "BaseComponents/basePage";
+import { ContributeDataPage } from "Pages/ContributeDataPage/contributeDataPage";
 import { Paths } from "Utils/paths";
+import { store } from "State/store";
+import { AccountAndHistoryPage } from "Pages/AccountAndHistoryPage/accountAndHistoryPage";
+import { AdminPage } from "Pages/AdminPage/adminPage";
 
 export const App = () => {
     // -- CONST DATA --
@@ -21,19 +26,23 @@ export const App = () => {
     return (
         <BrowserRouter>
             <DAppProviderWrapper config={config}>
-                <BasePage>
-                    <Switch>
-                        <Route path={Paths.CONTRIBUTE_DATA_PAGE} component={TestPage} />
+                <Provider store={store}>
+                    <BasePage>
+                        <Switch>
+                            <Route path={Paths.CONTRIBUTE_DATA_PAGE} component={ContributeDataPage} />
 
-                        <Route path={Paths.ACCOUNT_AND_HISTORY} component={TestPage} />
+                            <Route path={Paths.ACCOUNT_AND_HISTORY_PAGE} component={AccountAndHistoryPage} />
 
-                        <Route path={Paths.DEMO} component={TestPage} />
+                            <Route path={Paths.DEMO_PAGE} component={TestPage} />
 
-                        <Route path={Paths.LANDING_PAGE} component={LandingPage} />
+                            <Route path={Paths.ADMIN_PAGE} component={AdminPage} />
 
-                        <Route component={ErrorPage} />
-                    </Switch>
-                </BasePage>
+                            <Route path={Paths.LANDING_PAGE} component={LandingPage} />
+
+                            <Route component={ErrorPage} />
+                        </Switch>
+                    </BasePage>
+                </Provider>
             </DAppProviderWrapper>
         </BrowserRouter>
     );
@@ -44,7 +53,7 @@ type DAppProviderWrapperProps = {
     children: ReactNode;
 };
 const DAppProviderWrapper = ({ children, config }: DAppProviderWrapperProps) => (
-    // TODO Styling, add Loading Indicator for inital Load
+    // TODO Styling, add Loading Indicator for initial Load
     <DAppProvider config={config}>{children}</DAppProvider>
 );
 

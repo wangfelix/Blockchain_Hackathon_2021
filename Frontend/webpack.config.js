@@ -16,6 +16,7 @@ module.exports = {
     devtool: "source-map",
 
     output: {
+        publicPath: "/",
         path: __dirname + distPath,
         filename: "[name].js",
     },
@@ -37,6 +38,7 @@ module.exports = {
             Pages: path.resolve(__dirname, "src", "Pages"),
             Illustrations: path.resolve(__dirname, "src", "Illustrations"),
             Utils: path.resolve(__dirname, "src", "Utils"),
+            State: path.resolve(__dirname, "src", "State"),
             process: "process/browser",
         },
     },
