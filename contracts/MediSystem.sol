@@ -5,7 +5,7 @@ contract MediSystem {
     mapping(address => Doctor) private doctors;
     mapping(string => Disease) private diseases;
     address public mediCoinAddress;
-    address owner;
+    address public owner;
     string[] public diseasesNames;
     address[] public allDoctorAddress;
     address[] public unapprovedDoctors;
@@ -57,6 +57,10 @@ contract MediSystem {
         mediCoinAddress = _mediCoinAddress;
     }
 
+    function getAllUnapprovedDoctors() public view returns(address[] memory) {
+        return unapprovedDoctors;
+    }
+
     /**
      * @notice Registers a Doctor in the system by creating a Doctor instance and adding it to the doctors mapping.
      *
@@ -69,7 +73,10 @@ contract MediSystem {
         doctor.isExist = true;
         doctors[msg.sender] = doctor;
         allDoctorAddress.push(doctor.doctorAccount);
-        unapprovedDoctors.push(msg.sender);
+
+        if (msg.sender != owner) {
+            unapprovedDoctors.push(msg.sender);
+        }
     }
 
     function addDisease(uint budget, string memory name) public payable {
