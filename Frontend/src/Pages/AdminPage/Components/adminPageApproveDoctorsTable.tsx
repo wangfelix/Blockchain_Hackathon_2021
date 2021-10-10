@@ -36,7 +36,7 @@ export const AdminPageApproveDoctorsTable = () => {
                 marginLeft: 20,
             }}
         >
-            <Text textType="text" styleProps={{ marginLeft: 10, marginBottom: 10 }}>
+            <Text textType="text" styleProps={{ marginBottom: 10 }}>
                 Unapproved Doctors:
             </Text>
 
