@@ -13,6 +13,7 @@ interface InterfaceMediCoin {
 contract MediCoin is ERC20 {
     address public owner;
     address public minter;
+    address public mediSystemAddress;
 
     uint256 private _totalSupply;
 
@@ -23,7 +24,7 @@ contract MediCoin is ERC20 {
     }
 
     modifier hasAccess {
-        require(owner == msg.sender, "Caller is not owner");
+        require(owner == msg.sender || msg.sender == mediSystemAddress, "Caller is not owner");
         _;
     }
 
