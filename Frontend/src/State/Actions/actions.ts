@@ -132,7 +132,14 @@ export interface SetDiseaseName {
 
 export interface SetDatasetValue {
     type: ActionType.SET_DATASET_VALUE;
-    payload: number;
+    payload: string;
+}
+
+// FILEHASH
+
+export interface SetFileHash {
+    type: ActionType.SET_FILE_HASH;
+    payload: string;
 }
 
 export type ContributeDataPageAction =
@@ -155,4 +162,5 @@ export type ContributeDataPageAction =
     | SetIsSnomedExistsAction
     | SetFalsySnomedValues
     | SetDiseaseName
-    | SetDatasetValue;
+    | SetDatasetValue
+    | SetFileHash;

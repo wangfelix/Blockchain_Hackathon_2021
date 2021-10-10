@@ -11,7 +11,8 @@ export type ContributeDataState = {
     numberOfPatients: number;
     numberOfAttributes: number;
     snomed: SnomedState;
-    datasetValue: number;
+    datasetValue: string;
+    fileHash: string;
 };
 
 export type SnomedState = {
@@ -57,7 +58,8 @@ export const contributeDataPageReducer = (
         numberOfPatients: 0,
         numberOfAttributes: 0,
         snomed: { isSnomedExists: false, numberOfFalsySnomedValues: 0 },
-        datasetValue: 0,
+        datasetValue: "0",
+        fileHash: "",
     },
     action: ContributeDataPageAction
 ) => {
@@ -139,6 +141,11 @@ export const contributeDataPageReducer = (
 
         case ActionType.SET_DATASET_VALUE:
             return { ...state, datasetValue: action.payload };
+
+        // FILE HASH
+
+        case ActionType.SET_FILE_HASH:
+            return { ...state, fileHash: action.payload };
 
         default:
             return state;

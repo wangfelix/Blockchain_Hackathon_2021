@@ -5,7 +5,6 @@ import { BigNumber, Contract } from "ethers";
 import { Interface } from "@ethersproject/abi";
 
 import mediSysAbi from "Source/Contracts/MediSystem.json";
-import mediCoinAbi from "Source/Contracts/MediCoin.json";
 import { MediSys_Functions } from "Utils/smartContractUtils";
 
 /**
@@ -14,13 +13,9 @@ import { MediSys_Functions } from "Utils/smartContractUtils";
  * After the deployment of the smart contract, the owner of the system (medicalvalues) should
  * update this constant to the address of the smart contract.
  */
-const MEDISYSTEM_ADDRESS = "0xa3C5611aB6A7410B2E2A3ACe70890b7A8B25Bb31";
+const MEDISYSTEM_ADDRESS = "0xF45ca895F618A6dB3680E71E7dD405e9A3b517F0";
 const MEDI_SYSTEM_INTERFACE = new Interface(mediSysAbi.abi);
 const mediSysContract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
-
-export const MEDICOIN_ADDRESS = "0x7aAb421a4cbF7565F784A3bdB036FBd0F8545DBB";
-const MEDICOIN_INTERFACE = new Interface(mediCoinAbi.abi);
-const mediCoinContract = new Contract(MEDICOIN_ADDRESS, mediCoinAbi.abi);
 
 /**
  * Returns the current URL's pathname without any subdirectories or query parameters.
@@ -173,21 +168,6 @@ export const useGetMyMediCoinBalance = (account: string | null | undefined) => {
 };
 
 /**
- * This hook returns a function send, which should be used for setting the blockchain address of the MediCoin contract in the MediSystem contract.
- * The returned TransactionStatus object contains information about the transaction and can be used to monitor the transaction.
- *
- * @return {state: TransactionStatus, send: (...args: [any]) => Promise<void>} Object with fields state,
- *      a Object of type TransactionStatue, containing information about the transaction,
- *      and send, a function to call the function for setting the mediCoinAddress in the MediSystem smart contract.
- *      The blockchain address of the deployed MediCoin smart contract should be passed into the function.
- */
-export const useSetMediCoinAddress = () => {
-    const { state, send } = useContractFunction(mediSysContract, MediSys_Functions.SET_MEDICOIN_ADDRESS, {});
-
-    return { state, send };
-};
-
-/**
  * This hook retrieves the address of the MediCoin contract on the blockchain.
  *
  * @return string The address of the MediCoin contract on the blockchain.
@@ -273,12 +253,6 @@ export function useMediSysMethod(functionName: string) {
 
     return { state, send };
 }
-
-export const useMediCoinMethod = (functionName: string) => {
-    const { state, send } = useContractFunction(mediCoinContract, functionName, {});
-
-    return { state, send };
-};
 
 export const useGetGenderValue = (genderArray: string[]) => {
     const [genderValueNum, setGenderValueNum] = useState(0);

@@ -5,3 +5,8 @@ export enum Paths {
     DEMO_PAGE = "/demo",
     ADMIN_PAGE = "/admin",
 }
+
+export enum ContributeDataPagePaths {
+    FILE_UPLOADER = "/file-uploader",
+    DATASET_VALUE_DETAILS_PAGE = "/details",
+}

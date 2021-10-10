@@ -3,7 +3,6 @@ import React from "react";
 import { Page } from "BaseComponents/page";
 import { Container } from "BaseComponents/container";
 import { AdminPageApproveDoctorsTable } from "Pages/AdminPage/Components/adminPageApproveDoctorsTable";
-import { AdminPageSetMediCoinContractAddressForm } from "Pages/AdminPage/Components/adminPageSetMediCoinContractAddressForm";
 import admin from "Illustrations/admin.png";
 import { Text } from "BaseComponents/text";
 
@@ -16,16 +15,6 @@ export const AdminPage = () => (
                 width: "100%",
             }}
         >
-            <Container
-                styleProps={{
-                    gridColumn: "2",
-                    marginLeft: "20px",
-                    height: "100px",
-                    marginBottom: "10px",
-                }}
-            >
-                <AdminPageSetMediCoinContractAddressForm />
-            </Container>
             <Text
                 styleProps={{
                     gridColumn: "3",

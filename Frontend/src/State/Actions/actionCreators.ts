@@ -107,6 +107,12 @@ export const setDiseaseName = (diseaseName: string) => {
 
 // VALUE
 
-export const setDatasetValue = (datasetValue: number) => {
+export const setDatasetValue = (datasetValue: string) => {
     return { type: ActionType.SET_DATASET_VALUE, payload: datasetValue };
+};
+
+// FILE HASH
+
+export const setFileHash = (filehash: string) => {
+    return { type: ActionType.SET_FILE_HASH, payload: filehash };
 };

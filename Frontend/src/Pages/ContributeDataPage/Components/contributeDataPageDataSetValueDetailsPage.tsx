@@ -4,11 +4,8 @@ import { useSelector } from "react-redux";
 import document from "Illustrations/documentIcon.png";
 import { Text } from "BaseComponents/text";
 import { RootState } from "State/Reducers";
-import wallet from "Illustrations/wallet.png";
 import { Page } from "BaseComponents/page";
 import { Container } from "BaseComponents/container";
-import { CSVReader } from "react-papaparse";
-import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
 import { Row } from "BaseComponents/row";
 import { Button } from "BaseComponents/Button/button";
 import Checkmark from "Illustrations/checkmark.png";
@@ -20,31 +17,54 @@ import twoPoints from "Illustrations/40percent.png";
 import onePoint from "Illustrations/20percent.png";
 import zeroPoints from "Illustrations/0percent.png";
 import { useGetGenderValue, useMediSysMethod } from "Utils/hooks";
-import { GenderState } from "State/Reducers/contributeDataPageReducer";
+import { AgeState, ContributeDataState, GenderState } from "State/Reducers/contributeDataPageReducer";
 import { MediSys_Functions } from "Utils/smartContractUtils";
+import { useHistory } from "react-router-dom";
+import { ContributeDataPagePaths, Paths } from "Utils/paths";
+import { useEthers } from "@usedapp/core";
+import { BigNumber } from "ethers";
+import { parseMediCoin } from "Utils/utils";
+import { Colors } from "Utils/globalStyles";
 
 export const ContributeDataPageDataSetValueDetailsPage = () => {
-    const isModalOpen = useSelector<RootState, boolean>((state) => state.modals.isRegistrationModalOpen);
+    const history = useHistory();
 
-    const isLoincExist = useSelector<RootState, boolean>((state) => state.contributeDataPage.loinc);
-    const isRadlexExist = useSelector<RootState, boolean>((state) => state.contributeDataPage.radlex);
+    // -- STATE --
+
+    const { account } = useEthers();
+
+    const { datasetValue, fileHash, numberOfPatients, numberOfAttributes, loinc, radlex } = useSelector<
+        RootState,
+        ContributeDataState
+    >((state) => state.contributeDataPage);
+
+    // Snomed
+
     const isSnomedExist = useSelector<RootState, boolean>((state) => state.contributeDataPage.snomed.isSnomedExists);
     const numOfFalsySnomedValues = useSelector<RootState, number>(
         (state) => state.contributeDataPage.snomed.numberOfFalsySnomedValues
     );
 
-    const numOfPatients = useSelector<RootState, number>((state) => state.contributeDataPage.numberOfPatients);
-    const numOfAttributes = useSelector<RootState, number>((state) => state.contributeDataPage.numberOfAttributes);
+    // Age
 
-    const isAgeExists = useSelector<RootState, boolean>((state) => state.contributeDataPage.age.isAgeExists);
-    const numFalsyAgeValues = useSelector<RootState, number>(
-        (state) => state.contributeDataPage.age.numberFalsyAgeValues
+    const { isAgeExists, numberFalsyAgeValues } = useSelector<RootState, AgeState>(
+        (state) => state.contributeDataPage.age
     );
+
+    // Gender
 
     const { numberMaleOccurrences, numberFemaleOccurrences, numberTransgenderOccurrences, falsyGenderValues } =
         useSelector<RootState, GenderState>((state) => state.contributeDataPage.gender);
 
     let genderArr: string[] = [];
+
+    const genderValue = useGetGenderValue(genderArr);
+
+    // Smart Contract Functions
+
+    const { state: contributeDataState, send: contributeData } = useMediSysMethod(MediSys_Functions.CONTRIBUTE_DATA);
+
+    // -- EFFECTS --
 
     useEffect(() => {
         genderArr = [
@@ -61,14 +81,42 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
         });
     }, [numberMaleOccurrences, numberFemaleOccurrences, numberTransgenderOccurrences, falsyGenderValues]);
 
-    const genderValue = useGetGenderValue(genderArr);
+    // Monitors the State of the transaction for the contribution
+    useEffect(() => {
+        if (contributeDataState.status === "Success") {
+            history.push(Paths.ACCOUNT_AND_HISTORY_PAGE);
+        }
+        if (contributeDataState.errorMessage) {
+            console.log("Error");
+            console.log(contributeDataState.errorMessage);
+        }
+    }, [contributeDataState]);
 
-    const datasetValue = useSelector<RootState, number>((state) => state.contributeDataPage.datasetValue);
+    // -- HELPERS --
 
-    const { send: transferFrom } = useMediSysMethod(MediSys_Functions.TRANSFER_FROM);
-    const transfer = () => {
-        transfer();
+    const data = [
+        { title: "Loinc", value: loinc },
+        { title: "RadLex", value: radlex },
+    ];
+
+    // -- CALLBACKS --
+
+    const handleGoToFileUploader = () => {
+        history.push(`${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.FILE_UPLOADER}`);
+
+        // Call abortContributeData function in MediSystem contract
+
+        // Reset redux store
     };
+
+    const handleContributeData = () => {
+        console.log("BigNumber from");
+        console.log(BigNumber.from(datasetValue));
+
+        contributeData(fileHash, account, BigNumber.from(datasetValue));
+    };
+
+    // -- RENDER --
 
     return (
         <Page heading="Contribute-Data" icon={document}>
@@ -76,76 +124,54 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                 styleProps={{
                     display: "grid",
                     gridTemplateColumns: "1fr 50% 1fr",
-                    gridGap: "80px",
+                    gridGap: "100px",
                     width: "100%",
                 }}
             >
                 <Container styleProps={{ gridColumn: "2" }}>
                     <Container
                         styleProps={{
-                            //background: "red",
-                            border: "solid",
-                            borderColor: "lightgrey",
-                            borderWidth: "1px",
+                            border: `solid 2px ${Colors.GREY_LIGHT}`,
                             borderRadius: "5px",
-                            padding: "15px",
+                            padding: "20px",
                             marginBottom: "70px",
                         }}
                     >
-                        <Text
-                            styleProps={{
-                                color: "grey",
-                                marginBottom: "50px",
-                            }}
-                        >
-                            Selected file:
-                        </Text>
+                        <Text styleProps={{ color: "grey", marginBottom: "50px" }}>Selected file:</Text>
 
-                        <Row
-                            styleProps={{
-                                width: "100%",
-                            }}
-                        >
-                            <Button
-                                buttonType="text"
-                                styleProps={{
-                                    width: "200px",
-                                }}
-                            >
+                        <Row styleProps={{ width: "100%" }}>
+                            <Button buttonType="text" onClickHandle={handleGoToFileUploader}>
                                 Delete
                             </Button>
+
                             <Button
                                 buttonType="secondary"
-                                styleProps={{
-                                    width: "200px",
-                                    marginLeft: "auto",
-                                }}
+                                onClickHandle={handleGoToFileUploader}
+                                styleProps={{ marginLeft: "auto" }}
                             >
                                 Select new file
                             </Button>
                         </Row>
                     </Container>
+
                     <Container styleProps={{ marginBottom: "50px", alignItems: "space-between" }}>
-                        <Text textType="text" styleProps={{ color: "grey", marginBottom: "30px" }}>
+                        <Text
+                            textType="text"
+                            styleProps={{ color: Colors.BLACK, fontWeight: "bold", fontSize: 17, marginBottom: "30px" }}
+                        >
                             Quality of your dataset:
                         </Text>
 
-                        <Row styleProps={{ justifyContent: "space-between", marginBottom: "10px" }}>
-                            <Text textType="text">Loinc</Text>
-                            <img
-                                alt={isLoincExist ? "Checkmark" : "Crossing"}
-                                src={isLoincExist ? Checkmark : Crossing}
-                                style={{ height: "15px" }}
-                            />
-                        </Row>
-                        <Row styleProps={{ justifyContent: "space-between", marginBottom: "10px" }}>
-                            <Text textType="text">Radlex</Text>
-                            <img
-                                alt={isRadlexExist ? "Checkmark" : "Crossing"}
-                                src={isRadlexExist ? Checkmark : Crossing}
-                                style={{ height: "15px" }}
-                            />
-                        </Row>
+                        {data.map((attribute) => (
+                            <Row styleProps={{ justifyContent: "space-between", marginBottom: "10px" }}>
+                                <Text textType="text">{attribute.title}</Text>
+                                <img
+                                    alt={attribute.value ? "Checkmark" : "Crossing"}
+                                    src={attribute.value ? Checkmark : Crossing}
+                                    style={{ height: 20 }}
+                                />
+                            </Row>
+                        ))}
 
                         <Row styleProps={{ justifyContent: "space-between", marginBottom: "10px" }}>
                             <Text textType="text">Snomed</Text>
@@ -165,7 +191,7 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                                             : zeroPoints
                                         : Crossing
                                 }
-                                style={{ height: "15px" }}
+                                style={{ height: isSnomedExist ? 15 : 20 }}
                             />
                         </Row>
 
@@ -173,19 +199,19 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                             <Text textType="text">Number of patients</Text>
                             <img
                                 src={
-                                    numOfPatients >= 1000
+                                    numberOfPatients >= 1000
                                         ? fivePoints
-                                        : numOfPatients >= 600
+                                        : numberOfPatients >= 600
                                         ? fourPoints
-                                        : numOfPatients >= 400
+                                        : numberOfPatients >= 400
                                         ? threepoints
-                                        : numOfPatients >= 200
+                                        : numberOfPatients >= 200
                                         ? twoPoints
-                                        : numOfPatients >= 10
+                                        : numberOfPatients >= 10
                                         ? onePoint
                                         : zeroPoints
                                 }
-                                style={{ height: "15px" }}
+                                style={{ height: 15 }}
                             />
                         </Row>
 
@@ -194,20 +220,20 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                             <img
                                 src={
                                     isAgeExists
-                                        ? numFalsyAgeValues <= 5
+                                        ? numberFalsyAgeValues <= 5
                                             ? fivePoints
-                                            : numFalsyAgeValues <= 10
+                                            : numberFalsyAgeValues <= 10
                                             ? fourPoints
-                                            : numFalsyAgeValues <= 15
+                                            : numberFalsyAgeValues <= 15
                                             ? threepoints
-                                            : numFalsyAgeValues <= 20
+                                            : numberFalsyAgeValues <= 20
                                             ? twoPoints
-                                            : numFalsyAgeValues <= 25
+                                            : numberFalsyAgeValues <= 25
                                             ? onePoint
                                             : zeroPoints
                                         : zeroPoints
                                 }
-                                style={{ height: "15px" }}
+                                style={{ height: 15 }}
                             />
                         </Row>
 
@@ -227,7 +253,7 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                                         ? onePoint
                                         : zeroPoints
                                 }
-                                style={{ height: "15px" }}
+                                style={{ height: 15 }}
                             />
                         </Row>
 
@@ -235,19 +261,19 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                             <Text>Number of attributes</Text>
                             <img
                                 src={
-                                    numOfAttributes >= 30
+                                    numberOfAttributes >= 30
                                         ? fivePoints
-                                        : numOfAttributes >= 24
+                                        : numberOfAttributes >= 24
                                         ? fourPoints
-                                        : numOfAttributes >= 18
+                                        : numberOfAttributes >= 18
                                         ? threepoints
-                                        : numOfAttributes >= 12
+                                        : numberOfAttributes >= 12
                                         ? twoPoints
-                                        : numOfAttributes >= 6
+                                        : numberOfAttributes >= 6
                                         ? onePoint
                                         : zeroPoints
                                 }
-                                style={{ height: "15px" }}
+                                style={{ height: 15 }}
                             />
                         </Row>
 
@@ -260,16 +286,20 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                             >
                                 <h2>Approximate value of your dataset:</h2>
                             </Text>
-                            <h2 style={{ color: "black", marginLeft: "auto" }}>{datasetValue} MediCoins</h2>
+                            <h2 style={{ color: "black", marginLeft: "auto" }}>
+                                {parseMediCoin(datasetValue)} MediCoins
+                            </h2>
                         </Row>
                     </Container>
-                    <Row styleProps={{ justifyContent: "flex-end" }}>
-                        <Button buttonType="primary" styleProps={{ width: "200px", marginBottom: "50px" }}>
+
+                    <Row styleProps={{ justifyContent: "flex-end", marginBottom: "50px" }}>
+                        <Button buttonType="primary" onClickHandle={handleContributeData}>
                             Upload Dataset
                         </Button>
                     </Row>
                 </Container>
-                <Text styleProps={{ gridColumn: "3", width: "50%" }}>
+
+                <Text styleProps={{ gridColumn: "3", width: "100%", marginRight: 80 }}>
                     Help us improve our platform and facilitate the process of diagnosis, ultimately helping patients
                     getting the best medical resources possible!
                     <br></br>

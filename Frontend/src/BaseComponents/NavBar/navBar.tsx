@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { NavBarItem } from "BaseComponents/NavBar/Components/navBarItem";
 import { NAVBAR_HEIGHT, Colors, NavBarTabs, Z_INDEX } from "Utils/globalStyles";
-import { Paths } from "Utils/paths";
+import { ContributeDataPagePaths, Paths } from "Utils/paths";
 import { useGetIsOwner, useIsLoggedIn, useMyName, usePage } from "Utils/hooks";
 import { NavBarItemProps as navBarItem } from "BaseComponents/NavBar/Components/navBarItem";
 import { Button } from "BaseComponents/Button/button";
@@ -38,7 +38,7 @@ export const NavBar = () => {
                 ? [
                       {
                           title: NavBarTabs.CONTRIBUTED_DATA,
-                          to: Paths.CONTRIBUTE_DATA_PAGE,
+                          to: `${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.FILE_UPLOADER}`,
                           selected: page === Paths.CONTRIBUTE_DATA_PAGE,
                       },
                       {
@@ -57,7 +57,7 @@ export const NavBar = () => {
             // TODO REMOVE
             {
                 title: NavBarTabs.CONTRIBUTED_DATA,
-                to: Paths.CONTRIBUTE_DATA_PAGE,
+                to: `${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.FILE_UPLOADER}`,
                 selected: page === Paths.CONTRIBUTE_DATA_PAGE,
             },
             {

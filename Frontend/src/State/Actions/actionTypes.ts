@@ -52,4 +52,8 @@ export enum ActionType {
     // VALUE
 
     SET_DATASET_VALUE = "setDatasetValue",
+
+    // FILEHASH
+
+    SET_FILE_HASH = "setFileHash",
 }

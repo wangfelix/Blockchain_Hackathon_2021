@@ -5,15 +5,12 @@ import { Text } from "BaseComponents/text";
 import { Container } from "BaseComponents/container";
 import { Row } from "BaseComponents/row";
 import { Button } from "BaseComponents/Button/button";
-import { useGetAllUnapprovedDoctors, useMediCoinMethod, useMediSysMethod } from "Utils/hooks";
-import { MediCoinFunctions, MediSys_Functions } from "Utils/smartContractUtils";
+import { useGetAllUnapprovedDoctors, useMediSysMethod } from "Utils/hooks";
+import { MediSys_Functions } from "Utils/smartContractUtils";
 
 export const AdminPageApproveDoctorsTable = () => {
     // -- STATE --
 
-    const { state: giveDoctorAllowanceState, send: giveDoctorAllowance } = useMediCoinMethod(
-        MediCoinFunctions.DEFAULT_APPROVE
-    );
     const { state: approveDoctorState, send: approveDoctor } = useMediSysMethod(MediSys_Functions.APPROVE_DOCTOR);
 
     const unapprovedDoctors = useGetAllUnapprovedDoctors();
@@ -21,8 +18,7 @@ export const AdminPageApproveDoctorsTable = () => {
     // -- CALLBACKS --
 
     const handleApproveDoctor = (address: string) => {
-        giveDoctorAllowance(address).then(() => console.log("Approved Doctor!"));
-        approveDoctor(address).then(() => console.log("Doctor removed from unApprovedArray"));
+        approveDoctor(address).then(() => console.log("Doctor now has allowance"));
     };
 
     // -- RENDER --

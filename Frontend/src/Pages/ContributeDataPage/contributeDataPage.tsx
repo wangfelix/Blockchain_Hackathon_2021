@@ -3,13 +3,12 @@ import { CSVReader } from "react-papaparse";
 import { ParseResult } from "papaparse";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { useEthers } from "@usedapp/core";
-import web3 from "web3";
+import { useHistory } from "react-router-dom";
 
 import { Button } from "BaseComponents/Button/button";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
 import { Row } from "BaseComponents/row";
 import { Page } from "BaseComponents/page";
-import wallet from "Illustrations/wallet.png";
 import { Container } from "BaseComponents/container";
 import { Text } from "BaseComponents/text";
 import {
@@ -17,6 +16,7 @@ import {
     setDiseaseName,
     setFalsyGenderValues,
     setFemaleOccurrences,
+    setFileHash,
     setIndexAge,
     setIsAgeExists,
     setIsFemaleExists,
@@ -51,6 +51,7 @@ import { MediSys_Functions } from "Utils/smartContractUtils";
 import { Route, Switch } from "react-router-dom";
 import { ContributeDataPageDataSetValueDetailsPage } from "Pages/ContributeDataPage/Components/contributeDataPageDataSetValueDetailsPage";
 import { ContributeDataPagePaths, Paths } from "Utils/paths";
+import document from "Illustrations/documentIcon.png";
 const CryptoJS = require("crypto-js");
 
 export const ContributeDataPage = () => {
@@ -83,6 +84,8 @@ type FileUploaderProps = {
 
 export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
     const dispatch = useDispatch();
+
+    const history = useHistory();
 
     // -- STATE --
 
@@ -189,7 +192,9 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
         const arr: any[] = [];
         selectedFile?.forEach((item) => arr.push(item.data));
 
-        setSelectedFileHash(`0x${CryptoJS.SHA256(JSON.stringify(arr)).toString(CryptoJS.enc.Hex)}`);
+        const fileHashHex = `0x${CryptoJS.SHA256(JSON.stringify(arr)).toString(CryptoJS.enc.Hex)}`;
+        setSelectedFileHash(fileHashHex);
+        dispatch(setFileHash(fileHashHex));
 
         // Process dataset
         batch(() => {
@@ -201,6 +206,13 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
             processSnomed();
         });
     }, [dispatch, selectedFile]);
+
+    useEffect(() => {
+        if (calculateValueState.status === "Success" && datasetValue) {
+            dispatch(setDatasetValue(datasetValue));
+            history.push(`${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.DATASET_VALUE_DETAILS_PAGE}`);
+        }
+    }, [datasetValue, calculateValueState]);
 
     // -- HELPERS --
 
@@ -372,8 +384,6 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
 
         const snomedArr = [`${isSnomedExists}`, `${numberOfFalsySnomedValues}`];
 
-        console.log("Filehash:  " + selectedFileHash);
-
         const argumentsArr: any[] = [
             account,
             diseaseName,
@@ -387,13 +397,13 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
             snomedArr,
         ];
 
-        calculateValue(...argumentsArr).then(() => console.log("Value calculated!"));
+        calculateValue(...argumentsArr);
     };
 
     // -- RENDER --
 
     return (
-        <Page heading="Contribute-Data" icon={wallet}>
+        <Page heading="Contribute-Data" icon={document}>
             <Container
                 styleProps={{
                     display: "grid",
@@ -481,7 +491,7 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
                                         onClickHandle={handleCalculateValue}
                                         styleProps={{ marginLeft: "auto" }}
                                     >
-                                        {ctaLabel}
+                                        Calculate Value
                                     </Button>
                                 </>
                             )}

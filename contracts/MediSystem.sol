@@ -96,8 +96,6 @@ contract MediSystem is MediCoin{
         Disease memory disease = Disease(budget, 0, name);
         diseases[name] = disease;
         diseasesNames.push(name);
-
-        mint(1000000 * 10 ** 18);
     }
 
     /**
