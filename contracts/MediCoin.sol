@@ -6,7 +6,6 @@ interface InterfaceMediCoin {
     function getOwner() external view returns(address); // abstract
     function balanceOf(address) external view returns(uint);
     function transferFrom(address, address, uint256)external view;
-    function approve(address spender, uint256 amount) external returns (bool);
     function allowance(address owner, address spender) external view returns(uint256);
     function mint(uint256 amount) external view returns (bool);
 }
@@ -33,7 +32,12 @@ contract MediCoin is ERC20 {
         mediSystemAddress = _mediSystemAddress;
     }
 
-    function approve(address spender, uint256 amount)virtual override hasAccess public returns (bool) {
+    function defaultApprove(address spender) virtual hasAccess public returns (bool) {
+        super.approve(spender, 1000 * 10 ** 18);
+        return true;
+    }
+
+    function approve(address spender, uint amount) virtual override hasAccess public returns (bool) {
         super.approve(spender, amount);
         return true;
     }

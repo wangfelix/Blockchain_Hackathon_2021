@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { Text } from "BaseComponents/text";
 import { Row } from "BaseComponents/row";
 import { Button } from "BaseComponents/Button/button";
-import { useSetMediCoinAddress } from "Utils/hooks";
+import { useMediSysMethod, useSetMediCoinAddress } from "Utils/hooks";
+import { MediSys_Functions } from "Utils/smartContractUtils";
 
 export const AdminPageSetMediCoinContractAddressForm = () => {
     // -- STATE --

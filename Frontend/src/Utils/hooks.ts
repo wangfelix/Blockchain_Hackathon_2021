@@ -5,6 +5,7 @@ import { BigNumber, Contract } from "ethers";
 import { Interface } from "@ethersproject/abi";
 
 import mediSysAbi from "Source/Contracts/MediSystem.json";
+import mediCoinAbi from "Source/Contracts/MediCoin.json";
 import { MediSys_Functions } from "Utils/smartContractUtils";
 
 /**
@@ -13,10 +14,13 @@ import { MediSys_Functions } from "Utils/smartContractUtils";
  * After the deployment of the smart contract, the owner of the system (medicalvalues) should
  * update this constant to the address of the smart contract.
  */
-const MEDISYSTEM_ADDRESS = "0x5f9ed66263815FE539c7a1935e53527aC23DF987";
+const MEDISYSTEM_ADDRESS = "0xa3C5611aB6A7410B2E2A3ACe70890b7A8B25Bb31";
 const MEDI_SYSTEM_INTERFACE = new Interface(mediSysAbi.abi);
+const mediSysContract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
 
-export const MEDICOIN_ADDRESS = "0xdE4CA82ee2a935Db8A1Baa950121B005b79A67B9";
+export const MEDICOIN_ADDRESS = "0x7aAb421a4cbF7565F784A3bdB036FBd0F8545DBB";
+const MEDICOIN_INTERFACE = new Interface(mediCoinAbi.abi);
+const mediCoinContract = new Contract(MEDICOIN_ADDRESS, mediCoinAbi.abi);
 
 /**
  * Returns the current URL's pathname without any subdirectories or query parameters.
@@ -168,8 +172,6 @@ export const useGetMyMediCoinBalance = (account: string | null | undefined) => {
     return value;
 };
 
-const contract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
-
 /**
  * This hook returns a function send, which should be used for setting the blockchain address of the MediCoin contract in the MediSystem contract.
  * The returned TransactionStatus object contains information about the transaction and can be used to monitor the transaction.
@@ -180,7 +182,7 @@ const contract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
  *      The blockchain address of the deployed MediCoin smart contract should be passed into the function.
  */
 export const useSetMediCoinAddress = () => {
-    const { state, send } = useContractFunction(contract, MediSys_Functions.SET_MEDICOIN_ADDRESS, {});
+    const { state, send } = useContractFunction(mediSysContract, MediSys_Functions.SET_MEDICOIN_ADDRESS, {});
 
     return { state, send };
 };
@@ -215,8 +217,13 @@ export const useGetIsOwner = (account: string | null | undefined) => {
     return `${isOwner}` === account;
 };
 
+/**
+ * This hook returns an array with the addresses of all doctors, who are not approved (have no allowance) in the MediSystem smart contract.
+ */
 export const useGetAllUnapprovedDoctors = () => {
-    const [unapprovedDoctors] =
+    const [arrWithoutNullAddresses, setArrWithoutNullAddresses] = useState<string[]>([]);
+
+    const [unapprovedDoctors]: string[] | any =
         useContractCall({
             abi: MEDI_SYSTEM_INTERFACE,
             address: MEDISYSTEM_ADDRESS,
@@ -224,10 +231,19 @@ export const useGetAllUnapprovedDoctors = () => {
             args: [],
         }) ?? [];
 
-    console.log("unapprovedDoctors:");
-    console.log(unapprovedDoctors);
+    useEffect(() => {
+        if (!unapprovedDoctors) return;
 
-    return unapprovedDoctors ? [...unapprovedDoctors] : null;
+        // If a doctor has been removed, his address in the array will be turned into an zero address. These need to be filtered out.
+        // For the future, MediSystems should return an array without zero addresses, e.g. by using a mapping instead of an array for unapproved doctors.
+        setArrWithoutNullAddresses(
+            unapprovedDoctors.filter((address: string) => {
+                return address !== "0x0000000000000000000000000000000000000000";
+            })
+        );
+    }, [unapprovedDoctors]);
+
+    return arrWithoutNullAddresses;
 };
 
 export const useGetAmIApproved = (account: string | null | undefined) => {
@@ -253,7 +269,13 @@ export const useGetAmIApproved = (account: string | null | undefined) => {
  *      and send, a function to call the desired function in the smart contract.
  */
 export function useMediSysMethod(functionName: string) {
-    const { state, send } = useContractFunction(contract, functionName, {});
+    const { state, send } = useContractFunction(mediSysContract, functionName, {});
 
     return { state, send };
 }
+
+export const useMediCoinMethod = (functionName: string) => {
+    const { state, send } = useContractFunction(mediCoinContract, functionName, {});
+
+    return { state, send };
+};
