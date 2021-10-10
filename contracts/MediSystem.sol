@@ -270,17 +270,13 @@ contract MediSystem is MediCoin{
             if (countFalsyNum <= 5){
                 return 100;
             } else if (countFalsyNum <= 10) {
-                return 90;
-            } else if (countFalsyNum <= 10) {
                 return 80;
             } else if (countFalsyNum <= 15) {
-                return 70;
-            } else if (countFalsyNum <= 20) {
                 return 60;
+            } else if (countFalsyNum <= 20) {
+                return 40;
             } else if (countFalsyNum <= 25) {
-                return 50;
-            } else if (countFalsyNum <= 30) {
-                return 25;
+                return 20;
             } else {
                 return 0;
             }
