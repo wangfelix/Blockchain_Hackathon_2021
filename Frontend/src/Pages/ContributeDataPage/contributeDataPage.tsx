@@ -3,7 +3,7 @@ import { CSVReader } from "react-papaparse";
 import { ParseResult } from "papaparse";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { useEthers } from "@usedapp/core";
-import { utils } from "ethers";
+import web3 from "web3";
 
 import { Button } from "BaseComponents/Button/button";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
@@ -13,6 +13,8 @@ import wallet from "Illustrations/wallet.png";
 import { Container } from "BaseComponents/container";
 import { Text } from "BaseComponents/text";
 import {
+    setDatasetValue,
+    setDiseaseName,
     setFalsyGenderValues,
     setFemaleOccurrences,
     setIndexAge,
@@ -44,6 +46,12 @@ import {
 } from "Pages/ContributeDataPage/contributeDataPageUtils";
 import { AgeState, FalsyGenderValue, GenderState, SnomedState } from "State/Reducers/contributeDataPageReducer";
 import { HashTable } from "Utils/utils";
+import { useGetDatasetValue, useMediSysMethod } from "Utils/hooks";
+import { MediSys_Functions } from "Utils/smartContractUtils";
+import { Route, Switch } from "react-router-dom";
+import { ContributeDataPageDataSetValueDetailsPage } from "Pages/ContributeDataPage/Components/contributeDataPageDataSetValueDetailsPage";
+import { ContributeDataPagePaths, Paths } from "Utils/paths";
+const CryptoJS = require("crypto-js");
 
 export const ContributeDataPage = () => {
     // -- CALLBACKS --
@@ -52,7 +60,18 @@ export const ContributeDataPage = () => {
 
     // -- RENDER --
 
-    return <FileUploader ctaLabel="Calculate Value" onCta={handleMoveToValuePage} acceptedFileType="csv" />;
+    return (
+        <Switch>
+            <Route
+                path={`${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.FILE_UPLOADER}`}
+                component={FileUploader}
+            />
+            <Route
+                path={`${Paths.CONTRIBUTE_DATA_PAGE}${ContributeDataPagePaths.DATASET_VALUE_DETAILS_PAGE}`}
+                component={ContributeDataPageDataSetValueDetailsPage}
+            />
+        </Switch>
+    );
 };
 
 type FileUploaderProps = {
@@ -69,9 +88,17 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
 
     const { account } = useEthers();
 
+    const { state: calculateValueState, send: calculateValue } = useMediSysMethod(
+        MediSys_Functions.CALCULATE_DATASET_VALUE
+    );
+
     const [selectedFile, setSelectedFile] = useState<ParseResult<any>[] | undefined>(undefined);
 
     // File Data
+
+    const datasetValue = useGetDatasetValue(account);
+
+    const diseaseName = useSelector<RootState, string>((state) => state.contributeDataPage.diseaseName);
 
     const [selectedFileHash, setSelectedFileHash] = useState("");
 
@@ -148,19 +175,21 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
         dispatch(setNumberOfPatients(patients.length));
     }, [isSnomedExists]);
 
+    // TODO REMOVE BELOW
+    useEffect(() => {
+        console.log("calculateValueState:");
+        console.log(calculateValueState);
+    }, [calculateValueState]);
+    // TODO REMOVE ABOVE
+
     useEffect(() => {
         if (!selectedFile) return;
 
         // Calculate hash value of the dataset.
         const arr: any[] = [];
         selectedFile?.forEach((item) => arr.push(item.data));
-        setSelectedFileHash(utils.id(JSON.stringify(arr)));
 
-        // TODO REMOVE BELOW
-        console.log(arr);
-        console.log(JSON.stringify(arr));
-        console.log(utils.id(JSON.stringify(arr)));
-        // TODO REMOVE ABOVE
+        setSelectedFileHash(`0x${CryptoJS.SHA256(JSON.stringify(arr)).toString(CryptoJS.enc.Hex)}`);
 
         // Process dataset
         batch(() => {
@@ -321,6 +350,8 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
 
     const handleSelectFile = (data: ParseResult<any>[]) => setSelectedFile(data);
 
+    const handleChangeName = (value: string) => dispatch(setDiseaseName(value));
+
     // Calls SmartContract Function to calculate the value (in MediCoins) of the given dataset.
     const handleCalculateValue = () => {
         const genderArr = [
@@ -341,8 +372,11 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
 
         const snomedArr = [`${isSnomedExists}`, `${numberOfFalsySnomedValues}`];
 
+        console.log("Filehash:  " + selectedFileHash);
+
         const argumentsArr: any[] = [
             account,
+            diseaseName,
             numberOfPatients,
             ageArr,
             genderArr,
@@ -352,6 +386,8 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
             selectedFileHash,
             snomedArr,
         ];
+
+        calculateValue(...argumentsArr).then(() => console.log("Value calculated!"));
     };
 
     // -- RENDER --
@@ -367,6 +403,27 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
                 }}
             >
                 <Container styleProps={{ gridColumn: "2" }}>
+                    <Container styleProps={{ marginBottom: 50, gap: 10 }}>
+                        <Text textType="text">Disease:</Text>
+                        <input
+                            type="text"
+                            placeholder="Input disease here..."
+                            onChange={(e) => handleChangeName(e.target.value)}
+                            style={{
+                                height: 50,
+                                borderRadius: BORDER_RADIUS,
+                                borderStyle: "solid",
+                                borderColor: Colors.GREY,
+                                background: Colors.TRANSPARENT,
+
+                                padding: "0 20px",
+                            }}
+                        />
+                    </Container>
+
+                    <Text textType="text" styleProps={{ marginBottom: 10 }}>
+                        File:
+                    </Text>
                     <Container styleProps={{ height: "400px" }}>
                         <CSVReader
                             onDrop={handleSelectFile}
@@ -413,15 +470,22 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
                     </Container>
 
                     <Row>
-                        {selectedFile && (
-                            <Button
-                                buttonType="primary"
-                                onClickHandle={handleCalculateValue}
-                                styleProps={{ marginLeft: "auto" }}
-                            >
-                                {ctaLabel}
-                            </Button>
-                        )}
+                        <Container styleProps={{ justifySelf: "flex-end", marginLeft: "auto", gap: 10 }}>
+                            {selectedFile && (
+                                <>
+                                    <Text textType="nudge" styleProps={{ color: Colors.RED, height: 10 }}>
+                                        {diseaseName ? "" : "Error: Please specify the name of the disease!"}
+                                    </Text>
+                                    <Button
+                                        buttonType={diseaseName ? "primary" : "primaryGreyedOut"}
+                                        onClickHandle={handleCalculateValue}
+                                        styleProps={{ marginLeft: "auto" }}
+                                    >
+                                        {ctaLabel}
+                                    </Button>
+                                </>
+                            )}
+                        </Container>
                     </Row>
                 </Container>
 
@@ -439,6 +503,8 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
                     Medicalvalues-Coins, with which you can access our products at a discounted price.
                 </Text>
             </Container>
+
+            <Text textType="text">{datasetValue ? datasetValue : "Fehler"}</Text>
         </Page>
     );
 };
