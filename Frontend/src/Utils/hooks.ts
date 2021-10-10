@@ -215,6 +215,24 @@ export const useGetIsOwner = (account: string | null | undefined) => {
     return `${isOwner}` === account;
 };
 
+
+export const useGetAmIApproved = (account: string | null | undefined) => {
+    const [amIApproved] =
+        useContractCall({
+            abi: MEDI_SYSTEM_INTERFACE,
+            address: MEDISYSTEM_ADDRESS,
+            method: "getIsIApproved",
+            args: [account],
+        }) ?? [];
+
+    useEffect(() => {
+        console.log("amIApproved:");
+        console.log(amIApproved);
+    }, [amIApproved]);
+
+    return amIApproved;
+};
+
 /**
  * This hook returns returns the function send and TransactionStatus object from useDapp's useContractFunction hook.
  * By passing in the name of the desired function in the MediSystem contract, using the returned send function will call it.

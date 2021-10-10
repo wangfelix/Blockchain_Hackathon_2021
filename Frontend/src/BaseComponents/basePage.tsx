@@ -8,6 +8,7 @@ import { useViewportDimensions } from "Utils/hooks";
 import { Container } from "BaseComponents/container";
 import { RegistrationModal } from "BaseComponents/RegistrationModal/registrationModal";
 import { RootState } from "State/Reducers";
+import { AccountNotApprovedModal } from "BaseComponents/accountNotApprovedModal";
 
 type BasePageProps = {
     children: ReactNode;
@@ -53,6 +54,7 @@ export const BasePage = ({ children }: BasePageProps) => {
             <Footer />
 
             <RegistrationModal isOpen={isRegistrationModalOpen} />
+            <AccountNotApprovedModal />
         </Container>
     );
 };
