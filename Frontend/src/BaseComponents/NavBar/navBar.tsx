@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { NavBarItem } from "BaseComponents/NavBar/Components/navBarItem";
 import { NAVBAR_HEIGHT, Colors, NavBarTabs, Z_INDEX } from "Utils/globalStyles";
 import { Paths } from "Utils/paths";
-import { useIsLoggedIn, useMyName, usePage } from "Utils/hooks";
+import { useGetIsOwner, useIsLoggedIn, useMyName, usePage } from "Utils/hooks";
 import { NavBarItemProps as navBarItem } from "BaseComponents/NavBar/Components/navBarItem";
 import { Button } from "BaseComponents/Button/button";
 import { setRegistrationModalOpen } from "State/Actions/actionCreators";
@@ -27,12 +27,14 @@ export const NavBar = () => {
 
     const myName = useMyName(account);
 
+    const isOwner = useGetIsOwner(account);
+
     // -- MEMOIZED DATA --
 
     const navBarItemsLeft: navBarItem[] = useMemo(
         () => [
             { title: NavBarTabs.HOME, to: Paths.LANDING_PAGE, selected: page === Paths.LANDING_PAGE },
-            ...(account
+            ...(isLoggedIn
                 ? [
                       {
                           title: NavBarTabs.CONTRIBUTED_DATA,
@@ -41,12 +43,16 @@ export const NavBar = () => {
                       },
                       {
                           title: NavBarTabs.ACCOUNTS_AND_HISTORY,
-                          to: Paths.ACCOUNT_AND_HISTORY,
-                          selected: page === Paths.ACCOUNT_AND_HISTORY,
+                          to: Paths.ACCOUNT_AND_HISTORY_PAGE,
+                          selected: page === Paths.ACCOUNT_AND_HISTORY_PAGE,
                       },
                   ]
                 : []),
-            { title: NavBarTabs.DEMO, to: Paths.DEMO, selected: page === Paths.DEMO },
+            { title: NavBarTabs.DEMO, to: Paths.DEMO_PAGE, selected: page === Paths.DEMO_PAGE },
+
+            ...(isOwner
+                ? [{ title: NavBarTabs.ADMIN, to: Paths.ADMIN_PAGE, selected: page === Paths.ADMIN_PAGE }]
+                : []),
 
             // TODO REMOVE
             {
@@ -56,11 +62,11 @@ export const NavBar = () => {
             },
             {
                 title: NavBarTabs.ACCOUNTS_AND_HISTORY,
-                to: Paths.ACCOUNT_AND_HISTORY,
-                selected: page === Paths.ACCOUNT_AND_HISTORY,
+                to: Paths.ACCOUNT_AND_HISTORY_PAGE,
+                selected: page === Paths.ACCOUNT_AND_HISTORY_PAGE,
             },
         ],
-        [page, account]
+        [page, isLoggedIn]
     );
 
     // -- CALLBACKS --

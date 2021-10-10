@@ -12,6 +12,8 @@ export enum Colors {
     GREY_DARK = "#a5a5a5",
     GREY_DARKER = "#767676",
     GREY_LIGHT = "#EEEEEE",
+    GREY = "#CCCCCC",
+    RED = "#ba3446",
 }
 
 export const NAVBAR_HEIGHT = "65px";
@@ -23,6 +25,7 @@ export enum NavBarTabs {
     DEMO = "Watch Demo",
     CONTRIBUTED_DATA = "Contribute Data",
     ACCOUNTS_AND_HISTORY = "Accounts & History",
+    ADMIN = "Admin Panel",
 }
 
 export enum Z_INDEX {

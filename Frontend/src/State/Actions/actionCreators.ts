@@ -98,3 +98,15 @@ export const setIsSnomedExists = (isSnomedExists: boolean) => {
 export const setNumberOfFalsySnomedValues = (numberOfFalsySnomedValues: number) => {
     return { type: ActionType.SET_NUMBER_OF_FALSY_SNOMED_VALUES, payload: numberOfFalsySnomedValues };
 };
+
+// DISEASE NAME
+
+export const setDiseaseName = (diseaseName: string) => {
+    return { type: ActionType.SET_DISEASE_NAME, payload: diseaseName };
+};
+
+// VALUE
+
+export const setDatasetValue = (datasetValue: number) => {
+    return { type: ActionType.SET_DATASET_VALUE, payload: datasetValue };
+};

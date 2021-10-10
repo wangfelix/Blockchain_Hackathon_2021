@@ -4,18 +4,29 @@ import "./MediCoin.sol";
 contract MediSystem {
     mapping(address => Doctor) private doctors;
     mapping(string => Disease) private diseases;
-    address mediCoinAddress;
-    address owner;
+    address public mediCoinAddress;
+    address public owner;
     string[] public diseasesNames;
     address[] public allDoctorAddress;
     address[] public unapprovedDoctors;
 
 
+    struct Dataset {
+        bytes32 fileHash;
+        uint256 value;
+        uint numberOfPatientsData;
+        string diseaseName;
+    }
+
     struct Doctor {
         address doctorAccount;
         string doctorName;
-        bytes32[] contributedData;
-        uint256[] pendingDataSetsValues;
+        bytes32[] contributedData;      //TODO Needed? Could be done with Events, but maybe for Admin its easier this way?
+
+        // If isPendingDatasetExist is true, the Dataset pending has correct data.
+        bool isPendingDatasetExist;
+        Dataset pending;
+
         bool isExist;
     }
 
@@ -39,34 +50,61 @@ contract MediSystem {
         _;
     }
 
+    /**
+     * @dev Sets the address to the MediCoin contract. Needs to be called as soon as possible after contract deployment.
+     */
     function setMediCoinAddress(address _mediCoinAddress) external {
         mediCoinAddress = _mediCoinAddress;
     }
 
-    function registerDoctor(string memory doctorName) public payable returns(string memory) {
+    function getAllUnapprovedDoctors() public view returns(address[] memory) {
+        return unapprovedDoctors;
+    }
+
+    /**
+     * @notice Registers a Doctor in the system by creating a Doctor instance and adding it to the doctors mapping.
+     *
+     * @param doctorName The name of the doctor.
+     */
+    function registerDoctor(string memory doctorName) public payable {
         Doctor memory doctor;
         doctor.doctorAccount = msg.sender;
         doctor.doctorName = doctorName;
         doctor.isExist = true;
         doctors[msg.sender] = doctor;
         allDoctorAddress.push(doctor.doctorAccount);
-        unapprovedDoctors.push(msg.sender);
-        return "success";
+
+        if (msg.sender != owner) {
+            unapprovedDoctors.push(msg.sender);
+        }
     }
 
     function addDisease(uint budget, string memory name) public payable {
         Disease memory disease = Disease(budget, 0, name);
         diseases[name] = disease;
         diseasesNames.push(name);
+
+        InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
+        medicoin.mint(owner, budget);
     }
 
+    /**
+     * @param account The address of the doctor, whose name should be returned
+     *
+     * @return name of the doctor with the given address
+     */
     function getMyName(address account) public view returns(string memory) {
         return doctors[account].doctorName;
     }
 
-    function getMyMediCoinBalance() public view returns(uint) {
+    /**
+     * @notice Returns the MediCoin balance of the sender
+     *
+     * @return the MediCoin balance of the senders
+     */
+    function getMyMediCoinBalance(address _address) public view returns(uint) {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        return medicoin.balanceOf(msg.sender);
+        return medicoin.balanceOf(_address);
     }
 
     // Only the deployer of the contract - medicalvalues - is able to see a list of all the users.
@@ -261,9 +299,8 @@ contract MediSystem {
     * @param radlex loinc true, if dataset contains radlex-data - false, if not.
     * @param snomed A string array with 2 fields. The first containing either "true" or "false", corresponding with the existence of snomed data in the dataset. The second field contains a string representation of the number of falsy values. A falsy snomed value is any string containing symbols different than numbers.
     *
-    * @return medicoinsWorth The number of MediCoins, that the dataset is worth, given the quality of it and the current available budget for the disease.
     */
-    function getDatasetValue(
+    function calculateDatasetValue(
         address account,
         string memory disease,
         uint256 numberOfPatients,
@@ -272,7 +309,9 @@ contract MediSystem {
         uint256 numberOfAttributes,
         bool loinc,
         bool radlex,
-        string[] memory snomed) public payable returns (uint) {
+        bytes32 _fileHash,
+        string[] memory snomed
+    ) public payable {
 
         uint256 sumValue = getTotalDatasetValuePercentage(numberOfPatients, age, gender, numberOfAttributes, loinc, radlex, snomed);
 
@@ -281,23 +320,39 @@ contract MediSystem {
 
         // Check if the disease exists. If not, add it to the system, mint medicoins and allocate budget.
         if (getIsDiseaseExists(disease) == false) {
-
-            // Add disease
-            diseases[disease] = Disease(10000 * 10 ** 18, 0, disease);
-            diseasesNames.push(disease);
-
-            // Mint medicoins
-            // TODO Mint MediCoins
-
+            addDisease(10000 * 10 ** 18, disease);
         }
 
         uint mediCoinsWorth = (diseases[disease].budget * percentageWorth) / 100000;
         diseases[disease].budget -= mediCoinsWorth;
 
-        // add the amount of Medicoins to the pendingDataSetsValues array of the doctor for future transfer validation
-        doctors[account].pendingDataSetsValues.push(mediCoinsWorth);
+        addPendingDataset(account, _fileHash, mediCoinsWorth, numberOfPatients);
+        doctors[account].pending.diseaseName = disease;
+    }
 
-        return mediCoinsWorth;
+    function addPendingDataset(address account, bytes32 _fileHash, uint256 amount, uint256 numberOfPatients) public payable {
+        Dataset memory dataset;
+        dataset.fileHash = _fileHash;
+        dataset.value = amount;
+        dataset.numberOfPatientsData = numberOfPatients;
+        doctors[account].isPendingDatasetExist = true;
+        doctors[account].pending = dataset;
+    }
+
+    function getDataSetValue(address account) public view returns(uint256) {
+        require(doctors[account].isPendingDatasetExist == true, "No pending dataset");
+        return doctors[account].pending.value;
+    }
+
+    function abortContribution(address account, string memory diseaseName) public {
+        require(doctors[account].isPendingDatasetExist == true, "Nothing to abort");
+
+        // Add the value of the dataset to the budget of the disease
+        diseases[diseaseName].budget += doctors[account].pending.value;
+
+        // Delete pending dataset
+        doctors[account].isPendingDatasetExist = false;
+
     }
 
     function getTotalDatasetValuePercentage(
@@ -307,7 +362,8 @@ contract MediSystem {
         uint256 numberOfAttributes,
         bool loinc,
         bool radlex,
-        string[] memory snomed) public pure returns(uint256) {
+        string[] memory snomed
+    ) public pure returns(uint256) {
 
         // number of patients, attributes and the existence of valid snomed data is double-weighted
         uint256 numberOfPatientsValue = getNumberOfPatientsValue(numberOfPatients) * 2;
@@ -337,45 +393,67 @@ contract MediSystem {
         return false;
     }
 
-    //@Anna
+    /// @notice Event, that is beeing emitted every time a doctor shares a dataset.
     event ContributeData(address doctor, bytes32 fileHash, uint256 amount, uint now);
 
-    function contributedData(bytes32 fileHash, address doctor, uint256 amount) public payable {
-        emit ContributeData(msg.sender, fileHash, msg.value, block.timestamp);
-        transfer(doctor, amount);
+    /**
+     * @notice function that contributes a dataset to MediSystem. The params fileHash and amount must align with the data values in the Dataset pending of the doctor.
+     * @dev In order to contribute data, a pending Dataset is required.
+     *
+     * @param _fileHash The hash value of the dataset, that is about to be contributed.
+     * @param _address address of the doctor, who is contributing the dataset. TODO check msg.sender
+     * @param amount The value of the dataset.
+     */
+    function contributeData(bytes32 _fileHash, address _address, uint256 amount) public payable {
+        require(doctors[_address].isPendingDatasetExist == true, "Cannot contribute dataset. No pending data.");
+        require(doctors[_address].pending.value == amount, "Cannot contribute dataset. The given amount does not match the calculated value of the dataset.");
+        require(doctors[_address].pending.fileHash == _fileHash, "Cannot contribute dataset. The given file does not match the previously evaluated dataset.");
+
+        transfer(_address, amount);
+
+        // Increment attribute numberOfPatientsData of the disease by the attribute numberOfPatients of the dataset.
+        diseases[doctors[_address].pending.diseaseName].numberOfPatientsData += doctors[_address].pending.numberOfPatientsData;
+
+        // Delete pending dataset, as the contribution is completed.
+        doctors[_address].isPendingDatasetExist = false;
+        doctors[_address].contributedData.push(_fileHash);
+
+        emit ContributeData(msg.sender, _fileHash, amount, block.timestamp);
     }
 
+    /**
+     * @notice function transfers a given amount of MediCoins from the owners account to the given account.
+     *
+     * @dev The function checks, if the doctor has enough allowance from the owner, from where he will transfer MediCoins to himself.
+     * If the allowance is lower than 100 [MDC], his account will be pushed into the array unapprovedDoctors, so that the owner can approve him more allowance.
+     * Before the transaction is made, the given amount is compared to pendingDataSetsValues. If the given amount is included in pendingDataSetsValues,
+     * the amount was manipulated in the frontend and the transaction should not be executed.
+     *
+     * @param _address The address of the message sender. TODO: Check why msg.sender does not work
+     * @param amount The amount of MediCoins to be transfered.
+     *
+     */
     function transfer(address _address, uint amount) public {
         InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        bool exist;
-
-        for(uint i = 0; i < doctors[_address].pendingDataSetsValues.length; i++) {
-            if(doctors[_address].pendingDataSetsValues[i] == amount) {
-                exist = true;
-            }
-        }
 
         uint doctorsAllowance = medicoin.allowance(owner, _address);
 
         require(doctorsAllowance >= amount, "Allowance not sufficient for transaction.");
 
-        require(exist == true, "You can not tansfer");
         medicoin.transferFrom(owner, _address, amount);
-
-        for(uint j = 0; j < doctors[_address].pendingDataSetsValues.length; j++) {
-            if(doctors[_address].pendingDataSetsValues[j] == amount) {
-                doctors[_address].pendingDataSetsValues[j] = doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
-                delete doctors[_address].pendingDataSetsValues[doctors[_address].pendingDataSetsValues.length - 1];
-            }
-        }
 
         // If the doctors allowance is low, add his address to the unapprovedDoctors array, so that meidcalvalues can refill his allowance.
         if (doctorsAllowance < 100 * 10 ** 18) {
             unapprovedDoctors.push(_address);
         }
     }
-    //@Anna
-    function isIApproved(address _address) public view returns(bool) {
+
+    /**
+     * @notice Checks if the doctor with the given address is already approved (= has allowance)
+     *
+     * @return true, if doctor is approved; false, if not.
+     */
+    function getIsIApproved(address _address) public view returns(bool) {
         for(uint i = 0; i < unapprovedDoctors.length; i++) {
             if(unapprovedDoctors[i] == _address){
                 return false;
@@ -385,6 +463,13 @@ contract MediSystem {
         return true;
     }
 
+    /**
+     * @notice function returns the MediCoin budget of the given disease.
+     *
+     * @param diseaseName The name of the disease, whose budget should be returned.
+     *
+     * @return MediCoin budget of the given disease.
+     */
     function getDiseaseBudget(string memory diseaseName) public view returns(uint) {
         return diseases[diseaseName].budget;
     }
@@ -392,6 +477,10 @@ contract MediSystem {
     // TODO Increment numberOfPatientsData after contiributing data.
     function getDiseaseNumberOfPatientsData(string memory diseaseName) public view returns(uint256) {
         return diseases[diseaseName].numberOfPatientsData;
+    }
+
+    function getIsPendingDataExists(address _address) public view returns(bool) {
+        return doctors[_address].isPendingDatasetExist;
     }
 
 }
