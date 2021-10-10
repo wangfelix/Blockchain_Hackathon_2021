@@ -1,11 +1,10 @@
 pragma solidity 0.8.7;
 import "./MediCoin.sol";
 
-contract MediSystem {
+contract MediSystem is MediCoin{
     mapping(address => Doctor) private doctors;
     mapping(string => Disease) private diseases;
-    address public mediCoinAddress;
-    address public owner;
+    //address public owner;
     string[] public diseasesNames;
     address[] public allDoctorAddress;
     address[] public unapprovedDoctors;
@@ -50,12 +49,6 @@ contract MediSystem {
         _;
     }
 
-    /**
-     * @dev Sets the address to the MediCoin contract. Needs to be called as soon as possible after contract deployment.
-     */
-    function setMediCoinAddress(address _mediCoinAddress) external {
-        mediCoinAddress = _mediCoinAddress;
-    }
 
     function getAllUnapprovedDoctors() public view returns(address[] memory) {
         return unapprovedDoctors;
@@ -69,6 +62,8 @@ contract MediSystem {
         bool isApproved = getIsIApproved(doctor);
 
         require(isApproved == false, "Doctor is already approved");
+
+        approve(doctor, 10000 * 10 ** 18);
 
         // Remove Doctor from array unapprovedDoctors
         for (uint256 i = 0; i < unapprovedDoctors.length; i++) {
@@ -101,6 +96,8 @@ contract MediSystem {
         Disease memory disease = Disease(budget, 0, name);
         diseases[name] = disease;
         diseasesNames.push(name);
+
+        mint(1000000 * 10 ** 18);
     }
 
     /**
@@ -110,16 +107,6 @@ contract MediSystem {
      */
     function getMyName(address account) public view returns(string memory) {
         return doctors[account].doctorName;
-    }
-
-    /**
-     * @notice Returns the MediCoin balance of the sender
-     *
-     * @return the MediCoin balance of the senders
-     */
-    function getMyMediCoinBalance(address _address) public view returns(uint) {
-        InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
-        return medicoin.balanceOf(_address);
     }
 
     // Only the deployer of the contract - medicalvalues - is able to see a list of all the users.
@@ -436,32 +423,20 @@ contract MediSystem {
         emit ContributeData(msg.sender, _fileHash, amount, block.timestamp);
     }
 
-    /**
-     * @notice function transfers a given amount of MediCoins from the owners account to the given account.
-     *
-     * @dev The function checks, if the doctor has enough allowance from the owner, from where he will transfer MediCoins to himself.
-     * If the allowance is lower than 100 [MDC], his account will be pushed into the array unapprovedDoctors, so that the owner can approve him more allowance.
-     * Before the transaction is made, the given amount is compared to pendingDataSetsValues. If the given amount is included in pendingDataSetsValues,
-     * the amount was manipulated in the frontend and the transaction should not be executed.
-     *
-     * @param _address The address of the message sender. TODO: Check why msg.sender does not work
-     * @param amount The amount of MediCoins to be transfered.
-     *
-     */
-    function transfer(address _address, uint amount) public {
-        InterfaceMediCoin medicoin = InterfaceMediCoin(mediCoinAddress);
+    function transfer(address recipient, uint256 amount) override public returns(bool){
+        uint doctorsAllowance = allowance(owner, recipient);
 
-        uint doctorsAllowance = medicoin.allowance(owner, _address);
+        //require(doctorsAllowance >= amount, "Allowance not sufficient for transaction.");
 
-        require(doctorsAllowance >= amount, "Allowance not sufficient for transaction.");
-
-        medicoin.transferFrom(owner, _address, amount);
+        transferFrom(owner, recipient, amount);
 
         // If the doctors allowance is low, add his address to the unapprovedDoctors array, so that meidcalvalues can refill his allowance.
         if (doctorsAllowance < 100 * 10 ** 18) {
-            unapprovedDoctors.push(_address);
+            unapprovedDoctors.push(recipient);
         }
     }
+
+
 
     /**
      * @notice Checks if the doctor with the given address is already approved (= has allowance)
