@@ -4,6 +4,12 @@
 [[_TOC_]]
 
 ## Installation
+
+- Prerequisites
+    1. Git
+    2. Node.js for using the Node package manager.
+    3. Google Chrome or any other chromium browser, like Brave or Edge.
+
 1. **Clone the project** to any directory by running 
     ```
     $ git clone https://git.scc.kit.edu/urtma/blockchain_hackathon_2021.git
@@ -49,3 +55,17 @@
 
     //...
     ```
+
+6. <details><summary>Install and Configure Metamask</summary>
+
+    1. Install the Metamask browser extension from https://metamask.io/ and register/login.
+
+    2. Under Settings, add a new Network. Input http://127.0.0.1:7545 as URL and 1337 as ChainId.
+</details>
+
+7. **Start the frontend client** by navigating to `blockchain_hackathon_2021/Frontend` and running
+    ```
+    $ npm run build
+    ```
+
+    This will start a webpack development server. You can access the programm on localhost:8080
