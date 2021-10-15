@@ -1,4 +1,4 @@
-# Blockchain_Hackathon_2021
+# Blockchain Hackathon 2021 - Medi-System
 
 
 #### Table of Contents
@@ -128,8 +128,12 @@ First, specify the disease your dataset is providing data for. In the future, th
 
 Underneath the input field, there is a droppable area, where you can drag and drop your dataset. Alternatively, click on the area to select the file via the file exporer. Please note, that only csv files are supported.
 
+When the name of the disease and the dataset are provided, a button labelled `Calculate Value` will appear. Clicking it will call the 
+
 <br />
 
 ## Future Steps
 
-placeholder
+- clean up solidity code, remove redundant methods
+- Hook up Account & History page to the smart contract
+- Set up a local server that moves all contributed csv-files to a local directory, and then serves them to the fronted via an API, so that the history page can analyze them to show details of previous contributions in the Details Pane.
