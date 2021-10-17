@@ -134,11 +134,13 @@ ___
 
 ### Admin Rights
 
-To use the admin rights, the **Admin Panel** must be accessed. First the address of the Medicoin smart contract has to be set. this only has to be done once. To do this, copy the address of the contract and enter it in the admin panel in the following input field: 
+To use the admin rights, the **Admin Panel** must be accessed. First the address of the Medicoin smart contract has to be set. this only has to be done once. To do this, copy the address of the contract and enter it in the **Admin Panel** in the following input field: 
 
 ![Screenshot_2021-10-17_at_14.00.48](/uploads/3e8fdd55211ffd34432aba79fa02e42c/Screenshot_2021-10-17_at_14.00.48.png)
 
-Especially the approve of newly registered participants in the network (e.g. doctors) is important. As an admin you only have to press the approve button on the admin page. If this is done, the participant can get paid for contributing datasets in Medicoins.
+Especially the approve of newly registered participants in the network (e.g. doctors) is important. As an admin you only have to press the approve button on the **Admin Panel**. If this is done, the participant can get paid for contributing datasets in Medicoins.
+
+![Screenshot_2021-10-17_at_14.12.15](/uploads/7cf170fad80203fd92da7d027c96c81d/Screenshot_2021-10-17_at_14.12.15.png)
 
 ___ 
 
