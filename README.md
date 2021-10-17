@@ -82,6 +82,8 @@
 
 >**Notice: If you want to use the MediSystem web-application, please note that it has only been tested with Chromium based browsers. Using other browsers like Firefox, Safari or Internet Explorer can cause problems.**
 
+___ 
+
 ### Landing Page
 On the landing-page, you will be able to read more about the program. If you are not logged in or registered, you can do so by clicking the **Getting Started** button.
 
