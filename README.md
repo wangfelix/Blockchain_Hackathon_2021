@@ -128,13 +128,14 @@ First, specify the disease your dataset is providing data for. In the future, th
 
 Underneath the input field, there is a droppable area, where you can drag and drop your dataset. Alternatively, click on the area to select the file via the file exporer. Please note, that only csv files are supported.
 
-When the name of the disease and the dataset are provided, a button labelled `Calculate Value` will appear. Clicking it will call the 
+When the name of the disease and the dataset are provided, a button labelled `Calculate Value` will appear. With a click on the button, the algorithm starts calculating the value of the inserted data set.  
 
 ___ 
 
 ### Admin Rights
 
-To use the admin rights, the **Admin Panel** must be accessed. Especially the approve of newly registered participants in the network (e.g. doctors) is important. As an admin you only have to press the approve button on the admin page. If this is done, the participant can get paid for contributing datasets in Medicoins.
+To use the admin rights, the **Admin Panel** must be accessed. 
+Especially the approve of newly registered participants in the network (e.g. doctors) is important. As an admin you only have to press the approve button on the admin page. If this is done, the participant can get paid for contributing datasets in Medicoins.
 
 ___ 
 
