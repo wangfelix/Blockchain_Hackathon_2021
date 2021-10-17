@@ -130,7 +130,13 @@ Underneath the input field, there is a droppable area, where you can drag and dr
 
 When the name of the disease and the dataset are provided, a button labelled `Calculate Value` will appear. Clicking it will call the 
 
-<br />
+___ 
+
+### Admin Rights
+
+To use the admin rights, the **Admin Panel** must be accessed. Especially the approve of newly registered participants in the network (e.g. doctors) is important. As an admin you only have to press the approve button on the admin page. If this is done, the participant can get paid for contributing datasets in Medicoins.
+
+___ 
 
 ## Future Steps
 
