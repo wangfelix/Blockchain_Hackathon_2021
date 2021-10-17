@@ -140,7 +140,7 @@ To use the admin rights, the **Admin Panel** must be accessed. First the address
 
 After this simply click `Set address`.
 
-Especially the approve of newly registered participants in the network (e.g. doctors) is important. As an admin you only have to press the approve button on the **Admin Panel**. If this is done, the participant can get paid for contributing datasets in Medicoins like described in [Contributing Datasets](#login-and-registration).
+Especially the approve of newly registered participants in the network (e.g. doctors) is important. As an admin you only have to press the approve button on the **Admin Panel**. If this is done, the participant can get paid for contributing datasets in Medicoins like described in [Contributing Datasets](#contributing-datasets).
 
 ![Screenshot_2021-10-17_at_14.12.15](/uploads/7cf170fad80203fd92da7d027c96c81d/Screenshot_2021-10-17_at_14.12.15.png)
 
