@@ -104,10 +104,14 @@ There are three states of the login-system, where the account can be situated. T
 | ---      | ---      | ---      |
 | Account in Metamask is not connected to Medi-System | Account in Metamask is connected to Medi-System, Name has been registered but account has not been approved. | Account in Metamask is connected to Medi-System, Name has been registered and account has been approved |
 
+___ 
+
 #### Login and Registration
 To login or register, either click on the `login` button in top right corner of the navigation bar, or, when currently on the landin page, on the `Getting Started` button in the center of the screen. This will trigger a modal to pop up, asking you to connect to your browser wallet, in our case Metamask. Click on `Connect with Metamask` to trigger the Metamaskpop up, which will ask you to choose an account to connect to the website. After the wallet has successfully connected to the web site, the Modal disappears.
 
 If this is the first time the selected account is connecting to the website, a second modal will appear, asking for the name of the user. This is part of the registration process. Submitting the name will call the function `registerDoctor` in the MediSystem smart contract. 
+
+___ 
 
 #### Logout
 Currently there seems to be a problem with _web3.js_, where disconnecting the wallet programmatically does not work. To log out properly, we recommend opening Metamask, clicking on the _kebab menu_, and then on _connected sites_. Now click on the _trashcan icon_ to disconnect the selected account from the Medi-Systems web application. If you wish to log in again, see the section [Login and Registration](#login-and-registration).
@@ -115,6 +119,8 @@ Currently there seems to be a problem with _web3.js_, where disconnecting the wa
 For more information, see the github issues:
 - https://github.com/NoahZinsmeister/web3-react/issues/228
 - https://github.com/EthWorks/useDApp/issues/273
+
+___ 
 
 #### Switching between Accounts
 For testing purposes, it is helpful to import multiple accounts from the local Ganache instance into Metamask and switch between them between transactions. To properly switch accounts, it is currently needed to [log out](#logout) properly, before selecting a different account in Metamask and logging in again.
@@ -144,7 +150,9 @@ ___
 
 This page is currently under development, for more information use the `documentation`.
 
-## Future Steps
+___ 
+
+### Future Steps
 
 - clean up solidity code, remove redundant methods
 - Hook up Account & History page to the smart contract
