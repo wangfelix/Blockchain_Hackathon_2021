@@ -30,8 +30,10 @@ export enum NavBarTabs {
 }
 
 export enum Z_INDEX {
-    MODAL = 1000,
+    DEMO_PAGE_MODAL = 2200,
+    DEMO_PAGE = 2100,
     NAVBAR = 2000,
+    MODAL = 1000,
     BUTTON = 500,
     PAGE = 0,
     CARD = 10,

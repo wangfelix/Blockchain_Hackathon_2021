@@ -3,6 +3,7 @@ export enum ActionType {
 
     SET_IS_REGISTRATION_MODAL_OPEN = "setIsRegistrationModalOpen",
     SET_IS_SETTINGS_MODAL_OPEN = "setIsSettingsModalOpen",
+    SET_IS_USER_PANEL_CONTRIBUTION_MODAL_OPEN = "setIsUserPanelContributionModalOpen",
 
     // -- CONTRIBUTE DATA PAGE --
 

@@ -11,6 +11,10 @@ export const setSettingsModalOpen = (isOpen: boolean) => {
     return { type: ActionType.SET_IS_SETTINGS_MODAL_OPEN, payload: isOpen };
 };
 
+export const setUserPanelContributionModalOpen = (isOpen: boolean) => {
+    return { type: ActionType.SET_IS_USER_PANEL_CONTRIBUTION_MODAL_OPEN, payload: isOpen };
+};
+
 // -- CONTRIBUTE DATA PAGE --
 
 // AGE

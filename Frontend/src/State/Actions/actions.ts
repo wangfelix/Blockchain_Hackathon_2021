@@ -13,7 +13,12 @@ interface SettingsModalAction {
     payload: boolean;
 }
 
-export type ModalAction = RegistrationModalAction | SettingsModalAction;
+interface UserPanelContributionModalAction {
+    type: ActionType.SET_IS_USER_PANEL_CONTRIBUTION_MODAL_OPEN;
+    payload: boolean;
+}
+
+export type ModalAction = RegistrationModalAction | SettingsModalAction | UserPanelContributionModalAction;
 
 // -- CONTRIBUTE DATA PAGE --
 

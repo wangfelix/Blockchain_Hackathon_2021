@@ -10,6 +10,7 @@ import { Paths } from "Utils/paths";
 import { store } from "State/store";
 import { AccountAndHistoryPage } from "Pages/AccountAndHistoryPage/accountAndHistoryPage";
 import { AdminPage } from "Pages/AdminPage/adminPage";
+import { DemoPage } from "Pages/DemoPage/demoPage";
 
 export const App = () => {
     // -- CONST DATA --
@@ -33,7 +34,7 @@ export const App = () => {
 
                             <Route path={Paths.ACCOUNT_AND_HISTORY_PAGE} component={AccountAndHistoryPage} />
 
-                            <Route path={Paths.DEMO_PAGE} component={TestPage} />
+                            <Route path={Paths.DEMO_PAGE} component={DemoPage} />
 
                             <Route path={Paths.ADMIN_PAGE} component={AdminPage} />
 
@@ -55,13 +56,6 @@ type DAppProviderWrapperProps = {
 const DAppProviderWrapper = ({ children, config }: DAppProviderWrapperProps) => (
     // TODO Styling, add Loading Indicator for initial Load
     <DAppProvider config={config}>{children}</DAppProvider>
-);
-
-// TODO REMOVE
-const TestPage = () => (
-    <>
-        <div>Test!</div>
-    </>
 );
 
 const ErrorPage = () => <>404</>;
