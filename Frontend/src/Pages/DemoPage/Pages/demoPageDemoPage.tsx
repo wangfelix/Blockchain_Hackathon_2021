@@ -115,6 +115,7 @@ export const DemoPageDemoPage = () => {
 
                     <Lottie
                         options={nodesOptions}
+                        isPaused={isUserPanelContributionModalOpen}
                         style={{ width: 700, height: 500, background: Colors.TRANSPARENT, margin: 0 }}
                     />
 
