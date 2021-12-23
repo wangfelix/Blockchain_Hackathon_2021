@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Lottie from "react-lottie";
 
 import { Container } from "BaseComponents/container";
@@ -7,13 +7,17 @@ import { Row } from "BaseComponents/row";
 import { Button } from "BaseComponents/Button/button";
 import { Text } from "BaseComponents/text";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
-import { setUserPanelContributionModalOpen } from "State/Actions/actionCreators";
-
+import { setIndexOfContributingUser, setUserPanelContributionModalOpen } from "State/Actions/actionCreators";
+import { RootState } from "State/Reducers";
 import lottieBlockchain from "Illustrations/Lotties/blockchain_lottie.json";
 import dataTransfer from "Illustrations/Lotties/computer.json";
 import checkmark from "Illustrations/Lotties/checkmark.json";
 
-export const UserPanel = () => {
+type UserPanelProps = {
+    userIndex: number;
+};
+
+export const UserPanel = ({ userIndex }: UserPanelProps) => {
     const dispatch = useDispatch();
 
     // -- STATE --
@@ -24,6 +28,17 @@ export const UserPanel = () => {
 
     const [isComputerAnimating, setIsComputerAnimating] = useState(false);
     const [isServerAnimating, setIsServerAnimating] = useState(false);
+
+    // TODO: Write proper selector
+    const balance = useSelector<RootState, number | undefined>((state) => {
+        let balance: number | undefined = undefined;
+
+        state.demoPage.users.forEach((user) => {
+            if (user.index === userIndex) balance = user.balance;
+        });
+
+        return balance;
+    });
 
     // -- EFFECTS --
 
@@ -54,6 +69,13 @@ export const UserPanel = () => {
             loop: true,
             autoplay: false,
         },
+    };
+
+    // -- CALLBACKS --
+
+    const handleOpenContributionModal = () => {
+        dispatch(setIndexOfContributingUser(userIndex));
+        dispatch(setUserPanelContributionModalOpen(true));
     };
 
     // -- RENDER --
@@ -127,16 +149,14 @@ export const UserPanel = () => {
                 }}
             >
                 <Button
-                    buttonType={"primary"}
+                    buttonType="primary"
                     styleProps={{
                         fontSize: 16,
                         width: "100%",
                         marginRight: 15,
-                        background: Colors.WHITE_OFF_WHITE,
-                        color: Colors.PRIMARY_ACCENT,
                     }}
                     // onClickHandle={() => setIsUploadingDataset(true)}
-                    onClickHandle={() => dispatch(setUserPanelContributionModalOpen(true))}
+                    onClickHandle={handleOpenContributionModal}
                 >
                     Contribute Data
                 </Button>
@@ -153,7 +173,7 @@ export const UserPanel = () => {
                         color: Colors.WHITE_OFF_WHITE,
                     }}
                 >
-                    25 MDC
+                    {balance} MDC
                 </Text>
             </Row>
         </Container>

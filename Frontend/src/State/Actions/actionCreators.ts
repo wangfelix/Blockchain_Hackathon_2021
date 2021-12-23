@@ -120,3 +120,10 @@ export const setDatasetValue = (datasetValue: string) => {
 export const setFileHash = (filehash: string) => {
     return { type: ActionType.SET_FILE_HASH, payload: filehash };
 };
+
+// -- DEMO PAGE --
+
+export const setIndexOfContributingUser = (userIndex: number | undefined) => ({
+    type: ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER,
+    payload: userIndex,
+});

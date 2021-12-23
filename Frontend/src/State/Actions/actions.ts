@@ -1,5 +1,6 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
+import { Disease } from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -169,3 +170,49 @@ export type ContributeDataPageAction =
     | SetDiseaseName
     | SetDatasetValue
     | SetFileHash;
+
+// -- CONTRIBUTE DATA PAGE --
+
+//  USER
+
+export interface SetUserBalance {
+    type: ActionType.SET_DEMO_USER_BALANCE;
+    payload: { index: number; balance: number };
+}
+
+export interface SetDemoUserNumberContributions {
+    type: ActionType.SET_DEMO_USER_NUMBER_CONTRIBUTIONS;
+    payload: { index: number; numberContributions: number };
+}
+
+// DISEASE
+
+export interface SetDiseaseBudget {
+    type: ActionType.SET_DEMO_DISEASE_BUDGET;
+    payload: { name: string; budget: number };
+}
+
+export interface SetDemoDiseaseNumberContributions {
+    type: ActionType.SET_DEMO_DISEASE_NUMBER_CONTRIBUTIONS;
+    payload: { name: string; numberContributions: number };
+}
+
+export interface AddDemoNewDisease {
+    type: ActionType.ADD_DEMO_NEW_DISEASE;
+    payload: Disease;
+}
+
+// ELSE
+
+export interface SetIndexOfContributingUser {
+    type: ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER;
+    payload: number | undefined;
+}
+
+export type DemoPageAction =
+    | SetUserBalance
+    | SetDemoUserNumberContributions
+    | SetDiseaseBudget
+    | SetDemoDiseaseNumberContributions
+    | AddDemoNewDisease
+    | SetIndexOfContributingUser;

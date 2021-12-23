@@ -24,7 +24,6 @@ export const DemoPageIntroPage = () => {
                 styleProps={{
                     width: "100%",
                     height: "80vh",
-                    background: "linear-gradient(#182e61, #1d3185)",
                 }}
             >
                 <img

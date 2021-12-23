@@ -57,4 +57,24 @@ export enum ActionType {
     // FILEHASH
 
     SET_FILE_HASH = "setFileHash",
+
+    // -- DEMO PAGE --
+
+    // USERS
+
+    SET_DEMO_USER_BALANCE = "setUserBalance",
+
+    SET_DEMO_USER_NUMBER_CONTRIBUTIONS = "setDemoUserNumberContributions",
+
+    // DISEASES
+
+    SET_DEMO_DISEASE_BUDGET = "setDiseaseBudget",
+
+    SET_DEMO_DISEASE_NUMBER_CONTRIBUTIONS = "setDemoDiseaseNumberContributions",
+
+    ADD_DEMO_NEW_DISEASE = "addDemoNewDisease",
+
+    // ELSE
+
+    SET_DEMO_INDEX_OF_CONTRIBUTING_USER = "setIndexOfContributingUser",
 }

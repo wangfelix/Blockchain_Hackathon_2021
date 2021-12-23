@@ -11,9 +11,17 @@ import nodes from "Illustrations/Lotties/nodes.json";
 import { Button } from "BaseComponents/Button/button";
 import cross from "Illustrations/crossing.png";
 import { DemoPagePaths, Paths } from "Utils/paths";
+import { useSelector } from "react-redux";
+import { RootState } from "State/Reducers";
 
 export const DemoPageDemoPage = () => {
+    // -- STATE --
+
     const history = useHistory();
+
+    const isUserPanelContributionModalOpen = useSelector<RootState, boolean>(
+        (state) => state.modals.isUserPanelContributionModalOpen
+    );
 
     // -- EFFECTS --
 
@@ -43,6 +51,7 @@ export const DemoPageDemoPage = () => {
         <Container
             styleProps={{
                 width: "100vw",
+                minWidth: 1200,
                 height: "100vh",
                 position: "fixed",
                 background: "linear-gradient(.35turn, #6c86de, #7975e0)",
@@ -84,9 +93,9 @@ export const DemoPageDemoPage = () => {
                 }}
             >
                 <Row styleProps={{ alignItems: "center", height: "100%" }}>
-                    <UserPanel />
+                    <UserPanel userIndex={0} />
                     <Container styleProps={{ background: Colors.LAVENDER, width: "100%", height: 10 }} />
-                    <UserPanel />
+                    <UserPanel userIndex={1} />
                 </Row>
 
                 <Row
@@ -117,9 +126,9 @@ export const DemoPageDemoPage = () => {
                 </Row>
 
                 <Row styleProps={{ alignItems: "center", height: "100%" }}>
-                    <UserPanel />
+                    <UserPanel userIndex={2} />
                     <Container styleProps={{ width: "100%", height: 10, background: Colors.LAVENDER }} />
-                    <UserPanel />
+                    <UserPanel userIndex={3} />
                 </Row>
             </Container>
 
