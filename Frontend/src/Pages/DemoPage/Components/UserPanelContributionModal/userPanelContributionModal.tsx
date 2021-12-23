@@ -29,14 +29,14 @@ export const UserPanelContributionModal = () => {
 
     const userIndex = useSelector<RootState, number | undefined>((state) => state.demoPage.indexOfContributingUser);
 
-    const [value, setValue] = useState(0);
+    const [selectedSlide, setSelectedSlide] = useState(0);
 
     const [contentType, setContentType] = useState<"Carousel" | "SuccessPart">("Carousel");
 
     // -- MEMOIZED DATA --
 
-    const slides: SlideProps[] = useMemo(() => {
-        return [
+    const slides: SlideProps[] = useMemo(
+        () => [
             { title: "Step 1", content: <Text>Load the dataset into the MediSystem Parser.</Text> },
             {
                 content: (
@@ -45,12 +45,13 @@ export const UserPanelContributionModal = () => {
                     </Container>
                 ),
             },
-        ];
-    }, []);
+        ],
+        []
+    );
 
     // -- HELPER --
 
-    const isAtLastSlide = value === slides.length - 1;
+    const isAtLastSlide = selectedSlide === slides.length - 1;
 
     // -- CALLBACKS --
 
@@ -60,17 +61,12 @@ export const UserPanelContributionModal = () => {
             dispatch(setUserPanelContributionModalOpen(false));
         });
 
-        setValue(0);
+        setSelectedSlide(0);
         setContentType("Carousel");
     };
 
-    const handleGoToNextStep = () => {
-        if (isAtLastSlide) {
-            setContentType("SuccessPart");
-        } else {
-            setValue(value + 1);
-        }
-    };
+    const handleGoToNextStep = () =>
+        isAtLastSlide ? setContentType("SuccessPart") : setSelectedSlide(selectedSlide + 1);
 
     // -- STYLES --
 
@@ -95,7 +91,7 @@ export const UserPanelContributionModal = () => {
                         <UserPanelContributionModalTopBar handleModalClose={handleCloseModal} userIndex={userIndex} />
 
                         <Carousel
-                            selectedItem={value}
+                            selectedItem={selectedSlide}
                             showArrows={false}
                             showIndicators={false}
                             showStatus={false}
@@ -118,8 +114,8 @@ export const UserPanelContributionModal = () => {
                         </Carousel>
 
                         <UserPanelContributionModalBottomBar
-                            value={value}
-                            setValue={setValue}
+                            value={selectedSlide}
+                            setValue={setSelectedSlide}
                             handleGoToNextStep={handleGoToNextStep}
                         />
                     </>
