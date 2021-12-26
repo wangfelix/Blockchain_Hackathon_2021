@@ -3,8 +3,8 @@ import Lottie from "react-lottie";
 import { useHistory } from "react-router-dom";
 
 import { Container } from "BaseComponents/container";
-import { UserPanel } from "Pages/DemoPage/Components/UserPanel/userPanel";
-import { UserPanelContributionModal } from "Pages/DemoPage/Components/UserPanelContributionModal/userPanelContributionModal";
+import { UserPanel } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanel/userPanel";
+import { UserPanelContributionModal } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/userPanelContributionModal";
 import { Colors, Z_INDEX } from "Utils/globalStyles";
 import { Row } from "BaseComponents/row";
 import nodes from "Illustrations/Lotties/nodes.json";
@@ -115,6 +115,7 @@ export const DemoPageDemoPage = () => {
 
                     <Lottie
                         options={nodesOptions}
+                        isClickToPauseDisabled
                         isPaused={isUserPanelContributionModalOpen}
                         style={{ width: 700, height: 500, background: Colors.TRANSPARENT, margin: 0 }}
                     />

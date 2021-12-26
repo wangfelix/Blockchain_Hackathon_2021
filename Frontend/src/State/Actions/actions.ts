@@ -1,6 +1,6 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
-import { Disease } from "State/Reducers/demoPageReducer";
+import { Contribution, Disease } from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -209,10 +209,54 @@ export interface SetIndexOfContributingUser {
     payload: number | undefined;
 }
 
+// CONTRIBUTION
+
+export interface SetDemoContribution {
+    type: ActionType.SET_DEMO_CONTRIBUTION;
+    payload: Contribution;
+}
+
+export interface SetDemoContributionAgeData {
+    type: ActionType.SET_DEMO_CONTRIBUTION_AGE_DATA;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+}
+
+export interface SetDemoContributionGenderData {
+    type: ActionType.SET_DEMO_CONTRIBUTION_GENDER_DATA;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+}
+
+export interface SetDemoContributionSnomedData {
+    type: ActionType.SET_DEMO_CONTRIBUTION_SNOMED_DATA;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+}
+
+export interface SetDemoNumberOfPatients {
+    type: ActionType.SET_DEMO_NUMBER_OF_PATIENTS;
+    payload: "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000";
+}
+
+export interface SetDemoNumberOfAttributes {
+    type: ActionType.SET_DEMO_NUMBER_OF_ATTRIBUTES;
+    payload: "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30";
+}
+
+export interface SetDemoContributionDataCompletenessValue {
+    type: ActionType.SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%";
+}
+
 export type DemoPageAction =
     | SetUserBalance
     | SetDemoUserNumberContributions
     | SetDiseaseBudget
     | SetDemoDiseaseNumberContributions
     | AddDemoNewDisease
-    | SetIndexOfContributingUser;
+    | SetIndexOfContributingUser
+    | SetDemoContribution
+    | SetDemoContributionAgeData
+    | SetDemoContributionGenderData
+    | SetDemoContributionSnomedData
+    | SetDemoNumberOfPatients
+    | SetDemoNumberOfAttributes
+    | SetDemoContributionDataCompletenessValue;

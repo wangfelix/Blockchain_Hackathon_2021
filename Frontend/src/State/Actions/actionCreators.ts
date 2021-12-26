@@ -1,5 +1,6 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
+import { AgeData, Contribution, DataCompleteness, GenderData, SNOMEDData } from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -126,4 +127,48 @@ export const setFileHash = (filehash: string) => {
 export const setIndexOfContributingUser = (userIndex: number | undefined) => ({
     type: ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER,
     payload: userIndex,
+});
+
+export const setDemoDiseaseNumberOfContributions = (diseaseName: string, numberOfContributions: number) => ({
+    type: ActionType.SET_DEMO_DISEASE_NUMBER_CONTRIBUTIONS,
+    payload: { name: diseaseName, numberContributions: numberOfContributions },
+});
+
+export const setDemoContribution = (contribution: Contribution) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION,
+    payload: contribution,
+});
+
+export const setDemoContributionAgeData = (ageData: AgeData) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_AGE_DATA,
+    payload: ageData,
+});
+
+export const setDemoContributionGenderData = (genderData: GenderData) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_GENDER_DATA,
+    payload: genderData,
+});
+
+export const setDemoContributionSnomedData = (snomedData: SNOMEDData) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_SNOMED_DATA,
+    payload: snomedData,
+});
+
+export const setDemoNumberOfPatients = (
+    numberOfPatients: "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000"
+) => ({
+    type: ActionType.SET_DEMO_NUMBER_OF_PATIENTS,
+    payload: numberOfPatients,
+});
+
+export const setDemoNumberOfAttributes = (
+    numberOfAttrbiutes: "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30"
+) => ({
+    type: ActionType.SET_DEMO_NUMBER_OF_ATTRIBUTES,
+    payload: numberOfAttrbiutes,
+});
+
+export const setDemoContributionDataCompletenessValue = (dataCompleteness: DataCompleteness) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE,
+    payload: dataCompleteness,
 });

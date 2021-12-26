@@ -13,13 +13,36 @@ type User = {
     numberContributions: number;
 };
 
-type DemoPageState = {
+export type AgeData = `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+export type GenderData = `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+export type SNOMEDData = `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+export type DataCompleteness = `0%` | "25%" | "50%" | "75%" | "100%";
+
+type DatasetAttributes = {
+    numberPatientData: "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000";
+    numberOfAttributes: "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30";
+    ageData: AgeData; // percentage indicates the amount of falsy unusable values
+    genderData: GenderData; // percentage indicates the amount of falsy unusable values
+    snomedData: SNOMEDData; // percentage indicates the amount of falsy unusable values
+    dataCompleteness: DataCompleteness; // percentage indicates the amount of falsy unusable values
+};
+
+export type Contribution =
+    | {
+          user: number;
+          disease: string;
+          datasetAttributes: DatasetAttributes | undefined;
+      }
+    | undefined;
+
+export type DemoPageState = {
     diseases: Disease[];
     users: User[];
     indexOfContributingUser: number | undefined;
+    contribution: Contribution;
 };
 
-const InitialState = {
+const InitialState: DemoPageState = {
     diseases: [
         { name: "Morbus Chron", budget: 1000, numberContributions: 0 },
         { name: "Covid 19", budget: 5000, numberContributions: 0 },
@@ -33,9 +56,10 @@ const InitialState = {
         { index: 3, numberContributions: 0, balance: 80 },
     ],
     indexOfContributingUser: undefined,
+    contribution: undefined,
 };
 
-export const demoPageReducer = (state: DemoPageState = InitialState, action: DemoPageAction) => {
+export const demoPageReducer = (state: DemoPageState = InitialState, action: DemoPageAction): DemoPageState => {
     switch (action.type) {
         // -- USER --
 
@@ -90,6 +114,131 @@ export const demoPageReducer = (state: DemoPageState = InitialState, action: Dem
 
         case ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER:
             return { ...state, indexOfContributingUser: action.payload };
+
+        // -- CONTRIBUTION --
+
+        case ActionType.SET_DEMO_CONTRIBUTION:
+            return { ...state, contribution: action.payload };
+
+        case ActionType.SET_DEMO_CONTRIBUTION_AGE_DATA:
+            return {
+                ...state,
+                ...(state.contribution?.datasetAttributes
+                    ? {
+                          contribution: {
+                              ...state.contribution,
+                              datasetAttributes: {
+                                  genderData: state.contribution.datasetAttributes.genderData,
+                                  numberOfAttributes: state.contribution.datasetAttributes.numberOfAttributes,
+                                  ageData: action.payload,
+                                  numberPatientData: state.contribution.datasetAttributes?.numberPatientData!,
+                                  snomedData: state.contribution.datasetAttributes?.snomedData,
+                                  dataCompleteness: state.contribution.datasetAttributes?.dataCompleteness!,
+                              },
+                          },
+                      }
+                    : { contribution: undefined }),
+            };
+
+        case ActionType.SET_DEMO_CONTRIBUTION_GENDER_DATA:
+            return {
+                ...state,
+                ...(state.contribution?.datasetAttributes
+                    ? {
+                          contribution: {
+                              ...state.contribution,
+                              datasetAttributes: {
+                                  genderData: action.payload,
+                                  numberOfAttributes: state.contribution.datasetAttributes.numberOfAttributes,
+                                  ageData: state.contribution.datasetAttributes.ageData,
+                                  numberPatientData: state.contribution.datasetAttributes?.numberPatientData!,
+                                  snomedData: state.contribution.datasetAttributes?.snomedData,
+                                  dataCompleteness: state.contribution.datasetAttributes?.dataCompleteness!,
+                              },
+                          },
+                      }
+                    : { contribution: undefined }),
+            };
+
+        case ActionType.SET_DEMO_CONTRIBUTION_SNOMED_DATA:
+            return {
+                ...state,
+                ...(state.contribution?.datasetAttributes
+                    ? {
+                          contribution: {
+                              ...state.contribution,
+                              datasetAttributes: {
+                                  genderData: state.contribution.datasetAttributes.genderData,
+                                  numberOfAttributes: state.contribution.datasetAttributes.numberOfAttributes,
+                                  ageData: state.contribution.datasetAttributes.ageData,
+                                  numberPatientData: state.contribution.datasetAttributes?.numberPatientData!,
+                                  snomedData: action.payload,
+                                  dataCompleteness: state.contribution.datasetAttributes?.dataCompleteness!,
+                              },
+                          },
+                      }
+                    : { contribution: undefined }),
+            };
+
+        case ActionType.SET_DEMO_NUMBER_OF_PATIENTS:
+            return {
+                ...state,
+                ...(state.contribution?.datasetAttributes
+                    ? {
+                          contribution: {
+                              ...state.contribution,
+                              datasetAttributes: {
+                                  genderData: state.contribution.datasetAttributes.genderData,
+                                  numberOfAttributes: state.contribution.datasetAttributes.numberOfAttributes,
+                                  ageData: state.contribution.datasetAttributes.ageData,
+                                  numberPatientData: action.payload,
+                                  snomedData: state.contribution.datasetAttributes.snomedData,
+                                  dataCompleteness: state.contribution.datasetAttributes?.dataCompleteness!,
+                              },
+                          },
+                      }
+                    : { contribution: undefined }),
+            };
+
+        case ActionType.SET_DEMO_NUMBER_OF_ATTRIBUTES:
+            return {
+                ...state,
+                ...(state.contribution?.datasetAttributes
+                    ? {
+                          contribution: {
+                              ...state.contribution,
+                              datasetAttributes: {
+                                  genderData: state.contribution.datasetAttributes.genderData,
+                                  numberOfAttributes: action.payload,
+                                  ageData: state.contribution.datasetAttributes.ageData,
+                                  numberPatientData: state.contribution.datasetAttributes.numberPatientData,
+                                  snomedData: state.contribution.datasetAttributes.snomedData,
+                                  dataCompleteness: state.contribution.datasetAttributes?.dataCompleteness!,
+                              },
+                          },
+                      }
+                    : { contribution: undefined }),
+            };
+
+        case ActionType.SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE:
+            return {
+                ...state,
+                ...(state.contribution?.datasetAttributes
+                    ? {
+                          contribution: {
+                              ...state.contribution,
+                              datasetAttributes: {
+                                  genderData: state.contribution.datasetAttributes.genderData,
+                                  numberOfAttributes: state.contribution.datasetAttributes.numberOfAttributes,
+                                  ageData: state.contribution.datasetAttributes.ageData,
+                                  numberPatientData: state.contribution.datasetAttributes?.numberPatientData!,
+                                  snomedData: state.contribution.datasetAttributes.snomedData,
+                                  dataCompleteness: action.payload,
+                              },
+                          },
+                      }
+                    : { contribution: undefined }),
+            };
 
         default:
             return state;

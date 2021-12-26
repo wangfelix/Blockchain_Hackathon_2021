@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 
 import { DemoPagePaths, Paths } from "Utils/paths";
-import { DemoPageDemoPage } from "Pages/DemoPage/Pages/demoPageDemoPage";
+import { DemoPageDemoPage } from "Pages/DemoPage/Pages/DemoPageDemoPage/demoPageDemoPage";
 import { DemoPageIntroPage } from "Pages/DemoPage/Pages/demoPageIntroPage";
 
 export const DemoPage = () => {

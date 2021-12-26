@@ -92,6 +92,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                     left: 20,
                     visibility: isUpdatingUser ? "unset" : "hidden",
                 }}
+                isClickToPauseDisabled
                 isPaused={!isUpdatingUser}
                 eventListeners={[
                     {
@@ -117,6 +118,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                     <Lottie
                         options={lottieOptions.computerOptions}
                         style={{ width: 300, paddingLeft: 20 }}
+                        isClickToPauseDisabled
                         isPaused={!isComputerAnimating}
                         eventListeners={[
                             {
@@ -131,6 +133,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                     <Lottie
                         options={lottieOptions.serverOptions}
                         style={{ width: 200 }}
+                        isClickToPauseDisabled
                         isPaused={!isServerAnimating}
                         eventListeners={[
                             {

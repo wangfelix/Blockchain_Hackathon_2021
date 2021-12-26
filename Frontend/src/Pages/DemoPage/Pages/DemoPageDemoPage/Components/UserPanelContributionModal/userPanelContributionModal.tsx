@@ -4,16 +4,20 @@ import { batch, useDispatch, useSelector } from "react-redux";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
-import { setIndexOfContributingUser, setUserPanelContributionModalOpen } from "State/Actions/actionCreators";
+import {
+    setDemoContribution,
+    setIndexOfContributingUser,
+    setUserPanelContributionModalOpen,
+} from "State/Actions/actionCreators";
 import { RootState } from "State/Reducers";
-import { UserPanelContributionModalMockupBrowserWindow } from "Pages/DemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalMockupBrowserWindow";
-import { Text } from "BaseComponents/text";
 import { Container } from "BaseComponents/container";
-import { UserPanelContributionModalTopBar } from "Pages/DemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalTopBar";
-import { UserPanelContributionModalBottomBar } from "Pages/DemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalBottomBar";
-import { getUserPanelContributionModalStyle } from "Pages/DemoPage/Components/UserPanelContributionModal/Utils/userPanelContributionModalHelper";
-import { UserPanelContributionModalSuccessPart } from "Pages/DemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalSuccessPart";
+import { UserPanelContributionModalTopBar } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalTopBar";
+import { UserPanelContributionModalBottomBar } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalBottomBar";
+import { getUserPanelContributionModalStyle } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Utils/userPanelContributionModalHelper";
+import { UserPanelContributionModalSuccessPart } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalSuccessPart";
 import { Colors } from "Utils/globalStyles";
+import { UserPanelContributionModalConfigurationSlide } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/UserPanelContributionModalConfigurationSlide/userPanelContributionModalConfigurationSlide";
+import { UserPanelConfigurationModalAlgorithmExplanationSlide } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/userPanelConfigurationModalAlgorithmExplanationSlide";
 
 type SlideProps = {
     title?: string;
@@ -37,13 +41,10 @@ export const UserPanelContributionModal = () => {
 
     const slides: SlideProps[] = useMemo(
         () => [
-            { title: "Step 1", content: <Text>Load the dataset into the MediSystem Parser.</Text> },
+            { title: "Dataset", content: <UserPanelContributionModalConfigurationSlide /> },
             {
-                content: (
-                    <Container styleProps={{ padding: 20 }}>
-                        <UserPanelContributionModalMockupBrowserWindow />
-                    </Container>
-                ),
+                title: "Value Evaluation",
+                content: <UserPanelConfigurationModalAlgorithmExplanationSlide />,
             },
         ],
         []
@@ -59,13 +60,14 @@ export const UserPanelContributionModal = () => {
         batch(() => {
             dispatch(setIndexOfContributingUser(undefined));
             dispatch(setUserPanelContributionModalOpen(false));
+            dispatch(setDemoContribution(undefined));
         });
 
         setSelectedSlide(0);
         setContentType("Carousel");
     };
 
-    const handleGoToNextStep = () =>
+    const handleGoToNextSlide = () =>
         isAtLastSlide ? setContentType("SuccessPart") : setSelectedSlide(selectedSlide + 1);
 
     // -- STYLES --
@@ -78,7 +80,7 @@ export const UserPanelContributionModal = () => {
         <ReactModal isOpen={isOpen} onRequestClose={handleCloseModal} style={modalStyles}>
             <Container
                 styleProps={{
-                    width: contentType === "Carousel" ? 900 : 650,
+                    width: contentType === "Carousel" ? 800 : 650,
                     height: contentType === "Carousel" ? 600 : 600,
                     background: contentType === "Carousel" ? Colors.WHITE : "#16162e",
                     transition: "width 1s, height 1s, background 0.5s",
@@ -104,9 +106,10 @@ export const UserPanelContributionModal = () => {
                                         alignItems: "center",
                                         height: "100%",
                                         margin: "auto 0",
+                                        position: "relative",
                                     }}
                                 >
-                                    {slide.title && <h2 style={{ marginBottom: 30 }}>{slide.title}</h2>}
+                                    {slide.title && <h3 style={{ marginTop: 0, marginBottom: 40 }}>{slide.title}</h3>}
 
                                     <Container>{slide.content}</Container>
                                 </Container>
@@ -116,7 +119,7 @@ export const UserPanelContributionModal = () => {
                         <UserPanelContributionModalBottomBar
                             value={selectedSlide}
                             setValue={setSelectedSlide}
-                            handleGoToNextStep={handleGoToNextStep}
+                            handleGoToNextStep={handleGoToNextSlide}
                         />
                     </>
                 ) : (

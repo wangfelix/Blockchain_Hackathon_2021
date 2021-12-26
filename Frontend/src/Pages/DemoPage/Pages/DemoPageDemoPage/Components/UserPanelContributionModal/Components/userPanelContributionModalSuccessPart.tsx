@@ -59,7 +59,7 @@ export const UserPanelContributionModalSuccessPart = ({
                 />
             </Container>
 
-            <Text styleProps={{ color: Colors.LAVENDER, padding: "0 20px", marginBottom: 30 }}>
+            <Text styleProps={{ color: Colors.LAVENDER, padding: "0 20px", marginBottom: 30, height: 72 }}>
                 Your contribution has been documented in the blockchain. Every observer can see and validate, that a
                 dataset about the disease $disease has been contributed to Medisystem under your address, and that you
                 have been rewarded $amount MediCoins in exchange.

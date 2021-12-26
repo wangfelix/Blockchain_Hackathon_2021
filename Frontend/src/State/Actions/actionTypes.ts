@@ -77,4 +77,20 @@ export enum ActionType {
     // ELSE
 
     SET_DEMO_INDEX_OF_CONTRIBUTING_USER = "setIndexOfContributingUser",
+
+    // CONTRIBUTION
+
+    SET_DEMO_CONTRIBUTION = "setDemoContribution",
+
+    SET_DEMO_NUMBER_OF_PATIENTS = "setDemoNumberOfPatients",
+
+    SET_DEMO_NUMBER_OF_ATTRIBUTES = "setDemoNumberOfAttributes",
+
+    SET_DEMO_CONTRIBUTION_AGE_DATA = "setDemoContributionAgeData",
+
+    SET_DEMO_CONTRIBUTION_GENDER_DATA = "setDemoContributionGenderData",
+
+    SET_DEMO_CONTRIBUTION_SNOMED_DATA = "setDemoContributionSnomedData",
+
+    SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE = "setDemoContributionDataCompletenessValue",
 }

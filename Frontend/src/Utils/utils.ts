@@ -19,3 +19,5 @@ export const parseMediCoin = (medicoin: string) => {
 
     return temp.substring(0, decimalIndex + 3);
 };
+
+export const isEven = (num: number) => num % 2 === 0;

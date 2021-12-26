@@ -17,7 +17,7 @@ export const UserPanelContributionModalTopBar = ({
     <Row
         styleProps={{
             width: "100%",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             flexShrink: 0,
             alignItems: "center",
             marginBottom: 10,
@@ -28,7 +28,7 @@ export const UserPanelContributionModalTopBar = ({
                 fontWeight: 500,
             }}
         >
-            User {userIndex} is contributing
+            User {userIndex}
         </Text>
 
         <Button
