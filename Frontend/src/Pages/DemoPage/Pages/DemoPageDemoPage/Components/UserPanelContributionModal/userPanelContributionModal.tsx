@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import ReactModal from "react-modal";
 import { batch, useDispatch, useSelector } from "react-redux";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -6,7 +6,7 @@ import { Carousel } from "react-responsive-carousel";
 
 import {
     setDemoContribution,
-    setIndexOfContributingUser,
+    setDemoIndexOfContributingUser,
     setUserPanelContributionModalOpen,
 } from "State/Actions/actionCreators";
 import { RootState } from "State/Reducers";
@@ -18,10 +18,12 @@ import { UserPanelContributionModalSuccessPart } from "Pages/DemoPage/Pages/Demo
 import { Colors } from "Utils/globalStyles";
 import { UserPanelContributionModalConfigurationSlide } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/UserPanelContributionModalConfigurationSlide/userPanelContributionModalConfigurationSlide";
 import { UserPanelConfigurationModalAlgorithmExplanationSlide } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/userPanelConfigurationModalAlgorithmExplanationSlide";
+import { UserPanelContributionModalAssessmentSlide } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalAssessmentSlide";
 
 type SlideProps = {
     title?: string;
     content: ReactNode;
+    primaryCtaLabel?: string;
 };
 
 export const UserPanelContributionModal = () => {
@@ -31,34 +33,23 @@ export const UserPanelContributionModal = () => {
 
     const isOpen = useSelector<RootState, boolean>((state) => state.modals.isUserPanelContributionModalOpen);
 
-    const userIndex = useSelector<RootState, number | undefined>((state) => state.demoPage.indexOfContributingUser);
+    const contributingUserIndex = useSelector<RootState, number | undefined>(
+        (state) => state.demoPage.indexOfContributingUser
+    );
 
     const [selectedSlide, setSelectedSlide] = useState(0);
 
     const [contentType, setContentType] = useState<"Carousel" | "SuccessPart">("Carousel");
 
-    // -- MEMOIZED DATA --
+    const [finalDatasetValue, setFinalDatasetValue] = useState<number>(0);
 
-    const slides: SlideProps[] = useMemo(
-        () => [
-            { title: "Dataset", content: <UserPanelContributionModalConfigurationSlide /> },
-            {
-                title: "Value Evaluation",
-                content: <UserPanelConfigurationModalAlgorithmExplanationSlide />,
-            },
-        ],
-        []
-    );
-
-    // -- HELPER --
-
-    const isAtLastSlide = selectedSlide === slides.length - 1;
+    const [diseaseName, setDiseaseName] = useState<string>("");
 
     // -- CALLBACKS --
 
     const handleCloseModal = () => {
         batch(() => {
-            dispatch(setIndexOfContributingUser(undefined));
+            dispatch(setDemoIndexOfContributingUser(undefined));
             dispatch(setUserPanelContributionModalOpen(false));
             dispatch(setDemoContribution(undefined));
         });
@@ -69,6 +60,37 @@ export const UserPanelContributionModal = () => {
 
     const handleGoToNextSlide = () =>
         isAtLastSlide ? setContentType("SuccessPart") : setSelectedSlide(selectedSlide + 1);
+
+    const handleGoToDatasetConfigurationSlide = () => setSelectedSlide(0);
+
+    // -- MEMOIZED DATA --
+
+    const slides: SlideProps[] = useMemo(
+        () => [
+            { title: "Dataset", content: <UserPanelContributionModalConfigurationSlide /> },
+            {
+                title: "Value Evaluation",
+                content: <UserPanelConfigurationModalAlgorithmExplanationSlide />,
+            },
+            {
+                title: "Dataset Value",
+                content: (
+                    <UserPanelContributionModalAssessmentSlide
+                        finalDatasetValue={finalDatasetValue}
+                        setFinalDatasetValue={setFinalDatasetValue}
+                        contributionDiseaseName={diseaseName}
+                        setContributionDiseaseName={setDiseaseName}
+                        handleGoToDatasetConfigurationSlide={handleGoToDatasetConfigurationSlide}
+                    />
+                ),
+            },
+        ],
+        [diseaseName, finalDatasetValue]
+    );
+
+    // -- HELPER --
+
+    const isAtLastSlide = selectedSlide === slides.length - 1;
 
     // -- STYLES --
 
@@ -90,7 +112,10 @@ export const UserPanelContributionModal = () => {
             >
                 {contentType === "Carousel" ? (
                     <>
-                        <UserPanelContributionModalTopBar handleModalClose={handleCloseModal} userIndex={userIndex} />
+                        <UserPanelContributionModalTopBar
+                            handleModalClose={handleCloseModal}
+                            userIndex={contributingUserIndex}
+                        />
 
                         <Carousel
                             selectedItem={selectedSlide}
@@ -120,12 +145,18 @@ export const UserPanelContributionModal = () => {
                             value={selectedSlide}
                             setValue={setSelectedSlide}
                             handleGoToNextStep={handleGoToNextSlide}
+                            ctaLabel={isAtLastSlide ? "Confirm Contribution" : "Next Step"}
                         />
                     </>
                 ) : (
-                    <UserPanelContributionModalSuccessPart handleCloseModal={handleCloseModal} />
+                    <UserPanelContributionModalSuccessPart
+                        handleCloseModal={handleCloseModal}
+                        finalDatasetValue={finalDatasetValue}
+                    />
                 )}
             </Container>
         </ReactModal>
     );
 };
+
+// TODO Move state finalatasetValue to Store

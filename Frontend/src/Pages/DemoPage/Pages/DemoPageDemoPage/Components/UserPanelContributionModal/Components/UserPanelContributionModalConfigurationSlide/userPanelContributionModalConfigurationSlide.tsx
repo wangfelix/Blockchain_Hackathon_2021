@@ -20,6 +20,7 @@ import {
     setDemoContribution,
     setDemoContributionAgeData,
     setDemoContributionDataCompletenessValue,
+    setDemoContributionDiseaseName,
     setDemoContributionGenderData,
     setDemoContributionSnomedData,
     setDemoDiseaseNumberOfContributions,
@@ -64,7 +65,7 @@ export const UserPanelContributionModalConfigurationSlide = () => {
         { value: ">1000", label: ">1000" },
     ];
 
-    const [numberOfAttributes, setNumberOfAttributes] = useState<"0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30">(
+    const [numberOfAttributes, setNumberOfAttributes] = useState<"0-6" | "7-12" | "13-18" | "19-24" | "25-30" | ">30">(
         "0-6"
     );
 
@@ -73,7 +74,7 @@ export const UserPanelContributionModalConfigurationSlide = () => {
         { value: "7-12", label: "7-12" },
         { value: "13-18", label: "13-18" },
         { value: "19-24", label: "19-24" },
-        { value: "15-30", label: "15-30" },
+        { value: "25-30", label: "25-30" },
         { value: ">30", label: ">30" },
     ];
 
@@ -156,6 +157,9 @@ export const UserPanelContributionModalConfigurationSlide = () => {
 
         // Reference needs to be updated, as objects in the store are immutable => created new with every change.
         handleSelectDisease(selectedDisease.name);
+
+        // dispatch to update the store
+        dispatch(setDemoContributionDiseaseName(selectedDisease.name));
     }, [selectedDisease]);
 
     // Form Inputs
@@ -211,9 +215,9 @@ export const UserPanelContributionModalConfigurationSlide = () => {
             ? (str as "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000")
             : undefined;
 
-    const isTypeFifthsToThirty = (str: string): "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30" | undefined =>
-        ["0-6", "7-12", "13-18", "19-24", "15-30", ">30"].filter((item) => item === str).length !== 0
-            ? (str as "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30")
+    const isTypeFifthsToThirty = (str: string): "0-6" | "7-12" | "13-18" | "19-24" | "25-30" | ">30" | undefined =>
+        ["0-6", "7-12", "13-18", "19-24", "25-30", ">30"].filter((item) => item === str).length !== 0
+            ? (str as "0-6" | "7-12" | "13-18" | "19-24" | "25-30" | ">30")
             : undefined;
 
     // -- RENDER --

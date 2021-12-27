@@ -78,9 +78,13 @@ export enum ActionType {
 
     SET_DEMO_INDEX_OF_CONTRIBUTING_USER = "setIndexOfContributingUser",
 
+    SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL = "setDemoIsContributionSuccessful",
+
     // CONTRIBUTION
 
     SET_DEMO_CONTRIBUTION = "setDemoContribution",
+
+    SET_DEMO_CONTRIBUTION_DISEASE_NAME = "setDemoContributionDiseaseName",
 
     SET_DEMO_NUMBER_OF_PATIENTS = "setDemoNumberOfPatients",
 

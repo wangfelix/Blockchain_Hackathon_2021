@@ -7,7 +7,7 @@ import { Row } from "BaseComponents/row";
 import { Button } from "BaseComponents/Button/button";
 import { Text } from "BaseComponents/text";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
-import { setIndexOfContributingUser, setUserPanelContributionModalOpen } from "State/Actions/actionCreators";
+import { setDemoIndexOfContributingUser, setUserPanelContributionModalOpen } from "State/Actions/actionCreators";
 import { RootState } from "State/Reducers";
 import lottieBlockchain from "Illustrations/Lotties/blockchain_lottie.json";
 import dataTransfer from "Illustrations/Lotties/computer.json";
@@ -74,7 +74,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
     // -- CALLBACKS --
 
     const handleOpenContributionModal = () => {
-        dispatch(setIndexOfContributingUser(userIndex));
+        dispatch(setDemoIndexOfContributingUser(userIndex));
         dispatch(setUserPanelContributionModalOpen(true));
     };
 

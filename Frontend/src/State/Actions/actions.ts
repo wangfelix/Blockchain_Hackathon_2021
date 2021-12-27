@@ -1,6 +1,6 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
-import { Contribution, Disease } from "State/Reducers/demoPageReducer";
+import { Contribution, Disease, NumberOfAttributes, NumberPatientData } from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -209,6 +209,11 @@ export interface SetIndexOfContributingUser {
     payload: number | undefined;
 }
 
+export interface SetDemoIsContributionSuccessful {
+    type: ActionType.SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL;
+    payload: boolean;
+}
+
 // CONTRIBUTION
 
 export interface SetDemoContribution {
@@ -233,17 +238,21 @@ export interface SetDemoContributionSnomedData {
 
 export interface SetDemoNumberOfPatients {
     type: ActionType.SET_DEMO_NUMBER_OF_PATIENTS;
-    payload: "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000";
+    payload: NumberPatientData;
 }
 
 export interface SetDemoNumberOfAttributes {
     type: ActionType.SET_DEMO_NUMBER_OF_ATTRIBUTES;
-    payload: "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30";
+    payload: NumberOfAttributes;
 }
 
 export interface SetDemoContributionDataCompletenessValue {
     type: ActionType.SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE;
     payload: `0%` | "25%" | "50%" | "75%" | "100%";
+}
+export interface SetDemoContributionDiseaseName {
+    type: ActionType.SET_DEMO_CONTRIBUTION_DISEASE_NAME;
+    payload: string;
 }
 
 export type DemoPageAction =
@@ -259,4 +268,6 @@ export type DemoPageAction =
     | SetDemoContributionSnomedData
     | SetDemoNumberOfPatients
     | SetDemoNumberOfAttributes
-    | SetDemoContributionDataCompletenessValue;
+    | SetDemoContributionDataCompletenessValue
+    | SetDemoContributionDiseaseName
+    | SetDemoIsContributionSuccessful;

@@ -26,7 +26,7 @@ export const InsetForm = ({ formStyleProps, title, content }: InsetFormProps) =>
             styleProps={{
                 width: "100%",
                 height: "100%",
-                border: `solid 2px ${Colors.GREY_LIGHT}`,
+                border: `solid 1px ${Colors.GREY}`,
                 padding: "0 15px 15px 15px",
                 borderRadius: BORDER_RADIUS,
                 alignItems: "center",

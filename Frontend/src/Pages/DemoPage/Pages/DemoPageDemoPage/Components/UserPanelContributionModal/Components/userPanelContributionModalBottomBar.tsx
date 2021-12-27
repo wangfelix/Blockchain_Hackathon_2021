@@ -8,11 +8,13 @@ type UserPanelContributionModalBottomBarProps = {
     value: number;
     setValue: React.Dispatch<React.SetStateAction<number>>;
     handleGoToNextStep: () => void;
+    ctaLabel: string;
 };
 export const UserPanelContributionModalBottomBar = ({
     value,
     setValue,
     handleGoToNextStep,
+    ctaLabel,
 }: UserPanelContributionModalBottomBarProps) => (
     <Container styleProps={{ height: 40, position: "static", width: "100%" }}>
         <Row styleProps={{ left: 0, right: 0, flexShrink: 0, position: "absolute", bottom: 20 }}>
@@ -25,7 +27,7 @@ export const UserPanelContributionModalBottomBar = ({
             </Button>
 
             <Button buttonType="primary" onClickHandle={handleGoToNextStep} styleProps={{ marginRight: 20 }}>
-                Next Step
+                {ctaLabel}
             </Button>
         </Row>
     </Container>

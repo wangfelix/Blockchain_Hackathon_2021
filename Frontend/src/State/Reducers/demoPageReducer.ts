@@ -13,25 +13,29 @@ type User = {
     numberContributions: number;
 };
 
+export type NumberPatientData = "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000";
+export type NumberOfAttributes = "0-6" | "7-12" | "13-18" | "19-24" | "25-30" | ">30";
 export type AgeData = `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
 export type GenderData = `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
 export type SNOMEDData = `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
 export type DataCompleteness = `0%` | "25%" | "50%" | "75%" | "100%";
 
-type DatasetAttributes = {
-    numberPatientData: "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000";
-    numberOfAttributes: "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30";
-    ageData: AgeData; // percentage indicates the amount of falsy unusable values
-    genderData: GenderData; // percentage indicates the amount of falsy unusable values
-    snomedData: SNOMEDData; // percentage indicates the amount of falsy unusable values
-    dataCompleteness: DataCompleteness; // percentage indicates the amount of falsy unusable values
-};
+export type DatasetAttributes =
+    | {
+          numberPatientData: NumberPatientData;
+          numberOfAttributes: NumberOfAttributes;
+          ageData: AgeData; // percentage indicates the amount of falsy unusable values
+          genderData: GenderData; // percentage indicates the amount of falsy unusable values
+          snomedData: SNOMEDData; // percentage indicates the amount of falsy unusable values
+          dataCompleteness: DataCompleteness; // percentage indicates the amount of falsy unusable values
+      }
+    | undefined;
 
 export type Contribution =
     | {
           user: number;
           disease: string;
-          datasetAttributes: DatasetAttributes | undefined;
+          datasetAttributes: DatasetAttributes;
       }
     | undefined;
 
@@ -40,6 +44,7 @@ export type DemoPageState = {
     users: User[];
     indexOfContributingUser: number | undefined;
     contribution: Contribution;
+    isContributionSuccessful: boolean;
 };
 
 const InitialState: DemoPageState = {
@@ -57,6 +62,7 @@ const InitialState: DemoPageState = {
     ],
     indexOfContributingUser: undefined,
     contribution: undefined,
+    isContributionSuccessful: false,
 };
 
 export const demoPageReducer = (state: DemoPageState = InitialState, action: DemoPageAction): DemoPageState => {
@@ -115,10 +121,26 @@ export const demoPageReducer = (state: DemoPageState = InitialState, action: Dem
         case ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER:
             return { ...state, indexOfContributingUser: action.payload };
 
+        case ActionType.SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL:
+            return { ...state, isContributionSuccessful: action.payload };
+
         // -- CONTRIBUTION --
 
         case ActionType.SET_DEMO_CONTRIBUTION:
             return { ...state, contribution: action.payload };
+
+        case ActionType.SET_DEMO_CONTRIBUTION_DISEASE_NAME:
+            return {
+                ...state,
+                ...(state.contribution
+                    ? {
+                          contribution: {
+                              ...state.contribution,
+                              disease: action.payload,
+                          },
+                      }
+                    : { contribution: undefined }),
+            };
 
         case ActionType.SET_DEMO_CONTRIBUTION_AGE_DATA:
             return {

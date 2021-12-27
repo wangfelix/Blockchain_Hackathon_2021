@@ -1,6 +1,14 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
-import { AgeData, Contribution, DataCompleteness, GenderData, SNOMEDData } from "State/Reducers/demoPageReducer";
+import {
+    AgeData,
+    Contribution,
+    DataCompleteness,
+    GenderData,
+    NumberOfAttributes,
+    NumberPatientData,
+    SNOMEDData,
+} from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -124,9 +132,24 @@ export const setFileHash = (filehash: string) => {
 
 // -- DEMO PAGE --
 
-export const setIndexOfContributingUser = (userIndex: number | undefined) => ({
+export const setDemoIndexOfContributingUser = (userIndex: number | undefined) => ({
     type: ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER,
     payload: userIndex,
+});
+
+export const setDemoIsContributionSuccessful = (isContributionSuccessfull: boolean) => ({
+    type: ActionType.SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL,
+    payload: isContributionSuccessfull,
+});
+
+export const setDemoUserBalance = (index: number, balance: number) => ({
+    type: ActionType.SET_DEMO_USER_BALANCE,
+    payload: { index, balance },
+});
+
+export const setDemoUserNumberOfContributions = (index: number, numberContributions: number) => ({
+    type: ActionType.SET_DEMO_USER_NUMBER_CONTRIBUTIONS,
+    payload: { index, numberContributions },
 });
 
 export const setDemoDiseaseNumberOfContributions = (diseaseName: string, numberOfContributions: number) => ({
@@ -134,9 +157,21 @@ export const setDemoDiseaseNumberOfContributions = (diseaseName: string, numberO
     payload: { name: diseaseName, numberContributions: numberOfContributions },
 });
 
+export const setDemoDiseaseBudget = (name: string, budget: number) => ({
+    type: ActionType.SET_DEMO_DISEASE_BUDGET,
+    payload: { name, budget },
+});
+
+// CONTRIBUTION
+
 export const setDemoContribution = (contribution: Contribution) => ({
     type: ActionType.SET_DEMO_CONTRIBUTION,
     payload: contribution,
+});
+
+export const setDemoContributionDiseaseName = (diseaseName: string) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_DISEASE_NAME,
+    payload: diseaseName,
 });
 
 export const setDemoContributionAgeData = (ageData: AgeData) => ({
@@ -154,16 +189,12 @@ export const setDemoContributionSnomedData = (snomedData: SNOMEDData) => ({
     payload: snomedData,
 });
 
-export const setDemoNumberOfPatients = (
-    numberOfPatients: "0-200" | "200-400" | "400-600" | "600-800" | "800-1000" | ">1000"
-) => ({
+export const setDemoNumberOfPatients = (numberOfPatients: NumberPatientData) => ({
     type: ActionType.SET_DEMO_NUMBER_OF_PATIENTS,
     payload: numberOfPatients,
 });
 
-export const setDemoNumberOfAttributes = (
-    numberOfAttrbiutes: "0-6" | "7-12" | "13-18" | "19-24" | "15-30" | ">30"
-) => ({
+export const setDemoNumberOfAttributes = (numberOfAttrbiutes: NumberOfAttributes) => ({
     type: ActionType.SET_DEMO_NUMBER_OF_ATTRIBUTES,
     payload: numberOfAttrbiutes,
 });
