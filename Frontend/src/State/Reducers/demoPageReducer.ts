@@ -55,10 +55,10 @@ const InitialState: DemoPageState = {
         { name: "Influenza", budget: 500, numberContributions: 0 },
     ],
     users: [
-        { index: 0, numberContributions: 0, balance: 10 },
+        { index: 0, numberContributions: 0, balance: 0 },
         { index: 1, numberContributions: 0, balance: 0 },
-        { index: 2, numberContributions: 0, balance: 20 },
-        { index: 3, numberContributions: 0, balance: 80 },
+        { index: 2, numberContributions: 0, balance: 0 },
+        { index: 3, numberContributions: 0, balance: 0 },
     ],
     indexOfContributingUser: undefined,
     contribution: undefined,

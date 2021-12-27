@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import ReactModal from "react-modal";
 import { batch, useDispatch, useSelector } from "react-redux";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -49,7 +49,12 @@ export const UserPanelContributionModal = () => {
 
     const handleCloseModal = () => {
         batch(() => {
-            dispatch(setDemoIndexOfContributingUser(undefined));
+            console.log(contentType);
+
+            if (contentType === "Carousel") {
+                dispatch(setDemoIndexOfContributingUser(undefined));
+            }
+
             dispatch(setUserPanelContributionModalOpen(false));
             dispatch(setDemoContribution(undefined));
         });
