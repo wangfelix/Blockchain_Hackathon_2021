@@ -13,6 +13,7 @@ import cross from "Illustrations/crossing.png";
 import { DemoPagePaths, Paths } from "Utils/paths";
 import { useSelector } from "react-redux";
 import { RootState } from "State/Reducers";
+import { NodeConnectionPipe } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/NodeConnectionPipe/nodeConnectionPipe";
 
 export const DemoPageDemoPage = () => {
     // -- STATE --
@@ -44,6 +45,8 @@ export const DemoPageDemoPage = () => {
     // -- CALLBACKS --
 
     const handleGoToDemoPageIntroPage = () => history.push(`${Paths.DEMO_PAGE}${DemoPagePaths.INTRO_PAGE}`);
+
+    const startAnimation = useSelector<RootState, boolean>((state) => state.demoPage.isContributionSuccessful);
 
     // -- RENDER --
 
@@ -94,7 +97,7 @@ export const DemoPageDemoPage = () => {
             >
                 <Row styleProps={{ alignItems: "center", height: "100%" }}>
                     <UserPanel userIndex={0} />
-                    <Container styleProps={{ background: Colors.LAVENDER, width: "100%", height: 10 }} />
+                    <NodeConnectionPipe triggerAnimation={startAnimation} />
                     <UserPanel userIndex={1} />
                 </Row>
 
@@ -110,7 +113,7 @@ export const DemoPageDemoPage = () => {
                     <Container
                         styleProps={{ width: 500, height: "100%", alignItems: "center", justifyContent: "center" }}
                     >
-                        <Container styleProps={{ background: Colors.LAVENDER, width: 10, height: "100%" }} />
+                        <NodeConnectionPipe triggerAnimation={startAnimation} vertical />
                     </Container>
 
                     <Lottie
@@ -123,13 +126,13 @@ export const DemoPageDemoPage = () => {
                     <Container
                         styleProps={{ width: 500, height: "100%", alignItems: "center", justifyContent: "center" }}
                     >
-                        <Container styleProps={{ background: Colors.LAVENDER, width: 10, height: "100%" }} />
+                        <NodeConnectionPipe triggerAnimation={startAnimation} vertical />
                     </Container>
                 </Row>
 
                 <Row styleProps={{ alignItems: "center", height: "100%" }}>
                     <UserPanel userIndex={2} />
-                    <Container styleProps={{ width: "100%", height: 10, background: Colors.LAVENDER }} />
+                    <NodeConnectionPipe triggerAnimation={startAnimation} />
                     <UserPanel userIndex={3} />
                 </Row>
             </Container>
