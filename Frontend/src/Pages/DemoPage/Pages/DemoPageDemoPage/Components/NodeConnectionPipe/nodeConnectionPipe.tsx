@@ -53,7 +53,7 @@ export const NodeConnectionPipe = ({
             styleProps={{
                 width: "100%",
                 height: height ? height : 10,
-                background: background ? background : Colors.LAVENDER,
+                background: background ? background : "rgba(104,178,255,0.25)",
                 justifyContent: "center",
             }}
         >
@@ -67,7 +67,7 @@ export const NodeConnectionPipe = ({
             styleProps={{
                 width: width ? width : 10,
                 height: "100%",
-                background: background ? background : Colors.LAVENDER,
+                background: background ? background : "rgba(104,178,255,0.25)",
             }}
         >
             <Container

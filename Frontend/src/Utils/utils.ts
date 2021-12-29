@@ -27,3 +27,5 @@ export const getRandomNumberBetween = (min: number, max: number) => {
 };
 
 export const getRandomElementFromArray = (array: any[]) => array[Math.floor(Math.random() * array.length)];
+
+export const isEmptyString = (str: string) => str === "";

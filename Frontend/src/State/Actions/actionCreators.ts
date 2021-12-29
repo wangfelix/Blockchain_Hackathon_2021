@@ -4,6 +4,7 @@ import {
     AgeData,
     Contribution,
     DataCompleteness,
+    Disease,
     GenderData,
     NumberOfAttributes,
     NumberPatientData,
@@ -160,6 +161,11 @@ export const setDemoDiseaseNumberOfContributions = (diseaseName: string, numberO
 export const setDemoDiseaseBudget = (name: string, budget: number) => ({
     type: ActionType.SET_DEMO_DISEASE_BUDGET,
     payload: { name, budget },
+});
+
+export const addNewDisease = (disease: Disease) => ({
+    type: ActionType.ADD_DEMO_NEW_DISEASE,
+    payload: disease,
 });
 
 // CONTRIBUTION

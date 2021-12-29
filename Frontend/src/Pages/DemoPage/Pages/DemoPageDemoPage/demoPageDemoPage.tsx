@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Lottie from "react-lottie";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { Container } from "BaseComponents/container";
 import { UserPanel } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanel/userPanel";
@@ -11,9 +12,9 @@ import nodes from "Illustrations/Lotties/nodes.json";
 import { Button } from "BaseComponents/Button/button";
 import cross from "Illustrations/crossing.png";
 import { DemoPagePaths, Paths } from "Utils/paths";
-import { useSelector } from "react-redux";
 import { RootState } from "State/Reducers";
 import { NodeConnectionPipe } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/NodeConnectionPipe/nodeConnectionPipe";
+import { DemoPageDemoPageDiseaseTooltip } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/demoPageDemoPageDiseaseTooltip";
 
 export const DemoPageDemoPage = () => {
     // -- STATE --
@@ -57,7 +58,7 @@ export const DemoPageDemoPage = () => {
                 minWidth: 1200,
                 height: "100vh",
                 position: "fixed",
-                background: "linear-gradient(.35turn, #6c86de, #7975e0)",
+                background: "linear-gradient(.15turn, #0e2451, #26578a)",
                 inset: 0,
                 zIndex: Z_INDEX.DEMO_PAGE,
                 overflow: "auto",
@@ -65,6 +66,8 @@ export const DemoPageDemoPage = () => {
                 alignItems: "center",
             }}
         >
+            <DemoPageDemoPageDiseaseTooltip />
+
             <Button
                 buttonType="secondary"
                 onClickHandle={handleGoToDemoPageIntroPage}

@@ -6,7 +6,7 @@ import { Container } from "BaseComponents/container";
 import { Row } from "BaseComponents/row";
 import { Button } from "BaseComponents/Button/button";
 import { Text } from "BaseComponents/text";
-import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
+import { BORDER_RADIUS, Colors, Z_INDEX } from "Utils/globalStyles";
 import {
     setDemoIndexOfContributingUser,
     setDemoIsContributionSuccessful,
@@ -120,6 +120,28 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                 ...(isUpdatingUser ? { transform: "scale(1.1)" } : {}),
             }}
         >
+            <Row
+                styleProps={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: "-15px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: Z_INDEX.DEMO_PAGE_MODAL - 1,
+                }}
+            >
+                <Text
+                    styleProps={{
+                        background: Colors.WHITE_OFF_WHITE,
+                        borderRadius: BORDER_RADIUS,
+                        padding: "5px 20px",
+                    }}
+                >
+                    User {userIndex}
+                </Text>
+            </Row>
+
             <Lottie
                 options={lottieOptions.checkmarkOptions}
                 style={{
