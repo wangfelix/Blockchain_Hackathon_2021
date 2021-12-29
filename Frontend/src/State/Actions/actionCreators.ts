@@ -143,6 +143,11 @@ export const setDemoIsContributionSuccessful = (isContributionSuccessfull: boole
     payload: isContributionSuccessfull,
 });
 
+export const setDemoIsContributorContributionSuccessAnimationFinished = (isAnimationFinished: boolean) => ({
+    type: ActionType.SET_DEMO_IS_CONTRIBUTOR_CONTRIBUTION_SUCCESS_ANIMATION_FINISHED,
+    payload: isAnimationFinished,
+});
+
 export const setDemoUserBalance = (index: number, balance: number) => ({
     type: ActionType.SET_DEMO_USER_BALANCE,
     payload: { index, balance },

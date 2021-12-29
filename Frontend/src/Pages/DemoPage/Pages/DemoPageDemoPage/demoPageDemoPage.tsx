@@ -47,7 +47,9 @@ export const DemoPageDemoPage = () => {
 
     const handleGoToDemoPageIntroPage = () => history.push(`${Paths.DEMO_PAGE}${DemoPagePaths.INTRO_PAGE}`);
 
-    const startAnimation = useSelector<RootState, boolean>((state) => state.demoPage.isContributionSuccessful);
+    const startAnimation = useSelector<RootState, boolean>(
+        (state) => state.demoPage.isContributorContributionSuccessAnimationFinished
+    );
 
     // -- RENDER --
 

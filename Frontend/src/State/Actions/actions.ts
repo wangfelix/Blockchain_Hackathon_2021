@@ -214,6 +214,11 @@ export interface SetDemoIsContributionSuccessful {
     payload: boolean;
 }
 
+export interface SetDemoIsContributorContributionSuccessAnimationFinished {
+    type: ActionType.SET_DEMO_IS_CONTRIBUTOR_CONTRIBUTION_SUCCESS_ANIMATION_FINISHED;
+    payload: boolean;
+}
+
 // CONTRIBUTION
 
 export interface SetDemoContribution {
@@ -270,4 +275,5 @@ export type DemoPageAction =
     | SetDemoNumberOfAttributes
     | SetDemoContributionDataCompletenessValue
     | SetDemoContributionDiseaseName
-    | SetDemoIsContributionSuccessful;
+    | SetDemoIsContributionSuccessful
+    | SetDemoIsContributorContributionSuccessAnimationFinished;

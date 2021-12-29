@@ -80,6 +80,8 @@ export enum ActionType {
 
     SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL = "setDemoIsContributionSuccessful",
 
+    SET_DEMO_IS_CONTRIBUTOR_CONTRIBUTION_SUCCESS_ANIMATION_FINISHED = "setDemoIsContributorContributionSuccessAnimationFinished",
+
     // CONTRIBUTION
 
     SET_DEMO_CONTRIBUTION = "setDemoContribution",

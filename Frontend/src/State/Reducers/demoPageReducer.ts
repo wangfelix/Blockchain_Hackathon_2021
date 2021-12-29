@@ -45,6 +45,7 @@ export type DemoPageState = {
     indexOfContributingUser: number | undefined;
     contribution: Contribution;
     isContributionSuccessful: boolean;
+    isContributorContributionSuccessAnimationFinished: boolean;
 };
 
 const InitialState: DemoPageState = {
@@ -63,6 +64,7 @@ const InitialState: DemoPageState = {
     indexOfContributingUser: undefined,
     contribution: undefined,
     isContributionSuccessful: false,
+    isContributorContributionSuccessAnimationFinished: false,
 };
 
 export const demoPageReducer = (state: DemoPageState = InitialState, action: DemoPageAction): DemoPageState => {
@@ -123,6 +125,9 @@ export const demoPageReducer = (state: DemoPageState = InitialState, action: Dem
 
         case ActionType.SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL:
             return { ...state, isContributionSuccessful: action.payload };
+
+        case ActionType.SET_DEMO_IS_CONTRIBUTOR_CONTRIBUTION_SUCCESS_ANIMATION_FINISHED:
+            return { ...state, isContributorContributionSuccessAnimationFinished: action.payload };
 
         // -- CONTRIBUTION --
 

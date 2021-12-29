@@ -10,6 +10,7 @@ import { BORDER_RADIUS, Colors, Z_INDEX } from "Utils/globalStyles";
 import {
     setDemoIndexOfContributingUser,
     setDemoIsContributionSuccessful,
+    setDemoIsContributorContributionSuccessAnimationFinished,
     setUserPanelContributionModalOpen,
 } from "State/Actions/actionCreators";
 import { RootState } from "State/Reducers";
@@ -30,6 +31,11 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
     const [isUpdatingUser, setIsUpdatingUser] = useState(false);
 
     const [isUploadingDataset, setIsUploadingDataset] = useState(false);
+    const [isUploadingDatasetAnimationRunning, setIsUploadingDatasetAnimationRunning] = useState(false);
+
+    const isContributorContributionSuccessAnimationFinished = useSelector<RootState, boolean>(
+        (state) => state.demoPage.isContributorContributionSuccessAnimationFinished
+    );
 
     const [isComputerAnimating, setIsComputerAnimating] = useState(false);
     const [isServerAnimating, setIsServerAnimating] = useState(false);
@@ -61,6 +67,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
         if (isUploadingDataset) {
             setIsComputerAnimating(true);
             setIsServerAnimating(true);
+            setIsUploadingDatasetAnimationRunning(true);
 
             setIsUploadingDataset(false);
         }
@@ -69,17 +76,52 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
     useEffect(() => {
         if (isUserContributing || contributingUserIndex === undefined) return;
 
+        if (contributingUserIndex !== userIndex) return;
+
+        if (startAnimation && isUploadingDatasetAnimationRunning && !isComputerAnimating && !isServerAnimating) {
+            setTimeout(() => dispatch(setDemoIsContributorContributionSuccessAnimationFinished(true)), 1000);
+            setIsUploadingDatasetAnimationRunning(false);
+        }
+    }, [
+        contributingUserIndex,
+        dispatch,
+        isComputerAnimating,
+        isServerAnimating,
+        isUploadingDatasetAnimationRunning,
+        isUserContributing,
+        startAnimation,
+        userIndex,
+    ]);
+
+    useEffect(() => {
+        if (isUserContributing || contributingUserIndex === undefined) return;
+
         if (contributingUserIndex === userIndex) {
             setIsUploadingDataset(true);
-        } else {
+        }
+    }, [contributingUserIndex, isUserContributing, startAnimation, userIndex]);
+
+    useEffect(() => {
+        if (isUserContributing || contributingUserIndex === undefined) return;
+
+        if (contributingUserIndex === userIndex) return;
+
+        if (isContributorContributionSuccessAnimationFinished) {
             setTimeout(() => {
                 setIsUpdatingUser(true);
-            }, getRandomNumberBetween(1000, 3000));
-        }
+            }, getRandomNumberBetween(1000, 1500));
 
-        dispatch(setDemoIndexOfContributingUser(undefined));
-        dispatch(setDemoIsContributionSuccessful(false));
-    }, [contributingUserIndex, dispatch, isUserContributing, startAnimation, userIndex]);
+            dispatch(setDemoIndexOfContributingUser(undefined));
+            dispatch(setDemoIsContributionSuccessful(false));
+            dispatch(setDemoIsContributorContributionSuccessAnimationFinished(false));
+        }
+    }, [
+        contributingUserIndex,
+        dispatch,
+        isContributorContributionSuccessAnimationFinished,
+        isUserContributing,
+        userIndex,
+    ]);
 
     // -- CONST DATA --
 
@@ -117,7 +159,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                 position: "relative",
                 margin: "0px 20px",
                 transition: "all .5s ease-in-out",
-                ...(isUpdatingUser ? { transform: "scale(1.1)" } : {}),
+                ...(isUpdatingUser || isUploadingDatasetAnimationRunning ? { transform: "scale(1.1)" } : {}),
             }}
         >
             <Row
