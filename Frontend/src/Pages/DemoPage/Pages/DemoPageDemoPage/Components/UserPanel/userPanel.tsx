@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import CountUp from "react-countup";
 import Lottie from "react-lottie";
 
 import { Container } from "BaseComponents/container";
@@ -50,6 +51,14 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
 
         return balance;
     });
+
+    const [prevBalance, setPrevBalance] = useState(0);
+
+    useEffect(() => {
+        if (!balance) return;
+
+        setTimeout(() => setPrevBalance(balance), 2000);
+    }, [balance]);
 
     const contributingUserIndex = useSelector<RootState, number | undefined>(
         (state) => state.demoPage.indexOfContributingUser
@@ -256,11 +265,9 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                 <Button
                     buttonType="primary"
                     styleProps={{
-                        fontSize: 16,
                         width: "100%",
                         marginRight: 15,
                     }}
-                    // onClickHandle={() => setIsUploadingDataset(true)}
                     onClickHandle={handleOpenContributionModal}
                 >
                     Contribute Data
@@ -270,15 +277,24 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                     styleProps={{
                         background: "rgba(104,178,255,0.25)",
                         borderRadius: BORDER_RADIUS,
-                        fontWeight: "bold",
-                        fontSize: 18,
+                        fontWeight: 500,
                         padding: "10px 20px",
                         width: "100%",
                         textAlign: "center",
                         color: Colors.WHITE_OFF_WHITE,
                     }}
                 >
-                    {balance?.toFixed(2)} MDC
+                    <CountUp
+                        start={Number(prevBalance.toFixed(2))}
+                        end={Number(balance?.toFixed(2))}
+                        duration={4.0}
+                        separator=" "
+                        decimals={2}
+                        decimal=","
+                        suffix=" MDC"
+                    >
+                        {({ countUpRef, update }) => <span ref={countUpRef} />}
+                    </CountUp>
                 </Text>
             </Row>
         </Container>

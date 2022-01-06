@@ -407,8 +407,7 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
             <Container
                 styleProps={{
                     display: "grid",
-                    gridTemplateColumns: "1fr 50% 1fr",
-                    gridGap: "80px",
+                    gridTemplateColumns: "1fr 45% 1fr",
                     width: "100%",
                 }}
             >
@@ -499,7 +498,7 @@ export const FileUploader = ({ label, ctaLabel, onCta }: FileUploaderProps) => {
                     </Row>
                 </Container>
 
-                <Text textType="nudge" styleProps={{ width: "75%", margin: "0 auto 0 0" }}>
+                <Text textType="nudge" styleProps={{ width: "75%", margin: "0 auto 0 auto", textAlign: "justify" }}>
                     Help us improve our platform and facilitate the process of diagnosis, ultimatively helping patients
                     getting the best medical resources possible! By contributing high quality datasets, you will be
                     given Medicalvalues-Coins, with which you can access our products at a discounted price.

@@ -3,6 +3,7 @@ export const BORDER_RADIUS = "5px";
 export enum Colors {
     PRIMARY_ACCENT = "#9A6EC6",
     PRIMARY_ACCENT_BLUE_HUE = "#353d58",
+    BLUE_DARKEST = "#0c1f31",
     PRIMARY_ACCENT_HUE = "#F3F4FB",
     PRIMARY_ACCENT_HUE_DARKER = "#edeff8",
     LAVENDER = "#9B99FF",
@@ -23,7 +24,7 @@ export const FOOTER_HEIGHT = "100px";
 
 export enum NavBarTabs {
     HOME = "Home",
-    DEMO = "Watch Demo",
+    DEMO = "Learn More",
     CONTRIBUTED_DATA = "Contribute Data",
     ACCOUNTS_AND_HISTORY = "Accounts & History",
     ADMIN = "Admin Panel",

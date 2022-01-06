@@ -14,6 +14,7 @@ import { Row } from "BaseComponents/row";
 import { setRegistrationModalOpen } from "State/Actions/actionCreators";
 import { Container } from "BaseComponents/container";
 import { Paths } from "Utils/paths";
+import { Text } from "BaseComponents/text";
 
 export const LandingPage = () => {
     const dispatch = useDispatch();
@@ -71,7 +72,9 @@ export const LandingPage = () => {
 
     return (
         <Page layout="landing">
-            <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT} num={550} bg={true} />
+            <Row styleProps={{ background: "blue" }}>
+                <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT} num={550} bg={true} />
+            </Row>
 
             <LandingPageSection color="transparent">
                 <Container
@@ -89,15 +92,14 @@ export const LandingPage = () => {
                     <Row styleProps={{ marginBottom: "30px", justifyContent: "center" }}>
                         <h1
                             style={{
-                                fontWeight: "bold",
                                 fontSize: "50px",
-                                fontFamily: "Work Sans",
                                 color: Colors.PRIMARY_ACCENT_BLUE_HUE,
                                 letterSpacing: "10px",
                                 marginRight: "-10px", // remove letter-spacing from last letter
+                                marginBottom: 20,
                             }}
                         >
-                            Medi-System
+                            MediSystem
                         </h1>
                     </Row>
                     <Row>
@@ -130,8 +132,10 @@ export const LandingPage = () => {
                     firstSection={index === 0 ?? true}
                     key={index}
                 >
-                    <div>{section.description}</div>
-                    {section.illustration && <img style={imageStyle} src={section.illustration} />}
+                    <>
+                        <Text>{section.description}</Text>
+                        {section.illustration && <img style={imageStyle} src={section.illustration} />}
+                    </>
                 </LandingPageSection>
             ))}
         </Page>

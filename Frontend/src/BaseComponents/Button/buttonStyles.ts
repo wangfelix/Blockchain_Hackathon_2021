@@ -27,10 +27,12 @@ const commonButtonStyle = {
     paddingRight: "20px",
     borderStyle: "solid",
     cursor: "pointer",
-    fontWeight: "bold" as "bold",
+    fontFamily: "Inter",
+    fontWeight: 400,
+    fontSize: 16,
     zIndex: Z_INDEX.BUTTON,
     height: BUTTON_HEIGHT,
-    fontFamily: "Work Sans",
+    lineHeight: 1.75,
 };
 
 export const primaryButtonStyle: React.CSSProperties = {

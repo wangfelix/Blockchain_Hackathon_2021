@@ -42,7 +42,7 @@ export const DemoPageDemoPageDiseaseTooltip = () => {
     // Edit Budgets
 
     const [isEditingBudgets, setIsEditingBudgets] = useState(false);
-    const [diseaseBudgets, setDiseasBudgets] = useState<DiseaseBudgetChangeType[]>([]);
+    const [diseaseBudgets, setDiseaseBudgets] = useState<DiseaseBudgetChangeType[]>([]);
 
     // -- EFFECTS --
 
@@ -95,7 +95,7 @@ export const DemoPageDemoPageDiseaseTooltip = () => {
             (disease) => disease.diseaseName !== diseaseName
         );
 
-        setDiseasBudgets([
+        setDiseaseBudgets([
             ...diseaseBudgetWithoutChangingDisease,
             { diseaseName: diseaseName, newBudget: Number(newBudget) },
         ]);
@@ -121,7 +121,7 @@ export const DemoPageDemoPageDiseaseTooltip = () => {
 
     const resetEditingBudgets = () => {
         setIsEditingBudgets(false);
-        setDiseasBudgets([]);
+        setDiseaseBudgets([]);
     };
 
     // -- RENDER --
@@ -363,7 +363,10 @@ export const DemoPageDemoPageDiseaseTooltip = () => {
                         <div>
                             <Row styleProps={{ justifyContent: "center", alignItems: "center", cursor: "pointer" }}>
                                 <MaterialButton
-                                    style={{ ...(isHovered || isTooltipOpen ? { color: Colors.WHITE_OFF_WHITE } : {}) }}
+                                    style={{
+                                        color:
+                                            isHovered || isTooltipOpen ? Colors.WHITE_OFF_WHITE : "rgba(104,178,255,1)",
+                                    }}
                                 >
                                     Diseases and Budgets
                                 </MaterialButton>

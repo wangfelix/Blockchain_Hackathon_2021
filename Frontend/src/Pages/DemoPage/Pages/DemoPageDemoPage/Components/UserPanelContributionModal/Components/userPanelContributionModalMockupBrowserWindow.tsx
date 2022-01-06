@@ -3,8 +3,6 @@ import React from "react";
 import { Row } from "BaseComponents/row";
 import { Container } from "BaseComponents/container";
 import { Text } from "BaseComponents/text";
-import { UserPanelContributionModalSuccessPart } from "Pages/DemoPage/Components/UserPanelContributionModal/Components/userPanelContributionModalSuccessPart";
-
 export const UserPanelContributionModalMockupBrowserWindow = () => {
     // -- CONST DATA --
 
@@ -47,9 +45,7 @@ export const UserPanelContributionModalMockupBrowserWindow = () => {
                 <Text>www.medisystem.de</Text>
             </Row>
 
-            <Row styleProps={{ justifyContent: "center" }}>
-                <UserPanelContributionModalSuccessPart />
-            </Row>
+            <Row styleProps={{ justifyContent: "center" }}>asda</Row>
         </Container>
     );
 };

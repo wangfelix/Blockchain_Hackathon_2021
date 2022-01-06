@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router";
-import { useContractCall, useEthers, useContractFunction } from "@usedapp/core";
+import { useContractCall, useContractFunction, useEthers } from "@usedapp/core";
 import { BigNumber, Contract } from "ethers";
 import { Interface } from "@ethersproject/abi";
 
@@ -85,6 +85,14 @@ export function useViewportDimensions() {
 
     return viewportDimensions;
 }
+
+/**
+ * Checks, if the user is using a mobile device.
+ */
+export const useIsMobile = () => {
+    const { viewportWidth } = useViewportDimensions();
+    return useMemo(() => viewportWidth <= 900, [viewportWidth]);
+};
 
 export const useIsLoggedIn = () => {
     const { account } = useEthers();

@@ -1,21 +1,21 @@
 .animate-loading-bar {
-    animation: loading-bar 3s;
+    animation: loading-bar 1.5s linear;
 }
 
 .animate-loading-bar-2 {
-    animation: loading-bar 3s;
+    animation: loading-bar 1.5s linear;
 }
 
 .animate-loading-bar-3 {
-    animation: loading-bar-3 3s;
+    animation: loading-bar-3 2s linear;
 }
 
 .animate-loading-bar-vertical {
-    animation: loading-bar-vertical 1.5s;
+    animation: loading-bar-vertical 1.5s linear;
 }
 
 .animate-loading-bar-vertical-2 {
-    animation: loading-bar-vertical-2 1.5s;
+    animation: loading-bar-vertical-2 1.5s linear;
 }
 
 @keyframes loading-bar {
