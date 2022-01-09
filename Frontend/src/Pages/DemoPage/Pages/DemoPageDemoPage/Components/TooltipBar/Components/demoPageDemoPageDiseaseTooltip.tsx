@@ -19,7 +19,15 @@ type DiseaseBudgetChangeType = {
     newBudget: number;
 };
 
-export const DemoPageDemoPageDiseaseTooltip = () => {
+type DemoPageDemoPageDiseaseTooltipProps = {
+    isOtherPanelOpen: boolean;
+    setIsOtherPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const DemoPageDemoPageDiseaseTooltip = ({
+    isOtherPanelOpen,
+    setIsOtherPanelOpen,
+}: DemoPageDemoPageDiseaseTooltipProps) => {
     const dispatch = useDispatch();
 
     // -- STATE --
@@ -84,6 +92,7 @@ export const DemoPageDemoPageDiseaseTooltip = () => {
 
     const handleCloseTooltip = () => {
         setIsTooltipOpen(false);
+        setIsOtherPanelOpen(false);
         resetAddingNewDisease();
         resetEditingBudgets();
     };
@@ -129,18 +138,19 @@ export const DemoPageDemoPageDiseaseTooltip = () => {
     return (
         <Container
             styleProps={{
-                top: 50,
                 margin: "0 auto",
                 zIndex: Z_INDEX.DEMO_PAGE_MODAL,
-                position: "absolute",
                 background: isHovered || isTooltipOpen ? "rgba(104,178,255,0.25)" : Colors.TRANSPARENT,
                 borderRadius: BORDER_RADIUS,
                 padding: "0 10px",
                 transition: "background 0.3s",
             }}
             onMouseEnter={() => {
-                setIsHovered(true);
-                setIsTooltipOpen(true);
+                if (!isOtherPanelOpen) {
+                    setIsHovered(true);
+                    setIsTooltipOpen(true);
+                    setIsOtherPanelOpen(true);
+                }
             }}
             onMouseLeave={() => setIsHovered(false)}
         >

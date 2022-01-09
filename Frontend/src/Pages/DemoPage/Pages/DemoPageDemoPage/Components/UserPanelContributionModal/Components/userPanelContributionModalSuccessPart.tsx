@@ -11,12 +11,14 @@ import { Button } from "BaseComponents/Button/button";
 import { RootState } from "State/Reducers";
 import { DemoPageState } from "State/Reducers/demoPageReducer";
 import {
+    addDemoEvent,
     setDemoDiseaseBudget,
     setDemoDiseaseNumberOfContributions,
     setDemoIsContributionSuccessful,
     setDemoUserBalance,
     setDemoUserNumberOfContributions,
 } from "State/Actions/actionCreators";
+import { keccak256, sha256, toUtf8Bytes } from "ethers/lib/utils";
 
 type UserPanelContributionModalSuccessPartProps = {
     handleCloseModal: () => void;
@@ -94,6 +96,15 @@ export const UserPanelContributionModalSuccessPart = ({
             dispatch(setDemoUserBalance(contributionUserIndex, contributionUserBalance + finalDatasetValue));
             dispatch(
                 setDemoUserNumberOfContributions(contributionUserIndex, contributionUserNumberOfContributions + 1)
+            );
+            dispatch(
+                addDemoEvent({
+                    date: `${new Date()}`,
+                    userAddress: `${sha256(toUtf8Bytes(`${contributionUserIndex}`))}`, // TODO: Save the user address to the redux store, if needed elsewhere.
+                    datasetHash: `${sha256(toUtf8Bytes(`${Math.random().toString(36)}`))}`, // Simulate Random Filename.
+                    diseaseName: contributionDiseaseName,
+                    transferredMediCoins: finalDatasetValue,
+                })
             );
         });
 

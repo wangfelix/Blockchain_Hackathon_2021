@@ -1,6 +1,6 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
-import { Contribution, Disease, NumberOfAttributes, NumberPatientData } from "State/Reducers/demoPageReducer";
+import { Contribution, Disease, NumberOfAttributes, NumberPatientData, Event } from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -260,6 +260,11 @@ export interface SetDemoContributionDiseaseName {
     payload: string;
 }
 
+export interface AddDemoEvent {
+    type: ActionType.ADD_DEMO_EVENT;
+    payload: Event;
+}
+
 export type DemoPageAction =
     | SetUserBalance
     | SetDemoUserNumberContributions
@@ -276,4 +281,5 @@ export type DemoPageAction =
     | SetDemoContributionDataCompletenessValue
     | SetDemoContributionDiseaseName
     | SetDemoIsContributionSuccessful
-    | SetDemoIsContributorContributionSuccessAnimationFinished;
+    | SetDemoIsContributorContributionSuccessAnimationFinished
+    | AddDemoEvent;

@@ -9,6 +9,7 @@ import {
     NumberOfAttributes,
     NumberPatientData,
     SNOMEDData,
+    Event,
 } from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
@@ -213,4 +214,11 @@ export const setDemoNumberOfAttributes = (numberOfAttrbiutes: NumberOfAttributes
 export const setDemoContributionDataCompletenessValue = (dataCompleteness: DataCompleteness) => ({
     type: ActionType.SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE,
     payload: dataCompleteness,
+});
+
+// -- EVENT --
+
+export const addDemoEvent = (event: Event) => ({
+    type: ActionType.ADD_DEMO_EVENT,
+    payload: event,
 });

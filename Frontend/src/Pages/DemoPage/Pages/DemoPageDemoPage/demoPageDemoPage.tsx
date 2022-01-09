@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { Container } from "BaseComponents/container";
 import { UserPanel } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanel/userPanel";
 import { UserPanelContributionModal } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/UserPanelContributionModal/userPanelContributionModal";
-import { Colors, Z_INDEX } from "Utils/globalStyles";
+import { BORDER_RADIUS, Colors, Z_INDEX } from "Utils/globalStyles";
 import { Row } from "BaseComponents/row";
 import nodes from "Illustrations/Lotties/nodes.json";
 import { Button } from "BaseComponents/Button/button";
@@ -14,7 +14,8 @@ import cross from "Illustrations/crossing.png";
 import { DemoPagePaths, Paths } from "Utils/paths";
 import { RootState } from "State/Reducers";
 import { NodeConnectionPipe } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/NodeConnectionPipe/nodeConnectionPipe";
-import { DemoPageDemoPageDiseaseTooltip } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/demoPageDemoPageDiseaseTooltip";
+import { DemoPageDemoPageDiseaseTooltip } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/TooltipBar/Components/demoPageDemoPageDiseaseTooltip";
+import { DemoPageDemoPageTooltipBar } from "Pages/DemoPage/Pages/DemoPageDemoPage/Components/TooltipBar/demoPageDemoPageTooltipBar";
 
 export const DemoPageDemoPage = () => {
     // -- STATE --
@@ -68,7 +69,7 @@ export const DemoPageDemoPage = () => {
                 alignItems: "center",
             }}
         >
-            <DemoPageDemoPageDiseaseTooltip />
+            <DemoPageDemoPageTooltipBar />
 
             <Button
                 buttonType="secondary"

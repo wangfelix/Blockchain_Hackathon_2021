@@ -99,4 +99,8 @@ export enum ActionType {
     SET_DEMO_CONTRIBUTION_SNOMED_DATA = "setDemoContributionSnomedData",
 
     SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE = "setDemoContributionDataCompletenessValue",
+
+    // -- EVENT LOG --
+
+    ADD_DEMO_EVENT = "addDemoEvent",
 }

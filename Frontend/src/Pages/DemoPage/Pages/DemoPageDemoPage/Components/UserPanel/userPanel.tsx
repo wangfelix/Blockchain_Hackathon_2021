@@ -267,6 +267,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                     styleProps={{
                         width: "100%",
                         marginRight: 15,
+                        height: 42,
                     }}
                     onClickHandle={handleOpenContributionModal}
                 >
@@ -282,6 +283,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                         width: "100%",
                         textAlign: "center",
                         color: Colors.WHITE_OFF_WHITE,
+                        lineHeight: "unset",
                     }}
                 >
                     <CountUp

@@ -1,5 +1,6 @@
 import { DemoPageAction } from "State/Actions/actions";
 import { ActionType } from "State/Actions/actionTypes";
+import { accordionActionsClasses } from "@mui/material";
 
 export type Disease = {
     name: string;
@@ -39,9 +40,18 @@ export type Contribution =
       }
     | undefined;
 
+export type Event = {
+    date: string;
+    userAddress: string;
+    diseaseName: string;
+    datasetHash: string;
+    transferredMediCoins: number;
+};
+
 export type DemoPageState = {
     diseases: Disease[];
     users: User[];
+    events: Event[];
     indexOfContributingUser: number | undefined;
     contribution: Contribution;
     isContributionSuccessful: boolean;
@@ -61,6 +71,7 @@ const InitialState: DemoPageState = {
         { index: 2, numberContributions: 0, balance: 0 },
         { index: 3, numberContributions: 0, balance: 0 },
     ],
+    events: [],
     indexOfContributingUser: undefined,
     contribution: undefined,
     isContributionSuccessful: false,
@@ -265,6 +276,14 @@ export const demoPageReducer = (state: DemoPageState = InitialState, action: Dem
                           },
                       }
                     : { contribution: undefined }),
+            };
+
+        // -- EVENT --
+
+        case ActionType.ADD_DEMO_EVENT:
+            return {
+                ...state,
+                events: [...state.events, action.payload],
             };
 
         default:
