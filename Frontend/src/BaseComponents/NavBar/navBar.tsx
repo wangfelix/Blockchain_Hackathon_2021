@@ -119,7 +119,15 @@ export const NavBar = () => {
 
             {!isLoggedIn && (
                 <Row styleProps={{ position: "absolute", right: "20px", justifySelf: "flex-end" }}>
-                    <Button buttonType="text" onClickHandle={openRegistrationModal}>
+                    <Button
+                        buttonType="primary"
+                        onClickHandle={openRegistrationModal}
+                        styleProps={{
+                            borderRadius: 50,
+                            padding: "0 20px",
+                            fontSize: 14,
+                        }}
+                    >
                         Login
                     </Button>
                 </Row>

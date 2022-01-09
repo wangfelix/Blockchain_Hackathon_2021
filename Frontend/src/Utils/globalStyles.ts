@@ -4,7 +4,7 @@ export enum Colors {
     PRIMARY_ACCENT = "#9A6EC6",
     PRIMARY_ACCENT_BLUE_HUE = "#353d58",
     BLUE_DARKEST = "#0c1f31",
-    PRIMARY_ACCENT_HUE = "#F3F4FB",
+    PRIMARY_ACCENT_HUE = "#eceefa",
     PRIMARY_ACCENT_HUE_DARKER = "#edeff8",
     LAVENDER = "#9B99FF",
     WHITE = "#FFF",
