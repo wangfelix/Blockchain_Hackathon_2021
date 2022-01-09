@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { batch, useDispatch, useSelector } from "react-redux";
 import Lottie from "react-lottie";
+import { sha256, toUtf8Bytes } from "ethers/lib/utils";
 
 import { Container } from "BaseComponents/container";
 import contract from "Illustrations/Lotties/contract.json";
@@ -18,7 +19,6 @@ import {
     setDemoUserBalance,
     setDemoUserNumberOfContributions,
 } from "State/Actions/actionCreators";
-import { keccak256, sha256, toUtf8Bytes } from "ethers/lib/utils";
 
 type UserPanelContributionModalSuccessPartProps = {
     handleCloseModal: () => void;
