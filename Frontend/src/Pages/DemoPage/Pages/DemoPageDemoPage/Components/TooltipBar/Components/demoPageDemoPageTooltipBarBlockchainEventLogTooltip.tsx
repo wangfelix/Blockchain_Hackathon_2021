@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MaterialButton from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ClickAwayListener } from "@mui/material";
 
 import { Container } from "BaseComponents/container";
@@ -12,11 +12,6 @@ import { Event } from "State/Reducers/demoPageReducer";
 import DownArrow from "Illustrations/downArrow.png";
 import { Text } from "BaseComponents/text";
 
-type DiseaseBudgetChangeType = {
-    diseaseName: string;
-    newBudget: number;
-};
-
 type DemoPageDemoPageTooltipBarBlockchainEventLogTooltipProps = {
     isOtherPanelOpen: boolean;
     setIsOtherPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,20 +21,12 @@ export const DemoPageDemoPageTooltipBarBlockchainEventLogTooltip = ({
     isOtherPanelOpen,
     setIsOtherPanelOpen,
 }: DemoPageDemoPageTooltipBarBlockchainEventLogTooltipProps) => {
-    const dispatch = useDispatch();
-
     // -- STATE --
 
     const [isTooltipOpen, setIsTooltipOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
     const events = useSelector<RootState, Event[]>((state) => state.demoPage.events);
-
-    // Add new disease
-    const [newDiseaseIsNameInvalid, setNewDiseaseIsNameInvalid] = useState(false);
-    const [newDiseaseIsBudgetInvalid, setNewDiseaseIsBudgetInvalid] = useState(false);
-
-    // -- EFFECTS --
 
     // -- CALLBACKS --
 

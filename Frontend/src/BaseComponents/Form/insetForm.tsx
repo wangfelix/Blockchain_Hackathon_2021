@@ -50,6 +50,7 @@ export const InsetForm = ({ formStyleProps, title, content }: InsetFormProps) =>
                         background: Colors.WHITE_OFF_WHITE,
                         borderRadius: BORDER_RADIUS,
                         padding: "5px 20px",
+                        lineHeight: "normal",
                     }}
                 >
                     {title}

@@ -187,6 +187,7 @@ export const UserPanel = ({ userIndex }: UserPanelProps) => {
                         background: Colors.WHITE_OFF_WHITE,
                         borderRadius: BORDER_RADIUS,
                         padding: "5px 20px",
+                        lineHeight: "normal",
                     }}
                 >
                     User {userIndex}

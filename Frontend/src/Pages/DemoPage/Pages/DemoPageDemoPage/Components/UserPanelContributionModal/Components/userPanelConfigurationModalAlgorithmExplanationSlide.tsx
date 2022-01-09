@@ -29,7 +29,7 @@ export const UserPanelConfigurationModalAlgorithmExplanationSlide = () => {
             >
                 <Container
                     styleProps={{
-                        height: 200,
+                        height: 180,
                         width: 400,
                         justifyContent: "center",
                         alignItems: "center",
@@ -44,11 +44,11 @@ export const UserPanelConfigurationModalAlgorithmExplanationSlide = () => {
                     />
                 </Container>
 
-                <Text>
+                <Text styleProps={{ fontSize: 15, lineHeight: 1.5 }}>
                     After selecting your dataset, the evaluation algorithm in the smart contract is run. All the quality
-                    attributes, that you configured manually on the last slide, are being automatically assessed and
-                    detected by the algorithm. This ensures fairness and transparency, as every user can see and
-                    retrace, by which quality attributes his or her dataset has been and will be evaluated.
+                    attributes, that you just configured manually, are being assessed automatically and detected by the
+                    algorithm. This ensures fairness and transparency, as every user can retrace, by which quality
+                    attributes his or her dataset has been and will be evaluated.
                     <br />
                     <br />
                     Following local regulations, all calculations are done <b>locally on your computer</b>, which means,

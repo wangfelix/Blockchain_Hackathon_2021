@@ -132,7 +132,7 @@ export const UserPanelContributionModalSuccessPart = ({
             <Container
                 styleProps={{
                     position: "relative",
-                    height: 350,
+                    height: 320,
                     width: 500,
                     justifyContent: "center",
                     alignItems: "center",
@@ -152,16 +152,25 @@ export const UserPanelContributionModalSuccessPart = ({
                 />
             </Container>
 
-            <Text styleProps={{ color: Colors.LAVENDER, padding: "0 20px", marginBottom: 30, height: 72 }}>
-                Your contribution has been documented in the blockchain. Every observer can see and validate, that a
-                dataset about the disease $disease has been contributed to Medisystem under your address, and that you
-                have been rewarded $amount MediCoins in exchange.
+            <Text
+                styleProps={{
+                    color: Colors.LAVENDER,
+                    padding: "0 20px",
+                    marginBottom: 30,
+                    height: 72,
+                    lineHeight: 1.5,
+                    fontSize: 15,
+                }}
+            >
+                Your contribution has been documented in the blockchain. Every observer can validate, that a dataset
+                about the disease {contributionDiseaseName} has been contributed to Medisystem under your address, and
+                that you have been rewarded {finalDatasetValue} MediCoins in exchange.
             </Text>
 
             <Button
                 buttonType="primary"
                 onClickHandle={handleCloseModal}
-                styleProps={{ height: 40, borderRadius: 50, padding: "0 30px" }}
+                styleProps={{ height: 40, borderRadius: 50, padding: "0 30px", position: "absolute", bottom: 30 }}
             >
                 Finish
             </Button>

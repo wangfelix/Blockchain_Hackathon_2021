@@ -255,6 +255,7 @@ export const UserPanelContributionModalAssessmentSlide = ({
                 <Container
                     styleProps={{
                         position: "relative",
+                        marginBottom: 10,
                     }}
                 >
                     <Container
@@ -330,9 +331,13 @@ export const UserPanelContributionModalAssessmentSlide = ({
                     </Row>
                 </Container>
 
-                <Text styleProps={{ textAlign: "unset" }}>
+                <Text styleProps={{ textAlign: "unset", fontSize: 15 }}>
                     In exchange for your specified dataset, you will recieve {finalDatasetValue} Medi-Coins.
-                    <Button buttonType="text" onClickHandle={handleGoToDatasetConfigurationSlide}>
+                    <Button
+                        buttonType="text"
+                        styleProps={{ fontSize: 15 }}
+                        onClickHandle={handleGoToDatasetConfigurationSlide}
+                    >
                         Try other dataset configurations
                     </Button>
                 </Text>
