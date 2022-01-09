@@ -17,6 +17,7 @@ export const NavBarItem = ({ title, selected, to: propsTo }: NavBarItemProps) =>
         display: "flex",
         height: "100%",
         position: "relative" as "relative",
+        fontFamily: "Work Sans",
     };
 
     const anchorStyle = {
@@ -31,10 +32,11 @@ export const NavBarItem = ({ title, selected, to: propsTo }: NavBarItemProps) =>
         position: "absolute" as "absolute",
         bottom: "0",
         right: "0",
-        height: "5px",
+        height: selected ? "5px" : 0,
         width: "100%",
         borderStyle: "none",
-        background: Colors.LAVENDER,
+        background: selected ? Colors.LAVENDER : Colors.TRANSPARENT,
+        transition: "background .3s, height .3s",
     };
 
     // -- HELPER --
@@ -51,7 +53,7 @@ export const NavBarItem = ({ title, selected, to: propsTo }: NavBarItemProps) =>
                 </Link>
             </div>
 
-            {selected && <div style={indicatorStyle} />}
+            <div style={indicatorStyle} />
         </li>
     );
 };

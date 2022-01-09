@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
 import {
     primaryButtonStyle,
@@ -6,6 +6,7 @@ import {
     secondaryButtonStyle,
     textButtonStyle,
 } from "BaseComponents/Button/buttonStyles";
+import { Colors } from "Utils/globalStyles";
 
 type ButtonProps = {
     buttonType: "primary" | "secondary" | "text" | "primaryGreyedOut";
@@ -16,15 +17,34 @@ type ButtonProps = {
 };
 
 export const Button = ({ children, styleProps, buttonType, onClickHandle, id }: ButtonProps) => {
+    // -- STATE --
+
+    const [isHovered, setIsHovered] = useState(false);
+
     // -- STYLES --
 
     let buttonStyle =
         buttonType === "primary"
-            ? { ...primaryButtonStyle, ...styleProps }
+            ? {
+                  ...primaryButtonStyle,
+                  ...(isHovered
+                      ? { background: `${Colors.PRIMARY_ACCENT}dd`, borderColor: `${Colors.PRIMARY_ACCENT}dd` }
+                      : {}),
+                  ...styleProps,
+              }
             : buttonType === "secondary"
-            ? { ...secondaryButtonStyle, ...styleProps }
+            ? {
+                  ...secondaryButtonStyle,
+                  ...(isHovered
+                      ? {
+                            color: `${Colors.PRIMARY_ACCENT_BLUE_HUE}`,
+                            borderColor: `${Colors.PRIMARY_ACCENT_BLUE_HUE}`,
+                        }
+                      : {}),
+                  ...styleProps,
+              }
             : buttonType === "text"
-            ? { ...textButtonStyle, ...styleProps }
+            ? { ...textButtonStyle, ...(isHovered ? { color: `${Colors.PRIMARY_ACCENT}dd` } : {}), ...styleProps }
             : { ...primaryButtonStyleGreyedOut, ...styleProps };
 
     // -- HELPERS --
@@ -34,7 +54,13 @@ export const Button = ({ children, styleProps, buttonType, onClickHandle, id }: 
     // -- RENDER --
 
     return (
-        <button id={id ? id : ""} style={buttonStyle} onClick={isGreyedOut ? undefined : onClickHandle}>
+        <button
+            id={id ? id : ""}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            style={buttonStyle}
+            onClick={isGreyedOut ? undefined : onClickHandle}
+        >
             {children}
         </button>
     );

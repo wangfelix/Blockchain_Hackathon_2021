@@ -1,5 +1,16 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
+import {
+    AgeData,
+    Contribution,
+    DataCompleteness,
+    Disease,
+    GenderData,
+    NumberOfAttributes,
+    NumberPatientData,
+    SNOMEDData,
+    Event,
+} from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -9,6 +20,10 @@ export const setRegistrationModalOpen = (isOpen: boolean) => {
 
 export const setSettingsModalOpen = (isOpen: boolean) => {
     return { type: ActionType.SET_IS_SETTINGS_MODAL_OPEN, payload: isOpen };
+};
+
+export const setUserPanelContributionModalOpen = (isOpen: boolean) => {
+    return { type: ActionType.SET_IS_USER_PANEL_CONTRIBUTION_MODAL_OPEN, payload: isOpen };
 };
 
 // -- CONTRIBUTE DATA PAGE --
@@ -116,3 +131,94 @@ export const setDatasetValue = (datasetValue: string) => {
 export const setFileHash = (filehash: string) => {
     return { type: ActionType.SET_FILE_HASH, payload: filehash };
 };
+
+// -- DEMO PAGE --
+
+export const setDemoIndexOfContributingUser = (userIndex: number | undefined) => ({
+    type: ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER,
+    payload: userIndex,
+});
+
+export const setDemoIsContributionSuccessful = (isContributionSuccessfull: boolean) => ({
+    type: ActionType.SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL,
+    payload: isContributionSuccessfull,
+});
+
+export const setDemoIsContributorContributionSuccessAnimationFinished = (isAnimationFinished: boolean) => ({
+    type: ActionType.SET_DEMO_IS_CONTRIBUTOR_CONTRIBUTION_SUCCESS_ANIMATION_FINISHED,
+    payload: isAnimationFinished,
+});
+
+export const setDemoUserBalance = (index: number, balance: number) => ({
+    type: ActionType.SET_DEMO_USER_BALANCE,
+    payload: { index, balance },
+});
+
+export const setDemoUserNumberOfContributions = (index: number, numberContributions: number) => ({
+    type: ActionType.SET_DEMO_USER_NUMBER_CONTRIBUTIONS,
+    payload: { index, numberContributions },
+});
+
+export const setDemoDiseaseNumberOfContributions = (diseaseName: string, numberOfContributions: number) => ({
+    type: ActionType.SET_DEMO_DISEASE_NUMBER_CONTRIBUTIONS,
+    payload: { name: diseaseName, numberContributions: numberOfContributions },
+});
+
+export const setDemoDiseaseBudget = (name: string, budget: number) => ({
+    type: ActionType.SET_DEMO_DISEASE_BUDGET,
+    payload: { name, budget },
+});
+
+export const addNewDisease = (disease: Disease) => ({
+    type: ActionType.ADD_DEMO_NEW_DISEASE,
+    payload: disease,
+});
+
+// CONTRIBUTION
+
+export const setDemoContribution = (contribution: Contribution) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION,
+    payload: contribution,
+});
+
+export const setDemoContributionDiseaseName = (diseaseName: string) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_DISEASE_NAME,
+    payload: diseaseName,
+});
+
+export const setDemoContributionAgeData = (ageData: AgeData) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_AGE_DATA,
+    payload: ageData,
+});
+
+export const setDemoContributionGenderData = (genderData: GenderData) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_GENDER_DATA,
+    payload: genderData,
+});
+
+export const setDemoContributionSnomedData = (snomedData: SNOMEDData) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_SNOMED_DATA,
+    payload: snomedData,
+});
+
+export const setDemoNumberOfPatients = (numberOfPatients: NumberPatientData) => ({
+    type: ActionType.SET_DEMO_NUMBER_OF_PATIENTS,
+    payload: numberOfPatients,
+});
+
+export const setDemoNumberOfAttributes = (numberOfAttrbiutes: NumberOfAttributes) => ({
+    type: ActionType.SET_DEMO_NUMBER_OF_ATTRIBUTES,
+    payload: numberOfAttrbiutes,
+});
+
+export const setDemoContributionDataCompletenessValue = (dataCompleteness: DataCompleteness) => ({
+    type: ActionType.SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE,
+    payload: dataCompleteness,
+});
+
+// -- EVENT --
+
+export const addDemoEvent = (event: Event) => ({
+    type: ActionType.ADD_DEMO_EVENT,
+    payload: event,
+});

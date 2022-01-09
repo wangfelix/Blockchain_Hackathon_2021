@@ -13,18 +13,19 @@ export const Text = ({ children, textType: textTypeProp, styleProps }: TextProps
     // -- STYLES --
 
     const textStyle = {
-        color: textType === "text" || "modal" ? Colors.BLACK : Colors.GREY_DARK,
-        fontSize: textType === "text" ? "15px" : "13px",
-        fontWeight: textType === "text" ? ("normal" as "normal") : ("lighter" as "lighter"),
-        textAlign: "justify" as "justify",
+        color: textType === "text" || "modal" ? Colors.PRIMARY_ACCENT_BLUE_HUE : Colors.GREY_DARK,
+        fontSize: textType === "text" ? 16 : 15,
+        fontWeight: textType === "text" ? 400 : 300,
+        textAlign: "left" as "left",
         hyphens: "auto" as "auto",
-        fontFamily: "Work Sans",
+        fontFamily: "Inter",
         justifySelf: "center",
+        lineHeight: 1.75,
 
         ...styleProps,
     };
 
     // -- RENDER --
 
-    return <p style={{ ...textStyle, ...styleProps }}>{children}</p>;
+    return <p style={textStyle}>{children}</p>;
 };

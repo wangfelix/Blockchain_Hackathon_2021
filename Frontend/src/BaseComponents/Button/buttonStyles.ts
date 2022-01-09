@@ -1,4 +1,5 @@
 import { Colors, BORDER_RADIUS, Z_INDEX } from "Utils/globalStyles";
+import React from "react";
 
 // -- CONSTANTS --
 
@@ -26,18 +27,21 @@ const commonButtonStyle = {
     paddingRight: "20px",
     borderStyle: "solid",
     cursor: "pointer",
-    fontWeight: "bold" as "bold",
+    fontFamily: "Inter",
+    fontWeight: 400,
+    fontSize: 16,
     zIndex: Z_INDEX.BUTTON,
     height: BUTTON_HEIGHT,
-    fontFamily: "Work Sans",
+    lineHeight: 1.75,
 };
 
-export const primaryButtonStyle = {
+export const primaryButtonStyle: React.CSSProperties = {
     ...commonButtonStyle,
     background: BUTTON_PRIMARY_BACKGROUND,
     color: BUTTON_PRIMARY_FONT_COLOR,
     borderColor: BUTTON_PRIMARY_BORDER,
     borderRadius: BORDER_RADIUS,
+    transition: "background 0.2s",
 };
 
 export const primaryButtonStyleGreyedOut = {
@@ -54,6 +58,7 @@ export const secondaryButtonStyle = {
     color: BUTTON_SECONDARY_FONT_COLOR,
     borderColor: BUTTON_SECONDARY_BORDER,
     borderRadius: BORDER_RADIUS,
+    transition: "color 0.2s",
 };
 
 export const textButtonStyle = {
@@ -61,4 +66,5 @@ export const textButtonStyle = {
     borderStyle: "none",
     background: BUTTON_TEXT_BACKGROUND,
     color: BUTTON_TEXT_FONT_COLOR,
+    transition: "color 0.2s",
 };

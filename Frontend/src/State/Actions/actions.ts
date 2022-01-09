@@ -1,5 +1,6 @@
 import { ActionType } from "State/Actions/actionTypes";
 import { FalsyGenderValue } from "State/Reducers/contributeDataPageReducer";
+import { Contribution, Disease, NumberOfAttributes, NumberPatientData, Event } from "State/Reducers/demoPageReducer";
 
 // -- MODALS --
 
@@ -13,7 +14,12 @@ interface SettingsModalAction {
     payload: boolean;
 }
 
-export type ModalAction = RegistrationModalAction | SettingsModalAction;
+interface UserPanelContributionModalAction {
+    type: ActionType.SET_IS_USER_PANEL_CONTRIBUTION_MODAL_OPEN;
+    payload: boolean;
+}
+
+export type ModalAction = RegistrationModalAction | SettingsModalAction | UserPanelContributionModalAction;
 
 // -- CONTRIBUTE DATA PAGE --
 
@@ -164,3 +170,116 @@ export type ContributeDataPageAction =
     | SetDiseaseName
     | SetDatasetValue
     | SetFileHash;
+
+// -- CONTRIBUTE DATA PAGE --
+
+//  USER
+
+export interface SetUserBalance {
+    type: ActionType.SET_DEMO_USER_BALANCE;
+    payload: { index: number; balance: number };
+}
+
+export interface SetDemoUserNumberContributions {
+    type: ActionType.SET_DEMO_USER_NUMBER_CONTRIBUTIONS;
+    payload: { index: number; numberContributions: number };
+}
+
+// DISEASE
+
+export interface SetDiseaseBudget {
+    type: ActionType.SET_DEMO_DISEASE_BUDGET;
+    payload: { name: string; budget: number };
+}
+
+export interface SetDemoDiseaseNumberContributions {
+    type: ActionType.SET_DEMO_DISEASE_NUMBER_CONTRIBUTIONS;
+    payload: { name: string; numberContributions: number };
+}
+
+export interface AddDemoNewDisease {
+    type: ActionType.ADD_DEMO_NEW_DISEASE;
+    payload: Disease;
+}
+
+// ELSE
+
+export interface SetIndexOfContributingUser {
+    type: ActionType.SET_DEMO_INDEX_OF_CONTRIBUTING_USER;
+    payload: number | undefined;
+}
+
+export interface SetDemoIsContributionSuccessful {
+    type: ActionType.SET_DEMO_IS_CONTRIBUTION_SUCCESSFUL;
+    payload: boolean;
+}
+
+export interface SetDemoIsContributorContributionSuccessAnimationFinished {
+    type: ActionType.SET_DEMO_IS_CONTRIBUTOR_CONTRIBUTION_SUCCESS_ANIMATION_FINISHED;
+    payload: boolean;
+}
+
+// CONTRIBUTION
+
+export interface SetDemoContribution {
+    type: ActionType.SET_DEMO_CONTRIBUTION;
+    payload: Contribution;
+}
+
+export interface SetDemoContributionAgeData {
+    type: ActionType.SET_DEMO_CONTRIBUTION_AGE_DATA;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+}
+
+export interface SetDemoContributionGenderData {
+    type: ActionType.SET_DEMO_CONTRIBUTION_GENDER_DATA;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+}
+
+export interface SetDemoContributionSnomedData {
+    type: ActionType.SET_DEMO_CONTRIBUTION_SNOMED_DATA;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%" | undefined;
+}
+
+export interface SetDemoNumberOfPatients {
+    type: ActionType.SET_DEMO_NUMBER_OF_PATIENTS;
+    payload: NumberPatientData;
+}
+
+export interface SetDemoNumberOfAttributes {
+    type: ActionType.SET_DEMO_NUMBER_OF_ATTRIBUTES;
+    payload: NumberOfAttributes;
+}
+
+export interface SetDemoContributionDataCompletenessValue {
+    type: ActionType.SET_DEMO_CONTRIBUTION_DATA_COMPLETENESS_VALUE;
+    payload: `0%` | "25%" | "50%" | "75%" | "100%";
+}
+export interface SetDemoContributionDiseaseName {
+    type: ActionType.SET_DEMO_CONTRIBUTION_DISEASE_NAME;
+    payload: string;
+}
+
+export interface AddDemoEvent {
+    type: ActionType.ADD_DEMO_EVENT;
+    payload: Event;
+}
+
+export type DemoPageAction =
+    | SetUserBalance
+    | SetDemoUserNumberContributions
+    | SetDiseaseBudget
+    | SetDemoDiseaseNumberContributions
+    | AddDemoNewDisease
+    | SetIndexOfContributingUser
+    | SetDemoContribution
+    | SetDemoContributionAgeData
+    | SetDemoContributionGenderData
+    | SetDemoContributionSnomedData
+    | SetDemoNumberOfPatients
+    | SetDemoNumberOfAttributes
+    | SetDemoContributionDataCompletenessValue
+    | SetDemoContributionDiseaseName
+    | SetDemoIsContributionSuccessful
+    | SetDemoIsContributorContributionSuccessAnimationFinished
+    | AddDemoEvent;

@@ -13,6 +13,8 @@ import { Row } from "BaseComponents/row";
 import { Text } from "BaseComponents/text";
 import DownArrow from "Illustrations/downArrow.png";
 import ProfilePicture from "Illustrations/ProfilePicture.png";
+import Logo from "Illustrations/MediSystemLogo.svg";
+import { Container } from "BaseComponents/container";
 
 export const NavBar = () => {
     const dispatch = useDispatch();
@@ -79,7 +81,7 @@ export const NavBar = () => {
         height: NAVBAR_HEIGHT,
         width: "100%",
         position: "fixed" as "fixed",
-        background: Colors.PRIMARY_ACCENT_BLUE_HUE,
+        background: Colors.BLUE_DARKEST,
         boxShadow: "0 5px 20px 2px rgba(20, 0, 20, 0.3)",
         display: "flex",
         alignItems: "center",
@@ -93,13 +95,39 @@ export const NavBar = () => {
 
     return (
         <nav style={navBarStyle}>
-            {navBarItemsLeft.map((item, index) => (
-                <NavBarItem title={item.title} key={index} selected={item.selected} to={item.to} />
-            ))}
+            <Container
+                style={{
+                    width: 170,
+                    height: "100%",
+                    display: "flex",
+                    marginRight: 30,
+                    padding: "0 30px",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                }}
+            >
+                <Logo />
+            </Container>
+
+            <Row styleProps={{ margin: "0 auto", height: "100%" }}>
+                {navBarItemsLeft.map((item, index) => (
+                    <NavBarItem title={item.title} key={index} selected={item.selected} to={item.to} />
+                ))}
+            </Row>
 
             {!isLoggedIn && (
                 <Row styleProps={{ position: "absolute", right: "20px", justifySelf: "flex-end" }}>
-                    <Button buttonType="text" onClickHandle={openRegistrationModal}>
+                    <Button
+                        buttonType="primary"
+                        onClickHandle={openRegistrationModal}
+                        styleProps={{
+                            borderRadius: 50,
+                            padding: "0 20px",
+                            fontSize: 14,
+                        }}
+                    >
                         Login
                     </Button>
                 </Row>

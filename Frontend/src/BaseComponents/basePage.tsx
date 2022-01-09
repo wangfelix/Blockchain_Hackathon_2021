@@ -33,7 +33,8 @@ export const BasePage = ({ children }: BasePageProps) => {
 
     const globalStyles = {
         color: Colors.BLACK,
-        fontFamily: "Work Sans",
+        fontFamily: "Inter",
+        lineHeight: "1.5em",
         zIndex: Z_INDEX.PAGE,
     };
 

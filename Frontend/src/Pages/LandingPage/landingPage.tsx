@@ -3,17 +3,23 @@ import { useEthers } from "@usedapp/core";
 import ParticlesBg from "particles-bg";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Lottie from "react-lottie";
 
 import { Button } from "BaseComponents/Button/button";
 import { LandingPageSection } from "Pages/LandingPage/Components/landingPageSection";
 import LandingPicture from "Illustrations/Drawkit-Vector-Illustration-Medical-16.png";
-import { Colors } from "Utils/globalStyles";
+import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
 import { useIsLoggedIn } from "Utils/hooks";
 import { Page } from "BaseComponents/page";
 import { Row } from "BaseComponents/row";
 import { setRegistrationModalOpen } from "State/Actions/actionCreators";
 import { Container } from "BaseComponents/container";
 import { Paths } from "Utils/paths";
+import { Text } from "BaseComponents/text";
+import DownArrows from "Illustrations/Lotties/DownArrows.json";
+import lottieBlockchain from "Illustrations/Lotties/blockchain_lottie.json";
+import dataTransfer from "Illustrations/Lotties/computer.json";
+import checkmark from "Illustrations/Lotties/checkmark.json";
 
 export const LandingPage = () => {
     const dispatch = useDispatch();
@@ -53,6 +59,14 @@ export const LandingPage = () => {
         },
     ];
 
+    const lottieOptions = {
+        downArrowOptions: {
+            animationData: DownArrows,
+            loop: true,
+            autoplay: true,
+        },
+    };
+
     // -- CALLBACKS --
 
     const openRegistrationModal = () => dispatch(setRegistrationModalOpen(true));
@@ -71,67 +85,93 @@ export const LandingPage = () => {
 
     return (
         <Page layout="landing">
-            <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT} num={550} bg={true} />
-
-            <LandingPageSection color="transparent">
+            <Row styleProps={{ background: Colors.BLUE_DARKEST, position: "relative" }}>
                 <Container
                     styleProps={{
-                        width: "90%",
-                        maxWidth: "800px",
+                        width: "100%",
+                        height: "100%",
                         padding: "40px",
-                        background: "rgba(250, 245, 256, 0.3)",
-                        backdropFilter: "blur(5px)",
-                        boxShadow: "0 0 20px 10px rgba(185, 175, 190, 0.2)",
                         justifyContent: "center",
                         alignItems: "center",
+                        position: "absolute",
                     }}
                 >
-                    <Row styleProps={{ marginBottom: "30px", justifyContent: "center" }}>
+                    <Container styleProps={{ marginBottom: "40px", justifyContent: "center", alignItems: "center" }}>
                         <h1
                             style={{
-                                fontWeight: "bold",
                                 fontSize: "50px",
-                                fontFamily: "Work Sans",
-                                color: Colors.PRIMARY_ACCENT_BLUE_HUE,
-                                letterSpacing: "10px",
-                                marginRight: "-10px", // remove letter-spacing from last letter
+                                color: Colors.WHITE_OFF_WHITE,
+                                letterSpacing: "8px",
+                                marginRight: "-8px", // remove letter-spacing from last letter
+                                marginBottom: 40,
                             }}
                         >
-                            Medi-System
+                            Medicalvalues MediSystem
                         </h1>
-                    </Row>
-                    <Row>
-                        <Row styleProps={{ width: "100%", justifyContent: "center", gap: "20px" }}>
-                            {!isLoggedIn && (
-                                <Button
-                                    buttonType="primary"
-                                    styleProps={{ width: "200px" }}
-                                    onClickHandle={openRegistrationModal}
-                                >
-                                    Get Started
-                                </Button>
-                            )}
+
+                        <h3 style={{ color: Colors.GREY, textAlign: "center" }}>
+                            Fair and transparent data-sharing platform for medical data.
+                            <br />
+                            Build on the blockchain, using the newest technologies.
+                        </h3>
+                    </Container>
+
+                    <Container
+                        styleProps={{
+                            width: 60,
+                            height: 5,
+                            background: Colors.LAVENDER,
+                            marginBottom: 40,
+                            borderRadius: BORDER_RADIUS,
+                        }}
+                    />
+
+                    <Row styleProps={{ width: "100%", justifyContent: "center", gap: "20px" }}>
+                        {!isLoggedIn && (
                             <Button
-                                buttonType={"secondary"}
+                                buttonType="primary"
                                 styleProps={{ width: "200px" }}
-                                onClickHandle={handleGoToDemoPage}
+                                onClickHandle={openRegistrationModal}
                             >
-                                Watch Demo
+                                Get Started
                             </Button>
-                        </Row>
+                        )}
+                        <Button
+                            buttonType={"secondary"}
+                            styleProps={{ width: "200px" }}
+                            onClickHandle={handleGoToDemoPage}
+                        >
+                            Learn More
+                        </Button>
                     </Row>
                 </Container>
+
+                <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT_BLUE_HUE} num={350} bg={false} />
+            </Row>
+
+            <LandingPageSection color="secondary" styleProps={{ height: "auto", padding: 30 }}>
+                <Row styleProps={{ justifyContent: "center", alignItems: "center" }}>
+                    <Lottie
+                        options={lottieOptions.downArrowOptions}
+                        style={{
+                            width: 100,
+                            height: 100,
+                        }}
+                        isClickToPauseDisabled
+                    />
+                </Row>
             </LandingPageSection>
 
             {landingSections.map((section, index) => (
                 <LandingPageSection
                     sectionTitle={section.title}
                     color={index % 2 === 0 ? "primary" : "secondary"}
-                    firstSection={index === 0 ?? true}
                     key={index}
                 >
-                    <div>{section.description}</div>
-                    {section.illustration && <img style={imageStyle} src={section.illustration} />}
+                    <>
+                        <Text>{section.description}</Text>
+                        {section.illustration && <img style={imageStyle} src={section.illustration} />}
+                    </>
                 </LandingPageSection>
             ))}
         </Page>

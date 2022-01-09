@@ -19,3 +19,13 @@ export const parseMediCoin = (medicoin: string) => {
 
     return temp.substring(0, decimalIndex + 3);
 };
+
+export const isEven = (num: number) => num % 2 === 0;
+
+export const getRandomNumberBetween = (min: number, max: number) => {
+    return Math.random() * (max - min) + min;
+};
+
+export const getRandomElementFromArray = (array: any[]) => array[Math.floor(Math.random() * array.length)];
+
+export const isEmptyString = (str: string) => str === "";

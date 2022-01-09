@@ -6,10 +6,10 @@ type LandingPageSectionProps = {
     children?: ReactNode;
     sectionTitle?: string;
     color?: "primary" | "secondary" | "transparent";
-    firstSection?: boolean;
+    styleProps?: React.CSSProperties;
 };
 
-export const LandingPageSection = ({ children, sectionTitle, color, firstSection }: LandingPageSectionProps) => {
+export const LandingPageSection = ({ children, sectionTitle, color, styleProps }: LandingPageSectionProps) => {
     // -- STYLES --
 
     const sectionStyle = {
@@ -26,7 +26,8 @@ export const LandingPageSection = ({ children, sectionTitle, color, firstSection
                 : color === "secondary"
                 ? Colors.PRIMARY_ACCENT_HUE
                 : Colors.TRANSPARENT,
-        boxShadow: firstSection ? "0 -5px 30px 10px rgba(100, 100, 100, 0.2)" : undefined,
+
+        ...styleProps,
     };
 
     const headingStyle = {

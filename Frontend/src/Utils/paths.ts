@@ -10,3 +10,8 @@ export enum ContributeDataPagePaths {
     FILE_UPLOADER = "/file-uploader",
     DATASET_VALUE_DETAILS_PAGE = "/details",
 }
+
+export enum DemoPagePaths {
+    INTRO_PAGE = "/",
+    DEMO_PAGE = "/demo-page",
+}
