@@ -1,15 +1,16 @@
-import React, { ReactNode } from "react";
+import React, { HTMLAttributes, ReactNode } from "react";
 
 type RowProps = {
     children: ReactNode;
     styleProps?: React.CSSProperties;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
 const defaultRowStyle = {
     display: "flex",
-    flexDirection: "row" as "row",
 };
 
-export const Row = ({ children, styleProps }: RowProps) => (
-    <div style={{ ...defaultRowStyle, ...styleProps }}>{children}</div>
+export const Row = ({ children, styleProps, ...rest }: RowProps) => (
+    <div style={{ ...defaultRowStyle, ...styleProps }} {...rest}>
+        {children}
+    </div>
 );

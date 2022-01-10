@@ -7,7 +7,7 @@ import Lottie from "react-lottie";
 
 import { Button } from "BaseComponents/Button/button";
 import { LandingPageSection } from "Pages/LandingPage/Components/landingPageSection";
-import LandingPicture from "Illustrations/Drawkit-Vector-Illustration-Medical-16.png";
+import ArtificialIntelligence from "Illustrations/artificial-intelligence.jpg";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
 import { useIsLoggedIn } from "Utils/hooks";
 import { Page } from "BaseComponents/page";
@@ -17,9 +17,6 @@ import { Container } from "BaseComponents/container";
 import { Paths } from "Utils/paths";
 import { Text } from "BaseComponents/text";
 import DownArrows from "Illustrations/Lotties/DownArrows.json";
-import lottieBlockchain from "Illustrations/Lotties/blockchain_lottie.json";
-import dataTransfer from "Illustrations/Lotties/computer.json";
-import checkmark from "Illustrations/Lotties/checkmark.json";
 
 export const LandingPage = () => {
     const dispatch = useDispatch();
@@ -28,16 +25,14 @@ export const LandingPage = () => {
 
     const history = useHistory();
 
-    const { account } = useEthers();
-
     const isLoggedIn = useIsLoggedIn();
 
     // -- CONST DATA --
 
     const landingSections = [
         {
-            title: "Section 1",
-            illustration: LandingPicture,
+            title: "Artificial Intelligence in Medicine",
+            illustration: ArtificialIntelligence,
             description:
                 "Unter Verwendung medizinischer Datenmengen (bspw. bei Anämien und Diabetes)" +
                 "hat Künstliche Intelligenz (KI) im medizinischen Umfeld großes Potenzial, die Qualität von Diagnosen zu" +
@@ -46,8 +41,7 @@ export const LandingPage = () => {
                 "allem in der computergestützten Diagnostik zu berücksichtigen.",
         },
         {
-            title: "Section 2",
-            illustration: LandingPicture,
+            title: "About Medicalvalues",
             description:
                 "Die medicalvalues GmbH ist ein Start-up aus Karlsruhe mit ca. 20 Mitarbeitern und entwickelt die medicalvalues" +
                 "platform zur Diagnose-Unterstützung. Das Hauptziel der Plattform ist die Unterstützung von Ärztinnen und" +
@@ -57,15 +51,12 @@ export const LandingPage = () => {
                 "Zuhilfenahme eines sog. Knowledge-Graphen passende Diagnose- und Behandlungsvorschläge. Der KnowledgeGraph" +
                 "wird von kooperierenden Mediziner:innen gepflegt und mittels aktueller Messdaten und MachineLearning (ML) laufend optimiert.",
         },
-    ];
-
-    const lottieOptions = {
-        downArrowOptions: {
-            animationData: DownArrows,
-            loop: true,
-            autoplay: true,
+        {
+            title: "What is MediSystem?",
+            description:
+                "MediSystem is a supporting application for the Medicalvalues knowledge-graph. Big amounts of data are necessary for the developement of it. Therefore, MediSystem aims to offer incentives for doctors and scientists for sharing research and patient data.",
         },
-    };
+    ];
 
     // -- CALLBACKS --
 
@@ -76,12 +67,19 @@ export const LandingPage = () => {
     // -- STYLES --
 
     const imageStyle = {
-        width: "300px",
-        height: "500px",
+        height: "400px",
         objectFit: "cover" as "cover",
     };
 
     // -- RENDER --
+
+    const lottieOptions = {
+        downArrowOptions: {
+            animationData: DownArrows,
+            loop: true,
+            autoplay: true,
+        },
+    };
 
     return (
         <Page layout="landing">
@@ -102,7 +100,7 @@ export const LandingPage = () => {
                                 fontSize: "50px",
                                 color: Colors.WHITE_OFF_WHITE,
                                 letterSpacing: "8px",
-                                marginRight: "-8px", // remove letter-spacing from last letter
+                                marginRight: "-8px", // Removes letter-spacing from the last letter.
                                 marginBottom: 40,
                             }}
                         >
@@ -146,7 +144,7 @@ export const LandingPage = () => {
                     </Row>
                 </Container>
 
-                <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT_BLUE_HUE} num={350} bg={false} />
+                <ParticlesBg type="cobweb" color={Colors.PRIMARY_ACCENT_BLUE_HUE} num={300} bg={false} />
             </Row>
 
             <LandingPageSection color="secondary" styleProps={{ height: "auto", padding: 30 }}>

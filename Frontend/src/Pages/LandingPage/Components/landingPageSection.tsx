@@ -31,7 +31,7 @@ export const LandingPageSection = ({ children, sectionTitle, color, styleProps }
     };
 
     const headingStyle = {
-        marginBottom: "20px",
+        marginBottom: "50px",
     };
 
     // -- RENDER --
