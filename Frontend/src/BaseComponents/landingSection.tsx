@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
 
 import { Container } from "BaseComponents/container";
-import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
+import { BORDER_RADIUS, Colors, MAX_PAGE_WIDTH } from "Utils/globalStyles";
 import { Row } from "BaseComponents/row";
 import { useIsMobile } from "Utils/hooks";
 
-type DemoPageIntroPageSectionProps = {
+export type LandingSectionProps = {
     title: string;
     backgroundColor?: "light" | "dark";
     content?: ReactNode;
@@ -13,13 +13,7 @@ type DemoPageIntroPageSectionProps = {
     contentRight?: ReactNode;
 };
 
-export const DemoPageIntroPageSection = ({
-    title,
-    backgroundColor,
-    content,
-    contentLeft,
-    contentRight,
-}: DemoPageIntroPageSectionProps) => {
+export const LandingSection = ({ title, backgroundColor, content, contentLeft, contentRight }: LandingSectionProps) => {
     // -- STATE --
 
     const isMobile = useIsMobile();
@@ -37,6 +31,7 @@ export const DemoPageIntroPageSection = ({
                 styleProps={{
                     width: "100%",
                     minWidth: 400,
+                    maxWidth: MAX_PAGE_WIDTH,
                     padding: "80px 70px",
                     alignItems: "center",
                 }}

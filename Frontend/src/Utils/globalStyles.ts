@@ -1,5 +1,7 @@
 export const BORDER_RADIUS = "5px";
 
+export const MAX_PAGE_WIDTH = 2000;
+
 export enum Colors {
     PRIMARY_ACCENT = "#9A6EC6",
     PRIMARY_ACCENT_BLUE_HUE = "#353d58",

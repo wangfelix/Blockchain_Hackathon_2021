@@ -10,7 +10,7 @@ import { Text } from "BaseComponents/text";
 import { BORDER_RADIUS, Colors } from "Utils/globalStyles";
 import ArchitectureImage from "Illustrations/ArchitectureScribble.png";
 import { useIsMobile } from "Utils/hooks";
-import { DemoPageIntroPageSection } from "Pages/DemoPage/Pages/DemoPageIntroPage/Components/demoPageIntroPageSection";
+import { LandingSection } from "BaseComponents/landingSection";
 import { DemoPageIntroPageInfoCard } from "Pages/DemoPage/Pages/DemoPageIntroPage/Components/demoPageIntroPageInfoCard";
 import PieChart from "Illustrations/pieChart.png";
 import Coins from "Illustrations/coins.png";
@@ -86,7 +86,7 @@ export const DemoPageIntroPage = () => {
 
             {/* Software-Architecture */}
 
-            <DemoPageIntroPageSection
+            <LandingSection
                 title="Architecture"
                 contentLeft={
                     <>
@@ -131,7 +131,7 @@ export const DemoPageIntroPage = () => {
 
             {/* Evaluation-Algorithm */}
 
-            <DemoPageIntroPageSection
+            <LandingSection
                 title="Dataset Evaluation Algorithm"
                 backgroundColor="dark"
                 content={

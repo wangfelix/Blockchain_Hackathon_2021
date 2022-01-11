@@ -13,7 +13,7 @@ import { MediSys_Functions } from "Utils/smartContractUtils";
  * After the deployment of the smart contract, the owner of the system (medicalvalues) should
  * update this constant to the address of the smart contract.
  */
-const MEDISYSTEM_ADDRESS = "0xF45ca895F618A6dB3680E71E7dD405e9A3b517F0";
+const MEDISYSTEM_ADDRESS = "0x84beb3Cb705C22a7808F67615E7425cb4D4036d2";
 const MEDI_SYSTEM_INTERFACE = new Interface(mediSysAbi.abi);
 const mediSysContract = new Contract(MEDISYSTEM_ADDRESS, mediSysAbi.abi);
 

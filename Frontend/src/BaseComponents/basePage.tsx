@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { NavBar } from "BaseComponents/NavBar/navBar";
 import { Footer } from "BaseComponents/footer";
@@ -10,7 +11,6 @@ import { RegistrationModal } from "BaseComponents/RegistrationModal/registration
 import { RootState } from "State/Reducers";
 import { AccountNotApprovedModal } from "BaseComponents/accountNotApprovedModal";
 import { Paths } from "Utils/paths";
-import { useHistory } from "react-router-dom";
 
 type BasePageProps = {
     children: ReactNode;

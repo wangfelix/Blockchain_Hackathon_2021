@@ -3,7 +3,7 @@ import { useEthers } from "@usedapp/core";
 import { useDispatch } from "react-redux";
 
 import { NavBarItem } from "BaseComponents/NavBar/Components/navBarItem";
-import { NAVBAR_HEIGHT, Colors, NavBarTabs, Z_INDEX } from "Utils/globalStyles";
+import { NAVBAR_HEIGHT, Colors, NavBarTabs, Z_INDEX, MAX_PAGE_WIDTH } from "Utils/globalStyles";
 import { ContributeDataPagePaths, Paths } from "Utils/paths";
 import { useGetIsOwner, useIsLoggedIn, usePage } from "Utils/hooks";
 import { NavBarItemProps as navBarItem } from "BaseComponents/NavBar/Components/navBarItem";
@@ -77,48 +77,50 @@ export const NavBar = () => {
     // -- RENDER --
 
     return (
-        <nav style={navBarStyle}>
-            <Container
-                style={{
-                    width: 120,
-                    height: "80%",
-                    display: "flex",
-                }}
-            >
-                <Logo />
-            </Container>
+        <nav style={{ ...navBarStyle, justifyContent: "center" }}>
+            <Row styleProps={{ ...navBarStyle, marginLeft: "auto", marginRight: "auto", maxWidth: MAX_PAGE_WIDTH }}>
+                <Container
+                    style={{
+                        width: 120,
+                        height: "80%",
+                        display: "flex",
+                    }}
+                >
+                    <Logo />
+                </Container>
 
-            <Row
-                styleProps={{
-                    margin: "0 auto",
-                    position: "absolute",
-                    inset: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
-                {navBarItemsLeft.map((item, index) => (
-                    <NavBarItem title={item.title} key={index} selected={item.selected} to={item.to} />
-                ))}
-            </Row>
-
-            {!isLoggedIn && (
-                <Row styleProps={{ position: "absolute", right: "20px", justifySelf: "flex-end" }}>
-                    <Button
-                        buttonType="primary"
-                        onClickHandle={openRegistrationModal}
-                        styleProps={{
-                            borderRadius: 50,
-                            padding: "0 20px",
-                            fontSize: 14,
-                        }}
-                    >
-                        Login
-                    </Button>
+                <Row
+                    styleProps={{
+                        margin: "0 auto",
+                        position: "absolute",
+                        inset: 0,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    {navBarItemsLeft.map((item, index) => (
+                        <NavBarItem title={item.title} key={index} selected={item.selected} to={item.to} />
+                    ))}
                 </Row>
-            )}
 
-            {isLoggedIn && <NavBarProfileDropdown />}
+                {!isLoggedIn && (
+                    <Row styleProps={{ position: "absolute", right: "20px", justifySelf: "flex-end" }}>
+                        <Button
+                            buttonType="primary"
+                            onClickHandle={openRegistrationModal}
+                            styleProps={{
+                                borderRadius: 50,
+                                padding: "0 20px",
+                                fontSize: 14,
+                            }}
+                        >
+                            Login
+                        </Button>
+                    </Row>
+                )}
+
+                {isLoggedIn && <NavBarProfileDropdown />}
+            </Row>
         </nav>
     );
 };
