@@ -1,7 +1,7 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 
 type RowProps = {
-    children: ReactNode;
+    children?: ReactNode;
     styleProps?: React.CSSProperties;
 } & HTMLAttributes<HTMLDivElement>;
 

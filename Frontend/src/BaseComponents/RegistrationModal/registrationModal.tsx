@@ -11,6 +11,7 @@ import { setRegistrationModalOpen } from "State/Actions/actionCreators";
 import { useMyName } from "Utils/hooks";
 import { RegistrationModalConnectBrowserWalletSection } from "BaseComponents/RegistrationModal/Components/registrationModalConnectBrowserWalletSection";
 import { RegistrationModalRegisterNameSection } from "BaseComponents/RegistrationModal/Components/registrationModalRegisterNameSection";
+import cross from "Illustrations/crossing.png";
 
 type RegistrationModalProps = {
     isOpen: boolean;
@@ -87,13 +88,13 @@ export const RegistrationModal = ({ isOpen }: RegistrationModalProps) => {
         >
             <Container>
                 {!account && (
-                    <Row styleProps={{ position: "absolute", top: "5px", right: "5px", justifyContent: "flex-end" }}>
+                    <Row styleProps={{ position: "absolute", top: 10, right: 15, justifyContent: "flex-end" }}>
                         <Button
                             buttonType="text"
-                            styleProps={{ color: Colors.GREY_DARK, fontWeight: "bold", fontSize: "20px" }}
+                            styleProps={{ color: Colors.GREY_DARK, fontWeight: "bold", fontSize: "20px", padding: 0 }}
                             onClickHandle={() => dispatch(setRegistrationModalOpen(false))}
                         >
-                            x
+                            <img src={cross} style={{ width: 24, height: 24 }} alt="cross" />
                         </Button>
                     </Row>
                 )}

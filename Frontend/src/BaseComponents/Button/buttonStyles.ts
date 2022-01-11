@@ -44,12 +44,13 @@ export const primaryButtonStyle: React.CSSProperties = {
     transition: "background 0.2s",
 };
 
-export const primaryButtonStyleGreyedOut = {
+export const primaryButtonStyleGreyedOut: React.CSSProperties = {
     ...commonButtonStyle,
     background: BUTTON_PRIMARY_GREYED_OUT_BACKGROUND,
     color: BUTTON_PRIMARY_GREYED_OUT_FONT_COLOR,
     borderColor: BUTTON_PRIMARY_GREYED_OUT_BORDER,
     borderRadius: BORDER_RADIUS,
+    cursor: "not-allowed",
 };
 
 export const secondaryButtonStyle = {

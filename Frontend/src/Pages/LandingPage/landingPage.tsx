@@ -83,19 +83,6 @@ export const LandingPage = () => {
                 <Container>
                     <Row
                         styleProps={{
-                            borderBottom: `solid 3px ${Colors.PRIMARY_ACCENT_HUE_DARKER}`,
-                            paddingBottom: 50,
-                        }}
-                    >
-                        <Text>
-                            MediSystem is a supporting application for the Medicalvalues knowledge-graph. Big amounts of
-                            data are necessary for the developement of it. Therefore, MediSystem aims to offer
-                            incentives for doctors and scientists for sharing research and patient data.
-                        </Text>
-                    </Row>
-
-                    <Row
-                        styleProps={{
                             alignItems: "center",
                             padding: "0 150px",
                             borderBottom: `solid 3px ${Colors.PRIMARY_ACCENT_HUE_DARKER}`,
@@ -132,10 +119,11 @@ export const LandingPage = () => {
                         }}
                     >
                         <Text styleProps={{ marginRight: 60 }}>
-                            Every participant and blockchain user can see the contract in it's entirety, and therefore
-                            also see, how the contract, and especially the evaluation algorithm works. This proof to all
-                            users, that everyone is being treated fairly and no big constituions like government funded
-                            research facilities are being favoured over local doctors.
+                            MediSystem comes with the MediCoin. MediCoins are virtual coins, that the user gets for
+                            contributing patient data in MediSystem. Using it's evaluation algorithm, MediSystem will
+                            assess the users dataset, and calculate the amount of MediCoins, that the dataset is worth
+                            at the given point in time. These MediCoins can then be used for royalties for different
+                            Medicalvalues products, such as the Medicalvalues workbench.
                         </Text>
 
                         <h3

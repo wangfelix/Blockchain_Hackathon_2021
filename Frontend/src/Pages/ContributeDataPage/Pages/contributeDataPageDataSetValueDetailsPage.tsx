@@ -277,7 +277,7 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                             />
                         </Row>
 
-                        <Row styleProps={{ marginTop: "40px" }}>
+                        <Row styleProps={{ marginTop: "40px", alignItems: "center" }}>
                             <Text
                                 styleProps={{
                                     color: "grey",
@@ -286,6 +286,7 @@ export const ContributeDataPageDataSetValueDetailsPage = () => {
                             >
                                 <h2>Approximate value of your dataset:</h2>
                             </Text>
+
                             <h2 style={{ color: "black", marginLeft: "auto" }}>
                                 {parseMediCoin(datasetValue)} MediCoins
                             </h2>

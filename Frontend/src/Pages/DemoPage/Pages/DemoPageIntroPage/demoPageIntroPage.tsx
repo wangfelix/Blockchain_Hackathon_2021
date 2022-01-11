@@ -169,7 +169,7 @@ export const DemoPageIntroPage = () => {
                         <DemoPageIntroPageInfoCard icon={LightBulb} iconAlt="down arrow" title="Easy to Comprehend">
                             The algorithm is <b>pure</b>, which means, that its calculated output for a specific dataset
                             is always the same value, ranging from 0 - 1000. Afterwards, this score is projected onto a
-                            percentage scale, ranging from 0% - 5, which is the share of the diseases budget, the user
+                            percentage scale, ranging from 0% - 5%, which is the share of the diseases budget, the user
                             will receive.
                         </DemoPageIntroPageInfoCard>
 
