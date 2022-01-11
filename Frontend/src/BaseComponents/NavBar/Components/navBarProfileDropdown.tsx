@@ -10,6 +10,9 @@ import DownArrow from "Illustrations/downArrow.png";
 import ProfilePicture from "Illustrations/ProfilePicture.png";
 import { useMyName } from "Utils/hooks";
 import { Container } from "BaseComponents/container";
+import Speechbubble from "Illustrations/exclamationmark.bubble@2x.png";
+import Settings from "Illustrations/gearshape@2x.png";
+import ProfilPictureIcon from "Illustrations/person@2x.png";
 
 export const NavBarProfileDropdown = () => {
     // -- STATE --
@@ -22,11 +25,21 @@ export const NavBarProfileDropdown = () => {
 
     const [isTooltipHovered, setIsTooltipHovered] = useState(false);
 
+    const [hoveredItemIndex, setHoveredItemIndex] = useState<number | undefined>(undefined);
+
     // -- CALLBACKS --
 
     const handleCloseTooltip = () => setIsTooltipOpen(false);
 
     const handleOpenTooltip = () => setIsTooltipOpen(true);
+
+    // -- CONST DATA --
+
+    const options = [
+        { icon: ProfilPictureIcon, title: "My Profile" },
+        { icon: Speechbubble, title: "Feedback" },
+        { icon: Settings, title: "Settings" },
+    ];
 
     // -- RENDER --
 
@@ -58,13 +71,31 @@ export const NavBarProfileDropdown = () => {
                                         boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                                         position: "relative",
                                         maxHeight: 500,
-                                        width: 300,
+                                        width: 200,
                                         gap: 5,
-                                        padding: 20,
+                                        padding: 5,
                                         zIndex: Z_INDEX.DEMO_PAGE,
                                     }}
                                 >
-                                    Work in Progress.
+                                    {options.map((option, index) => (
+                                        <Row
+                                            styleProps={{
+                                                alignItems: "center",
+                                                height: 40,
+                                                background:
+                                                    hoveredItemIndex === index
+                                                        ? Colors.PRIMARY_ACCENT_HUE
+                                                        : Colors.TRANSPARENT,
+                                                borderRadius: BORDER_RADIUS,
+                                                padding: "0 10px",
+                                            }}
+                                            onMouseEnter={() => setHoveredItemIndex(index)}
+                                            onMouseLeave={() => setHoveredItemIndex(undefined)}
+                                        >
+                                            <img src={option.icon} style={{ width: 20, marginRight: 20 }} />
+                                            {option.title}
+                                        </Row>
+                                    ))}
                                 </Container>
                             </>
                         }
